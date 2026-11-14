@@ -1,0 +1,2289 @@
+{
+  "users": [
+    {
+      "_id": "usr_admin_001",
+      "name": "Aaradhya Super Admin",
+      "email": "admin@aaradhya.com",
+      "password": "$2b$10$hZsHo1Yzngce5mFRqlR06.NG.fUypvGeQq44lvMtjRAmCTixRXQya",
+      "role": "super_admin",
+      "permissions": [
+        "all"
+      ],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 00001",
+      "addresses": [],
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "storeCode": null,
+      "resetPasswordToken": null,
+      "resetPasswordExpire": null,
+      "updatedAt": "2026-11-14T07:40:57.017Z"
+    },
+    {
+      "_id": "usr_silks_001",
+      "name": "Aaradhya Silks Admin",
+      "email": "silks@aaradhya.com",
+      "password": "$2b$10$EqdUV3NkYryLISyaGbf9WeNn2KNQNgKn8BU.rTvpB2xlUbh7sTyJS",
+      "role": "silks_admin",
+      "storeCode": "AS",
+      "permissions": [
+        "store:silks",
+        "products:manage",
+        "orders:manage",
+        "inventory:manage"
+      ],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 00002",
+      "addresses": [],
+      "createdAt": "2026-01-02T00:00:00.000Z",
+      "resetPasswordToken": "d25f8e898ba3da3ef2ccfb523b3560e8f39d407eec71956c",
+      "resetPasswordExpire": "2026-11-14T08:48:11.471Z",
+      "updatedAt": "2026-11-14T07:48:11.471Z"
+    },
+    {
+      "_id": "usr_fabrics_002",
+      "name": "Aaradhya Fabrics Admin",
+      "email": "fabrics@aaradhya.com",
+      "password": "$2b$10$0H2nJpmBz4AOSWF6X9Cml.2jAIdxRd8kzeYjZZ4aGqBaBaC47BZKa",
+      "role": "fabrics_admin",
+      "storeCode": "AF",
+      "permissions": [
+        "store:fabrics",
+        "products:manage",
+        "orders:manage",
+        "inventory:manage"
+      ],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 00003",
+      "addresses": [],
+      "createdAt": "2026-01-02T00:00:00.000Z"
+    },
+    {
+      "_id": "usr_pos_001",
+      "name": "Aaradhya Counter Cashier",
+      "email": "pos@aaradhya.com",
+      "password": "$2b$10$T30WiCPw93odTJfZitSfFOjgh2yyz7lZro01sjyCN8kyGwxrPNwA.",
+      "role": "store_manager",
+      "permissions": [
+        "pos:billing",
+        "inventory:manage"
+      ],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 33003",
+      "addresses": [],
+      "createdAt": "2026-01-03T00:00:00.000Z"
+    },
+    {
+      "_id": "usr_cust_001",
+      "name": "Priya Sharma",
+      "email": "customer@aaradhya.com",
+      "password": "$2b$10$t052WeytNCwGDrx6BC4rHeBsXLVD3GeiFwqmZ20s5NwJ4hEJxof36",
+      "role": "customer",
+      "permissions": [],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 44004",
+      "addresses": [
+        {
+          "_id": "addr_001",
+          "fullName": "Priya Sharma",
+          "phone": "+91 98765 44004",
+          "addressLine1": "Villa 14, Palm Meadows",
+          "addressLine2": "Whitefield",
+          "city": "Bengaluru",
+          "state": "Karnataka",
+          "pincode": "560066",
+          "country": "India",
+          "isDefault": true
+        }
+      ],
+      "createdAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "_id": "usr_admin_compat",
+      "name": "Super Admin (ShopMart)",
+      "email": "admin@shopmart.com",
+      "password": "$2b$10$YijNy/4jbotGSZXc0kB97.7JypYrUhq/trc.eeFyYtI7lKaRrU5JC",
+      "role": "super_admin",
+      "permissions": [
+        "all"
+      ],
+      "isActive": true,
+      "isVerified": true,
+      "phone": "+91 98765 00000",
+      "addresses": [],
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "storeCode": null
+    }
+  ],
+  "vendors": [
+    {
+      "_id": "ven_technova_001",
+      "user": "usr_vendor_001",
+      "storeName": "TechNova Store",
+      "slug": "technova-store",
+      "email": "vendor@technova.com",
+      "phone": "+91 98765 43210",
+      "description": "Authorized retailer for flagship electronics, premium audio, smartphones and smart home accessories.",
+      "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.8,
+      "reviewCount": 4856,
+      "gstin": "07AAAAA0000A1Z5",
+      "pan": "AAAAA0000A",
+      "bankDetails": {
+        "accountName": "TechNova Retail Solutions Pvt Ltd",
+        "accountNumber": "9182736450192",
+        "ifsc": "HDFC0001234",
+        "bankName": "HDFC Bank"
+      },
+      "pickupAddress": {
+        "street": "Plot 88, Okhla Industrial Area Phase 3",
+        "city": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110020",
+        "phone": "+91 98765 43210"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst.pdf",
+          "status": "verified",
+          "notes": "Verified by Super Admin"
+        },
+        {
+          "docType": "PAN Card",
+          "fileUrl": "https://cdn.example.com/kyc/pan.pdf",
+          "status": "verified",
+          "notes": "PAN matches business registry"
+        }
+      ],
+      "commissionRate": 8,
+      "status": "approved",
+      "totalSales": 1256430,
+      "totalEarnings": 1005144,
+      "pendingPayout": 220000,
+      "paidPayout": 780144,
+      "createdAt": "2026-01-10T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.704Z"
+    },
+    {
+      "_id": "ven_fashionhub_002",
+      "user": "usr_vendor_002",
+      "storeName": "FashionHub Official",
+      "slug": "fashionhub-official",
+      "email": "vendor@fashionhub.com",
+      "phone": "+91 98765 43211",
+      "description": "Contemporary streetwear, premium denim, artisan leather accessories and designer essentials.",
+      "logo": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.7,
+      "reviewCount": 3120,
+      "gstin": "29BBBBB1111B2Z6",
+      "pan": "BBBBB1111B",
+      "bankDetails": {
+        "accountName": "FashionHub Retailers LLP",
+        "accountNumber": "50100456789123",
+        "ifsc": "ICIC0000543",
+        "bankName": "ICICI Bank"
+      },
+      "pickupAddress": {
+        "street": "14, Commercial Street, Shivajinagar",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "phone": "+91 98765 43211"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst_fashion.pdf",
+          "status": "verified",
+          "notes": "Valid GSTIN"
+        }
+      ],
+      "commissionRate": 12,
+      "status": "approved",
+      "totalSales": 843499,
+      "totalEarnings": 699731.12,
+      "pendingPayout": 121731.12,
+      "paidPayout": 578000,
+      "createdAt": "2026-01-12T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.654Z"
+    },
+    {
+      "_id": "ven_homestyle_003",
+      "user": "usr_vendor_003",
+      "storeName": "HomeStyle Living",
+      "slug": "homestyle-living",
+      "email": "vendor@homestyle.com",
+      "phone": "+91 98765 43212",
+      "description": "Smart kitchen appliances, elegant dining essentials, ambient lighting and modern home decor.",
+      "logo": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 2410,
+      "gstin": "27CCCCC2222C3Z7",
+      "pan": "CCCCC2222C",
+      "bankDetails": {
+        "accountName": "HomeStyle Retail India LLP",
+        "accountNumber": "9876543210987",
+        "ifsc": "SBIN0004567",
+        "bankName": "State Bank of India"
+      },
+      "pickupAddress": {
+        "street": "42, Andheri Kurla Road",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400059",
+        "phone": "+91 98765 43212"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst_home.pdf",
+          "status": "verified",
+          "notes": "Verified"
+        }
+      ],
+      "commissionRate": 10,
+      "status": "approved",
+      "totalSales": 654200,
+      "totalEarnings": 556070,
+      "pendingPayout": 94000,
+      "paidPayout": 462070,
+      "createdAt": "2026-01-15T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.654Z"
+    },
+    {
+      "_id": "ven_glowcare_004",
+      "user": "usr_vendor_004",
+      "storeName": "GlowCare Organics",
+      "slug": "glowcare-organics",
+      "email": "vendor@glowcare.com",
+      "phone": "+91 98765 43213",
+      "description": "Dermatologist-formulated botanical skincare, hyaluronic serums, clean cosmetics and wellness.",
+      "logo": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.8,
+      "reviewCount": 1980,
+      "gstin": "36DDDDD3333D4Z8",
+      "pan": "DDDDD3333D",
+      "bankDetails": {
+        "accountName": "GlowCare Wellness Pvt Ltd",
+        "accountNumber": "4567891234567",
+        "ifsc": "UTIB0001234",
+        "bankName": "Axis Bank"
+      },
+      "pickupAddress": {
+        "street": "10, Road No 36, Jubilee Hills",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500033",
+        "phone": "+91 98765 43213"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst_glow.pdf",
+          "status": "verified",
+          "notes": "Verified"
+        }
+      ],
+      "commissionRate": 15,
+      "status": "approved",
+      "totalSales": 412000,
+      "totalEarnings": 350200,
+      "pendingPayout": 48000,
+      "paidPayout": 302200,
+      "createdAt": "2026-01-18T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.654Z"
+    },
+    {
+      "_id": "ven_greenfresh_005",
+      "user": "usr_vendor_005",
+      "storeName": "GreenFresh Pantry",
+      "slug": "greenfresh-pantry",
+      "email": "vendor@greenfresh.com",
+      "phone": "+91 98765 43214",
+      "description": "Certified organic farm-fresh staples, stone-ground flours, cold-pressed oils and gourmet superfoods.",
+      "logo": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 1540,
+      "gstin": "27EEEEE4444E5Z9",
+      "pan": "EEEEE4444E",
+      "bankDetails": {
+        "accountName": "GreenFresh Agro Organics",
+        "accountNumber": "3216549870123",
+        "ifsc": "KKBK0000987",
+        "bankName": "Kotak Mahindra Bank"
+      },
+      "pickupAddress": {
+        "street": "88, High Street, Baner",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411045",
+        "phone": "+91 98765 43214"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst_green.pdf",
+          "status": "verified",
+          "notes": "Verified"
+        }
+      ],
+      "commissionRate": 7,
+      "status": "approved",
+      "totalSales": 320000,
+      "totalEarnings": 297600,
+      "pendingPayout": 35000,
+      "paidPayout": 262600,
+      "createdAt": "2026-01-20T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.654Z"
+    },
+    {
+      "_id": "ven_audiotech_006",
+      "user": "usr_vendor_006",
+      "storeName": "SonicAcoustics Lab",
+      "slug": "sonicacoustics-lab",
+      "email": "vendor@sonicacoustics.com",
+      "phone": "+91 98765 43215",
+      "description": "High-resolution wireless headphones, ANC studio monitors, DACs and audiophile acoustic accessories.",
+      "logo": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=200&auto=format&fit=crop&q=80",
+      "banner": "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 3820,
+      "gstin": "33FFFFF5555F6Z1",
+      "pan": "FFFFF5555F",
+      "bankDetails": {
+        "accountName": "Sonic Acoustics Sound Systems",
+        "accountNumber": "7891234560123",
+        "ifsc": "HDFC0004321",
+        "bankName": "HDFC Bank"
+      },
+      "pickupAddress": {
+        "street": "19, Anna Salai, Guindy",
+        "city": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600032",
+        "phone": "+91 98765 43215"
+      },
+      "kycDocuments": [
+        {
+          "docType": "GST Certificate",
+          "fileUrl": "https://cdn.example.com/kyc/gst_sonic.pdf",
+          "status": "verified",
+          "notes": "Verified"
+        }
+      ],
+      "commissionRate": 9,
+      "status": "approved",
+      "totalSales": 890400,
+      "totalEarnings": 810264,
+      "pendingPayout": 110000,
+      "paidPayout": 700264,
+      "createdAt": "2026-01-22T00:00:00.000Z",
+      "updatedAt": "2026-11-12T13:48:13.654Z"
+    }
+  ],
+  "categories": [
+    {
+      "_id": "cat_sarees",
+      "name": "Sarees",
+      "slug": "sarees",
+      "description": "Pure Silk, Kanjeevaram, Banarasi, Chanderi, Georgette & Organza Sarees",
+      "icon": "Sparkles",
+      "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_kurtis",
+      "name": "Kurtis",
+      "slug": "kurtis",
+      "description": "Embroidered, Anarkali, Straight Cut, A-Line & Festive Designer Kurtis",
+      "icon": "Shirt",
+      "image": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_dresses",
+      "name": "Dresses",
+      "slug": "dresses",
+      "description": "Smocked, Tiered Midi, Maxi, Indo-Western & Evening Party Gowns",
+      "icon": "Sparkles",
+      "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_materials",
+      "name": "Dress Materials",
+      "slug": "dress-materials",
+      "description": "Unstitched 3-piece Chanderi, Cotton, Linen, and Silk Salwar Suit sets",
+      "icon": "Layers",
+      "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_fabrics",
+      "name": "Fabrics",
+      "slug": "fabrics",
+      "description": "Running meterage: Pure Cotton, Linen, Zari Brocade, Velvet, Chiffon & Silk",
+      "icon": "Scissors",
+      "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_menswear",
+      "name": "Men's Wear",
+      "slug": "mens-wear",
+      "description": "Raw Silk Kurta sets, Festive Dhotis, Casual Cotton & Linen Shirts",
+      "icon": "User",
+      "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_kidswear",
+      "name": "Kids Wear",
+      "slug": "kids-wear",
+      "description": "Traditional Pattu Pavadai, Girls Silk Frocks, Boys Kurta Sets",
+      "icon": "Smile",
+      "image": "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "cat_accessories",
+      "name": "Accessories",
+      "slug": "accessories",
+      "description": "Artisan Dupattas, Handcrafted Stoles, Clutches & Shawls",
+      "icon": "ShoppingBag",
+      "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop&q=80",
+      "isActive": true,
+      "isFeatured": true
+    }
+  ],
+  "brands": [
+    {
+      "_id": "brd_apple",
+      "name": "Apple",
+      "slug": "apple",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_samsung",
+      "name": "Samsung",
+      "slug": "samsung",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_oneplus",
+      "name": "OnePlus",
+      "slug": "oneplus",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/OnePlus_Logo.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_sony",
+      "name": "Sony",
+      "slug": "sony",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_nike",
+      "name": "Nike",
+      "slug": "nike",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_zara",
+      "name": "Zara",
+      "slug": "zara",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg",
+      "isActive": true,
+      "isFeatured": true
+    },
+    {
+      "_id": "brd_philips",
+      "name": "Philips",
+      "slug": "philips",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Philips_logo_new.svg",
+      "isActive": true,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "_id": "prod_as_001",
+      "productId": "AS-000001",
+      "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+      "slug": "pure-kanjeevaram-bridal-silk-saree",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Handwoven in pure mulberry silk with rich 2-gram gold zari brocade korvai border.",
+      "description": "Exquisite bridal heirloom Kanjeevaram silk saree crafted by master weavers. Features a rich intricate zari pallu, contrast temple border, and pure silk mark certification. Includes unstitched blouse piece.",
+      "category": "cat_sarees",
+      "price": 14999,
+      "mrp": 19999,
+      "discountPercent": 25,
+      "sku": "AS-000001-RED-FS",
+      "barcode": "AS-000001-RED-FS",
+      "stock": 10,
+      "lowStockThreshold": 3,
+      "images": [
+        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "Free Size (6.3m)"
+      ],
+      "colors": [
+        "Crimson Red",
+        "Royal Maroon"
+      ],
+      "fabricType": "Pure Kanjeevaram Silk",
+      "hsnCode": "5007",
+      "rating": 4.9,
+      "reviewCount": 142,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": true,
+      "isNewArrival": false,
+      "isActive": true,
+      "updatedAt": "2026-11-13T16:10:14.750Z"
+    },
+    {
+      "_id": "prod_as_002",
+      "productId": "AS-000002",
+      "name": "Floral Embroidered Festive Anarkali Kurti",
+      "slug": "floral-embroidered-festive-anarkali-kurti",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Regal emerald green silk-blend kurti with hand zardozi and mirror work embroidery.",
+      "description": "Turn heads at every festive gathering in this flared anarkali kurti featuring intricate gota patti neckline, flared tier hem, and quarter sleeves. Soft cotton inner lining ensures all-day celebration comfort.",
+      "category": "cat_kurtis",
+      "price": 1599,
+      "mrp": 2199,
+      "discountPercent": 27,
+      "sku": "AS-000002-GRN-M",
+      "barcode": "AS-000002-GRN-M",
+      "stock": 28,
+      "lowStockThreshold": 5,
+      "images": [
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Emerald Green",
+        "Wine Maroon"
+      ],
+      "fabricType": "Silk Chanderi",
+      "hsnCode": "6204",
+      "rating": 4.8,
+      "reviewCount": 96,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_as_003",
+      "productId": "AS-000003",
+      "name": "Banarasi Brocade Silk Saree with Zari Pallu",
+      "slug": "banarasi-brocade-silk-saree-zari-pallu",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Royal sapphire blue Banarasi katan silk woven with silver and antique gold zari booti.",
+      "description": "Woven in the historic looms of Varanasi, this katan silk masterpiece reflects timeless royal grandeur with floral kadwa zari motifs and heavy border.",
+      "category": "cat_sarees",
+      "price": 8999,
+      "mrp": 12999,
+      "discountPercent": 30,
+      "sku": "AS-000003-BLU-FS",
+      "barcode": "AS-000003-BLU-FS",
+      "stock": 15,
+      "lowStockThreshold": 4,
+      "images": [
+        "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "Free Size (6.3m)"
+      ],
+      "colors": [
+        "Sapphire Blue",
+        "Teal Green"
+      ],
+      "fabricType": "Banarasi Katan Silk",
+      "hsnCode": "5007",
+      "rating": 4.9,
+      "reviewCount": 68,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_as_004",
+      "productId": "AS-000004",
+      "name": "Men's Raw Silk Festive Kurta & Dhoti Set",
+      "slug": "mens-raw-silk-festive-kurta-dhoti-set",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Champagne gold raw silk long kurta with mandarin collar and matching pure silk dhoti.",
+      "description": "Traditional elegance redefined for weddings and rituals. Made with 100% pure raw silk with fine mother-of-pearl buttons and matching border dhoti.",
+      "category": "cat_menswear",
+      "price": 2999,
+      "mrp": 4499,
+      "discountPercent": 33,
+      "sku": "AS-000004-GLD-L",
+      "barcode": "AS-000004-GLD-L",
+      "stock": 22,
+      "lowStockThreshold": 5,
+      "images": [
+        "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "colors": [
+        "Champagne Gold",
+        "Off White"
+      ],
+      "fabricType": "Raw Silk",
+      "hsnCode": "6203",
+      "rating": 4.7,
+      "reviewCount": 52,
+      "approvalStatus": "approved",
+      "isFeatured": false,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_as_005",
+      "productId": "AS-000005",
+      "name": "Handcrafted Pure Tussar Silk Saree with Madhubani Art",
+      "slug": "pure-tussar-silk-saree-madhubani-art",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Earthy golden honey tussar silk featuring authentic hand-painted Madhubani floral stories.",
+      "description": "Artisanal organic tussar silk saree with naturally coarse rich texture and hand-painted folk motifs along the pallu.",
+      "category": "cat_sarees",
+      "price": 6499,
+      "mrp": 8999,
+      "discountPercent": 28,
+      "sku": "AS-000005-MST-FS",
+      "barcode": "AS-000005-MST-FS",
+      "stock": 8,
+      "lowStockThreshold": 2,
+      "images": [
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "Free Size (6.3m)"
+      ],
+      "colors": [
+        "Honey Mustard",
+        "Rust Orange"
+      ],
+      "fabricType": "Wild Tussar Silk",
+      "hsnCode": "5007",
+      "rating": 4.9,
+      "reviewCount": 38,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_as_006",
+      "productId": "AS-000006",
+      "name": "Girls Traditional Pattu Pavadai Silk Frock (Pink Gold)",
+      "slug": "girls-traditional-pattu-pavadai-silk-frock",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "shortDescription": "Vibrant rani pink pure silk skirt with heavy gold zari border and embroidered top.",
+      "description": "Adorable traditional South Indian festive wear for young girls. Soft pure silk with comfortable inner lining.",
+      "category": "cat_kidswear",
+      "price": 1899,
+      "mrp": 2599,
+      "discountPercent": 27,
+      "sku": "AS-000006-PNK-4Y",
+      "barcode": "AS-000006-PNK-4Y",
+      "stock": 18,
+      "lowStockThreshold": 4,
+      "images": [
+        "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "2-3Y",
+        "4-5Y",
+        "6-7Y",
+        "8-9Y"
+      ],
+      "colors": [
+        "Rani Pink",
+        "Peacock Blue"
+      ],
+      "fabricType": "Silk Brocade",
+      "hsnCode": "6204",
+      "rating": 4.8,
+      "reviewCount": 45,
+      "approvalStatus": "approved",
+      "isFeatured": false,
+      "isBestSeller": true,
+      "isNewArrival": false,
+      "isActive": true
+    },
+    {
+      "_id": "prod_af_001",
+      "productId": "AF-000001",
+      "name": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+      "slug": "hand-block-printed-chanderi-dress-material",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "Lavender and pastel mauve unstitched suit set with pure Chanderi silk dupatta.",
+      "description": "Premium unstitched 3-piece dress material containing 2.5m Chanderi top, 2.5m soft cotton bottom, and 2.5m printed zari border dupatta. Breathable and luxurious for office and day festive occasions.",
+      "category": "cat_materials",
+      "price": 1899,
+      "mrp": 2699,
+      "discountPercent": 30,
+      "sku": "AF-000001-PUR-S",
+      "barcode": "AF-000001-PUR-S",
+      "stock": 39,
+      "lowStockThreshold": 8,
+      "images": [
+        "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "Unstitched (7.5m total)"
+      ],
+      "colors": [
+        "Lavender Mauve",
+        "Sage Green"
+      ],
+      "fabricType": "Chanderi Silk Cotton",
+      "hsnCode": "5208",
+      "rating": 4.8,
+      "reviewCount": 118,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "isActive": true,
+      "updatedAt": "2026-11-13T16:09:58.601Z"
+    },
+    {
+      "_id": "prod_af_002",
+      "productId": "AF-000002",
+      "name": "Pure Organic Cotton Floral Running Fabric (Per Meter)",
+      "slug": "pure-organic-cotton-floral-running-fabric",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "60s count cambric cotton fabric with delicate botanical floral prints. 44-inch width.",
+      "description": "High-density, soft breathable organic cotton running meterage ideal for tailoring custom Kurtis, summer dresses, men shirts, and baby clothing. Pre-shrunk with azo-free organic dyes.",
+      "category": "cat_fabrics",
+      "price": 349,
+      "mrp": 499,
+      "discountPercent": 30,
+      "sku": "AF-000002-YEL-1M",
+      "barcode": "AF-000002-YEL-1M",
+      "stock": 150,
+      "lowStockThreshold": 20,
+      "images": [
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "1 Meter",
+        "2.5 Meters",
+        "5 Meters"
+      ],
+      "colors": [
+        "Buttercup Yellow",
+        "Mint Green",
+        "Rose Petal"
+      ],
+      "fabricType": "60s Cambric Cotton",
+      "hsnCode": "5208",
+      "rating": 4.9,
+      "reviewCount": 84,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": true,
+      "isNewArrival": false,
+      "isActive": true
+    },
+    {
+      "_id": "prod_af_003",
+      "productId": "AF-000003",
+      "name": "Artisan Indigo Dabu Hand-Block Print Fabric (Per Meter)",
+      "slug": "artisan-indigo-dabu-hand-block-fabric",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "Mud-resist mud printed artisanal indigo natural dyed cotton fabric from Bagru, Rajasthan.",
+      "description": "True artisanal textile craft. Crafted using natural fermentation indigo vats and traditional wooden blocks. Each meter carries the signature organic depth of authentic hand-dyeing.",
+      "category": "cat_fabrics",
+      "price": 429,
+      "mrp": 599,
+      "discountPercent": 28,
+      "sku": "AF-000003-IND-1M",
+      "barcode": "AF-000003-IND-1M",
+      "stock": 95,
+      "lowStockThreshold": 15,
+      "images": [
+        "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "1 Meter",
+        "2.5 Meters",
+        "5 Meters"
+      ],
+      "colors": [
+        "Deep Indigo Blue"
+      ],
+      "fabricType": "Natural Dye Cotton",
+      "hsnCode": "5208",
+      "rating": 4.9,
+      "reviewCount": 62,
+      "approvalStatus": "approved",
+      "isFeatured": false,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_af_004",
+      "productId": "AF-000004",
+      "name": "Smocked Tiered Cotton Summer Midi Dress",
+      "slug": "smocked-tiered-cotton-summer-midi-dress",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "Breezy lilac pastel dress with shirred elastic bodice and flowy tiered skirt.",
+      "description": "Effortless daytime chic tailored from 100% pure mulmul cotton. Features square neckline, puff sleeves, and a tiered midi silhouette.",
+      "category": "cat_dresses",
+      "price": 1399,
+      "mrp": 1999,
+      "discountPercent": 30,
+      "sku": "AF-000004-LAV-M",
+      "barcode": "AF-000004-LAV-M",
+      "stock": 35,
+      "lowStockThreshold": 6,
+      "images": [
+        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Lilac Pastel",
+        "Powder Pink"
+      ],
+      "fabricType": "Pure Mulmul Cotton",
+      "hsnCode": "6204",
+      "rating": 4.8,
+      "reviewCount": 77,
+      "approvalStatus": "approved",
+      "isFeatured": true,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_af_005",
+      "productId": "AF-000005",
+      "name": "Pure Linen Handloom Shirting & Kurta Fabric",
+      "slug": "pure-linen-handloom-shirting-fabric",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "80 lea European flax pure linen running fabric for luxury shirts, kurtas and jackets.",
+      "description": "Crisp, thermoregulating pure linen with signature natural slub texture. Softens gracefully with every wash.",
+      "category": "cat_fabrics",
+      "price": 599,
+      "mrp": 899,
+      "discountPercent": 33,
+      "sku": "AF-000005-WHT-1M",
+      "barcode": "AF-000005-WHT-1M",
+      "stock": 80,
+      "lowStockThreshold": 15,
+      "images": [
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "1 Meter",
+        "2.5 Meters",
+        "5 Meters"
+      ],
+      "colors": [
+        "Natural Ivory",
+        "Sky Blue",
+        "Olive Khaki"
+      ],
+      "fabricType": "80 Lea Pure Linen",
+      "hsnCode": "5309",
+      "rating": 4.9,
+      "reviewCount": 54,
+      "approvalStatus": "approved",
+      "isFeatured": false,
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "isActive": true
+    },
+    {
+      "_id": "prod_af_006",
+      "productId": "AF-000006",
+      "name": "Zari Brocade Jacquard Blouse & Craft Fabric (1 Meter)",
+      "slug": "zari-brocade-jacquard-blouse-fabric",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "shortDescription": "Lustrous antique gold floral jacquard brocade fabric cut for bridal blouses and dupattas.",
+      "description": "Richly textured metallic brocade fabric that adds opulent festive sparkle to any designer saree or lehenga ensemble.",
+      "category": "cat_fabrics",
+      "price": 499,
+      "mrp": 799,
+      "discountPercent": 38,
+      "sku": "AF-000006-GLD-1M",
+      "barcode": "AF-000006-GLD-1M",
+      "stock": 65,
+      "lowStockThreshold": 10,
+      "images": [
+        "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80"
+      ],
+      "sizes": [
+        "1 Meter Cut (44-inch)"
+      ],
+      "colors": [
+        "Antique Gold",
+        "Copper Rose"
+      ],
+      "fabricType": "Zari Jacquard Brocade",
+      "hsnCode": "5809",
+      "rating": 4.8,
+      "reviewCount": 42,
+      "approvalStatus": "approved",
+      "isFeatured": false,
+      "isBestSeller": true,
+      "isNewArrival": false,
+      "isActive": true
+    }
+  ],
+  "banners": [
+    {
+      "_id": "bnr_001",
+      "title": "Festive Fashion Edit",
+      "subtitle": "Elegant Ethnic & Trendy Western Styles for Every Occasion",
+      "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1600&auto=format&fit=crop&q=80",
+      "ctaText": "Shop the Collection",
+      "ctaLink": "/products",
+      "isActive": true,
+      "displayOrder": 1
+    },
+    {
+      "_id": "bnr_002",
+      "title": "Trendy Fashion, Better You",
+      "subtitle": "Discover the latest handwoven silks and artisan running fabrics",
+      "image": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1600&auto=format&fit=crop&q=80",
+      "ctaText": "Explore Now",
+      "ctaLink": "/products",
+      "isActive": true,
+      "displayOrder": 2
+    }
+  ],
+  "coupons": [
+    {
+      "_id": "cpm_01",
+      "name": "Silks Festive 10%",
+      "code": "SILK10",
+      "discountType": "percentage",
+      "discountValue": 10,
+      "applicableStores": "AS",
+      "minPurchaseAmount": 1999,
+      "maxDiscountAmount": 1500,
+      "usageLimit": 500,
+      "usedCount": 142,
+      "startDate": "2026-01-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "10% off pure handloom Kanjeevaram & Banarasi silks"
+    },
+    {
+      "_id": "cpm_02",
+      "name": "Fabrics Flat ₹200 Off",
+      "code": "FABRIC200",
+      "discountType": "fixed",
+      "discountValue": 200,
+      "applicableStores": "AF",
+      "minPurchaseAmount": 999,
+      "maxDiscountAmount": 200,
+      "usageLimit": 1000,
+      "usedCount": 218,
+      "startDate": "2026-01-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "₹200 instant off on artisan linen & yardage fabrics"
+    },
+    {
+      "_id": "cpm_03",
+      "name": "Saree Category 15% OFF",
+      "code": "SAREE15",
+      "discountType": "category",
+      "discountValue": 15,
+      "applicableStores": "AS",
+      "applicableCategory": "sarees",
+      "minPurchaseAmount": 2499,
+      "maxDiscountAmount": 2000,
+      "usageLimit": 300,
+      "usedCount": 89,
+      "startDate": "2026-02-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "15% discount on all pure silk & tussar saree collections"
+    },
+    {
+      "_id": "cpm_04",
+      "name": "Combo Saree Offer: 2 for ₹2,999",
+      "code": "COMBO2999",
+      "discountType": "combo",
+      "discountValue": 2999,
+      "applicableStores": "AS",
+      "comboQuantity": 2,
+      "minPurchaseAmount": 2999,
+      "usageLimit": 200,
+      "usedCount": 45,
+      "startDate": "2026-03-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "Buy two selected pure handloom sarees for flat ₹2,999"
+    },
+    {
+      "_id": "cpm_05",
+      "name": "Mixed Store Super Saver",
+      "code": "BOTH500",
+      "discountType": "both_stores",
+      "discountValue": 500,
+      "applicableStores": "both",
+      "minPurchaseAmount": 3499,
+      "maxDiscountAmount": 500,
+      "usageLimit": 500,
+      "usedCount": 112,
+      "startDate": "2026-01-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "₹500 discount when eligible cart contains items from both stores"
+    },
+    {
+      "_id": "cpm_06",
+      "name": "VIP Free Express Shipping",
+      "code": "FREESHIP",
+      "discountType": "free_shipping",
+      "discountValue": 99,
+      "applicableStores": "both",
+      "minPurchaseAmount": 499,
+      "usageLimit": 2000,
+      "usedCount": 430,
+      "startDate": "2026-01-01",
+      "expiryDate": "2026-12-31",
+      "isActive": true,
+      "description": "Zero shipping charge on all India orders"
+    }
+  ],
+  "orders": [
+    {
+      "orderNumber": "ORD-488764",
+      "customer": "usr_guest",
+      "customerDetails": {
+        "name": "Pooja Venkatesh",
+        "email": "customer@aaradhya.com",
+        "phone": "+91 98765 44321"
+      },
+      "shippingAddress": {
+        "fullName": "Pooja Venkatesh",
+        "phone": "+91 98765 44321",
+        "addressLine1": "#42, 4th Main, Malleshwaram",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560003"
+      },
+      "items": [
+        {
+          "product": "prod_as_001",
+          "variantId": null,
+          "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+          "productId": "AS-000001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "sku": "AS-SAREE-KAN-01",
+          "barcode": "AS-000001-RED-FS",
+          "price": 14999,
+          "mrp": 19999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80",
+          "vendorStatus": "pending",
+          "commissionAmount": 0,
+          "vendorEarning": 14999,
+          "shipment": {
+            "shiprocketOrderId": "",
+            "shiprocketShipmentId": "",
+            "awb": "",
+            "courierName": "Blue Dart / Shiprocket",
+            "status": "Order Placed",
+            "trackingUrl": "",
+            "labelUrl": ""
+          }
+        },
+        {
+          "product": "prod_af_001",
+          "variantId": null,
+          "name": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+          "productId": "AF-000001",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "sku": "AF-DM-CHAND-01",
+          "barcode": "AF-000001-PUR-S",
+          "price": 1899,
+          "mrp": 2699,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80",
+          "vendorStatus": "pending",
+          "commissionAmount": 0,
+          "vendorEarning": 1899,
+          "shipment": {
+            "shiprocketOrderId": "",
+            "shiprocketShipmentId": "",
+            "awb": "",
+            "courierName": "Blue Dart / Shiprocket",
+            "status": "Order Placed",
+            "trackingUrl": "",
+            "labelUrl": ""
+          }
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AS-ORD-000106",
+          "storeId": "store_silks_001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "itemCount": 1,
+          "subtotal": 14999,
+          "taxAmount": 749.95,
+          "shippingFee": 0,
+          "totalAmount": 15748.95,
+          "status": "pending",
+          "courier": "Blue Dart / Shiprocket Express",
+          "trackingNumber": "TRK-AS-449611",
+          "items": [
+            {
+              "product": "prod_as_001",
+              "variantId": null,
+              "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+              "productId": "AS-000001",
+              "storeCode": "AS",
+              "storeName": "Aaradhya Silks",
+              "sku": "AS-SAREE-KAN-01",
+              "barcode": "AS-000001-RED-FS",
+              "price": 14999,
+              "mrp": 19999,
+              "quantity": 1,
+              "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80",
+              "vendorStatus": "pending",
+              "commissionAmount": 0,
+              "vendorEarning": 14999,
+              "shipment": {
+                "shiprocketOrderId": "",
+                "shiprocketShipmentId": "",
+                "awb": "",
+                "courierName": "Blue Dart / Shiprocket",
+                "status": "Order Placed",
+                "trackingUrl": "",
+                "labelUrl": ""
+              }
+            }
+          ]
+        },
+        {
+          "suborderNumber": "AF-ORD-000099",
+          "storeId": "store_fabrics_002",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "itemCount": 1,
+          "subtotal": 1899,
+          "taxAmount": 94.95,
+          "shippingFee": 0,
+          "totalAmount": 1993.95,
+          "status": "pending",
+          "courier": "Blue Dart / Shiprocket Express",
+          "trackingNumber": "TRK-AF-258898",
+          "items": [
+            {
+              "product": "prod_af_001",
+              "variantId": null,
+              "name": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+              "productId": "AF-000001",
+              "storeCode": "AF",
+              "storeName": "Aaradhya Fabrics",
+              "sku": "AF-DM-CHAND-01",
+              "barcode": "AF-000001-PUR-S",
+              "price": 1899,
+              "mrp": 2699,
+              "quantity": 1,
+              "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80",
+              "vendorStatus": "pending",
+              "commissionAmount": 0,
+              "vendorEarning": 1899,
+              "shipment": {
+                "shiprocketOrderId": "",
+                "shiprocketShipmentId": "",
+                "awb": "",
+                "courierName": "Blue Dart / Shiprocket",
+                "status": "Order Placed",
+                "trackingUrl": "",
+                "labelUrl": ""
+              }
+            }
+          ]
+        }
+      ],
+      "subtotal": 16898,
+      "taxAmount": 3041.64,
+      "shippingFee": 0,
+      "discountAmount": 0,
+      "totalAmount": 19939.64,
+      "couponCode": "",
+      "paymentMethod": "razorpay",
+      "paymentStatus": "paid",
+      "razorpayDetails": {
+        "orderId": "rzp_ord_1794586198614",
+        "paymentId": "rzp_pay_1794586198614",
+        "signature": "sandbox_verified_signature"
+      },
+      "orderStatus": "confirmed",
+      "timeline": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-13T16:09:58.614Z",
+          "note": "Payment confirmed via RAZORPAY"
+        },
+        {
+          "status": "Order Confirmed",
+          "timestamp": "2026-11-13T16:09:58.614Z",
+          "note": "Generated 2 store suborders: AS-ORD-000106, AF-ORD-000099"
+        }
+      ],
+      "isPosOrder": false,
+      "_id": "ord_1794586198615_6hcv0",
+      "createdAt": "2026-11-13T16:09:58.615Z",
+      "updatedAt": "2026-11-13T16:09:58.615Z"
+    },
+    {
+      "_id": "ord_001",
+      "orderNumber": "ORD-2026-000001",
+      "customer": "usr_cust_001",
+      "customerDetails": {
+        "name": "Priya Sharma",
+        "email": "customer@aaradhya.com",
+        "phone": "+91 98765 44004"
+      },
+      "shippingAddress": {
+        "fullName": "Priya Sharma",
+        "phone": "+91 98765 44004",
+        "addressLine1": "Villa 14, Palm Meadows",
+        "addressLine2": "Whitefield",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560066"
+      },
+      "subtotal": 16898,
+      "taxAmount": 844.9,
+      "shippingFee": 0,
+      "totalAmount": 17742.9,
+      "paymentMethod": "razorpay",
+      "paymentStatus": "paid",
+      "orderStatus": "confirmed",
+      "items": [
+        {
+          "product": "prod_as_001",
+          "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+          "productId": "AS-000001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "price": 14999,
+          "quantity": 1,
+          "sku": "AS-000001-RED-FS",
+          "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80"
+        },
+        {
+          "product": "prod_af_001",
+          "name": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+          "productId": "AF-000001",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "price": 1899,
+          "quantity": 1,
+          "sku": "AF-000001-PUR-S",
+          "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=500&auto=format&fit=crop&q=80"
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AS-ORD-000105",
+          "storeId": "store_silks_001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "itemCount": 1,
+          "subtotal": 14999,
+          "taxAmount": 749.95,
+          "shippingFee": 0,
+          "totalAmount": 15748.95,
+          "status": "packed",
+          "courier": "Blue Dart Express",
+          "trackingNumber": "TRK-AS-819203",
+          "items": [
+            {
+              "product": "prod_as_001",
+              "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+              "productId": "AS-000001",
+              "storeCode": "AS",
+              "storeName": "Aaradhya Silks",
+              "price": 14999,
+              "quantity": 1,
+              "sku": "AS-000001-RED-FS",
+              "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80"
+            }
+          ]
+        },
+        {
+          "suborderNumber": "AF-ORD-000098",
+          "storeId": "store_fabrics_002",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "itemCount": 1,
+          "subtotal": 1899,
+          "taxAmount": 94.95,
+          "shippingFee": 0,
+          "totalAmount": 1993.95,
+          "status": "accepted",
+          "courier": "Shiprocket Surface",
+          "trackingNumber": "TRK-AF-541209",
+          "items": [
+            {
+              "product": "prod_af_001",
+              "name": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+              "productId": "AF-000001",
+              "storeCode": "AF",
+              "storeName": "Aaradhya Fabrics",
+              "price": 1899,
+              "quantity": 1,
+              "sku": "AF-000001-PUR-S",
+              "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=500&auto=format&fit=crop&q=80"
+            }
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-12T09:00:00.000Z",
+          "note": "Payment verified via Razorpay"
+        },
+        {
+          "status": "Split Suborders Created",
+          "timestamp": "2026-11-12T09:01:00.000Z",
+          "note": "Dispatched to Aaradhya Silks (AS-ORD-000105) and Aaradhya Fabrics (AF-ORD-000098)"
+        }
+      ],
+      "createdAt": "2026-11-12T09:00:00.000Z"
+    },
+    {
+      "orderNumber": "ORD-2026-000108",
+      "customer": "usr_cust_002",
+      "customerDetails": {
+        "name": "Ananya Reddy",
+        "email": "ananya.reddy@gmail.com",
+        "phone": "+91 99887 76655"
+      },
+      "shippingAddress": {
+        "fullName": "Ananya Reddy",
+        "phone": "+91 99887 76655",
+        "addressLine1": "Flat 402, Royal Palms, Jubilee Hills",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500033"
+      },
+      "subtotal": 24999,
+      "taxAmount": 1249.95,
+      "shippingFee": 0,
+      "discountAmount": 1500,
+      "totalAmount": 24748.95,
+      "paymentMethod": "Razorpay UPI",
+      "paymentStatus": "paid",
+      "orderStatus": "shipped",
+      "items": [
+        {
+          "product": "prod_as_002",
+          "name": "Banarasi Katan Silk Royal Saree",
+          "productId": "AS-000002",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "sku": "AS-SAREE-BAN-02",
+          "barcode": "890100452132",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500"
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AS-ORD-000108",
+          "storeId": "store_silks_001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "itemCount": 1,
+          "subtotal": 24999,
+          "totalAmount": 24748.95,
+          "status": "shipped",
+          "courier": "Blue Dart Express",
+          "trackingNumber": "BLUEDART-882194"
+        }
+      ],
+      "razorpayDetails": {
+        "orderId": "rzp_ord_108",
+        "paymentId": "rzp_pay_108",
+        "status": "captured"
+      },
+      "createdAt": "2026-11-14T04:23:11.776Z",
+      "updatedAt": "2026-11-14T09:23:11.778Z"
+    },
+    {
+      "orderNumber": "ORD-2026-000109",
+      "customer": "usr_cust_003",
+      "customerDetails": {
+        "name": "Sneha Patel",
+        "email": "sneha.patel@outlook.com",
+        "phone": "+91 98450 11223"
+      },
+      "shippingAddress": {
+        "fullName": "Sneha Patel",
+        "phone": "+91 98450 11223",
+        "addressLine1": "Plot 18, Banjara Hills",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500034"
+      },
+      "subtotal": 4598,
+      "taxAmount": 229.9,
+      "shippingFee": 99,
+      "discountAmount": 200,
+      "totalAmount": 4726.9,
+      "paymentMethod": "Razorpay NetBanking",
+      "paymentStatus": "paid",
+      "orderStatus": "delivered",
+      "items": [
+        {
+          "product": "prod_af_002",
+          "name": "Pure Linen Yardage Fabric (Lavender - 5m)",
+          "productId": "AF-000002",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "sku": "AF-FAB-LINEN-02",
+          "barcode": "890100582910",
+          "price": 2999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+        },
+        {
+          "product": "prod_af_003",
+          "name": "Artisan Ikat Cotton Yardage (3m)",
+          "productId": "AF-000003",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "sku": "AF-FAB-IKAT-01",
+          "barcode": "890100771822",
+          "price": 1599,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=500"
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AF-ORD-000109",
+          "storeId": "store_fabrics_002",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "itemCount": 2,
+          "subtotal": 4598,
+          "totalAmount": 4726.9,
+          "status": "delivered",
+          "courier": "Delhivery Surface",
+          "trackingNumber": "DELHIVERY-992144"
+        }
+      ],
+      "razorpayDetails": {
+        "orderId": "rzp_ord_109",
+        "paymentId": "rzp_pay_109",
+        "status": "captured"
+      },
+      "createdAt": "2026-11-13T05:23:11.778Z",
+      "updatedAt": "2026-11-14T09:23:11.778Z"
+    },
+    {
+      "orderNumber": "ORD-2026-000110",
+      "customer": "usr_cust_004",
+      "customerDetails": {
+        "name": "Kavitha Iyer",
+        "email": "kavitha.iyer@gmail.com",
+        "phone": "+91 97411 22334"
+      },
+      "shippingAddress": {
+        "fullName": "Kavitha Iyer",
+        "phone": "+91 97411 22334",
+        "addressLine1": "B-601, Prestige Shantiniketan",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560048"
+      },
+      "subtotal": 18498,
+      "taxAmount": 924.9,
+      "shippingFee": 0,
+      "discountAmount": 500,
+      "totalAmount": 18922.9,
+      "paymentMethod": "Razorpay UPI",
+      "paymentStatus": "paid",
+      "orderStatus": "processing",
+      "items": [
+        {
+          "product": "prod_as_003",
+          "name": "Mysore Silk Gold Zari Saree",
+          "productId": "AS-000003",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "sku": "AS-SAREE-MYS-03",
+          "barcode": "890100918234",
+          "price": 12999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500"
+        },
+        {
+          "product": "prod_af_004",
+          "name": "Handwoven Raw Silk Running Fabric (4m)",
+          "productId": "AF-000004",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "sku": "AF-FAB-RSILK-04",
+          "barcode": "890100654312",
+          "price": 5499,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AS-ORD-000110",
+          "storeId": "store_silks_001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "itemCount": 1,
+          "subtotal": 12999,
+          "totalAmount": 13348.9,
+          "status": "processing",
+          "courier": "Blue Dart Express",
+          "trackingNumber": "BLUEDART-551920"
+        },
+        {
+          "suborderNumber": "AF-ORD-000110",
+          "storeId": "store_fabrics_002",
+          "storeCode": "AF",
+          "storeName": "Aaradhya Fabrics",
+          "itemCount": 1,
+          "subtotal": 5499,
+          "totalAmount": 5574,
+          "status": "processing",
+          "courier": "Shiprocket Surface",
+          "trackingNumber": "SHIP-991204"
+        }
+      ],
+      "razorpayDetails": {
+        "orderId": "rzp_ord_110",
+        "paymentId": "rzp_pay_110",
+        "status": "captured"
+      },
+      "createdAt": "2026-11-13T21:23:11.778Z",
+      "updatedAt": "2026-11-14T09:23:11.778Z"
+    },
+    {
+      "orderNumber": "ORD-2026-000111",
+      "customer": "usr_cust_005",
+      "customerDetails": {
+        "name": "Deepa Narayanan",
+        "email": "deepa.n@gmail.com",
+        "phone": "+91 96112 34567"
+      },
+      "shippingAddress": {
+        "fullName": "Deepa Narayanan",
+        "phone": "+91 96112 34567",
+        "addressLine1": "Door 12, Besant Nagar",
+        "city": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600090"
+      },
+      "subtotal": 8999,
+      "taxAmount": 449.95,
+      "shippingFee": 0,
+      "discountAmount": 0,
+      "totalAmount": 9448.95,
+      "paymentMethod": "Razorpay Cards",
+      "paymentStatus": "paid",
+      "orderStatus": "confirmed",
+      "items": [
+        {
+          "product": "prod_as_004",
+          "name": "Tussar Hand-Painted Silk Saree",
+          "productId": "AS-000004",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "sku": "AS-SAREE-TUS-04",
+          "barcode": "890100341298",
+          "price": 8999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500"
+        }
+      ],
+      "suborders": [
+        {
+          "suborderNumber": "AS-ORD-000111",
+          "storeId": "store_silks_001",
+          "storeCode": "AS",
+          "storeName": "Aaradhya Silks",
+          "itemCount": 1,
+          "subtotal": 8999,
+          "totalAmount": 9448.95,
+          "status": "confirmed",
+          "courier": "Blue Dart Express",
+          "trackingNumber": "BLUEDART-110294"
+        }
+      ],
+      "razorpayDetails": {
+        "orderId": "rzp_ord_111",
+        "paymentId": "rzp_pay_111",
+        "status": "captured"
+      },
+      "createdAt": "2026-11-14T07:23:11.778Z",
+      "updatedAt": "2026-11-14T09:23:11.778Z"
+    }
+  ],
+  "posBills": [
+    {
+      "billNumber": "BILL-20261113-4192",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "cashier": {
+        "id": "usr_silks_001",
+        "name": "Pooja (Silks Cashier)"
+      },
+      "customer": {
+        "name": "Smt. Lakshmi Rao",
+        "phone": "+91 98450 11223",
+        "email": ""
+      },
+      "items": [
+        {
+          "product": "prod_as_001",
+          "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+          "sku": "AS-SAREE-KAN-01",
+          "barcode": "AS-000001-RED-FS",
+          "variantName": "",
+          "price": 14999,
+          "mrp": 19999,
+          "quantity": 1,
+          "gstRate": 5,
+          "taxAmount": 749.95,
+          "total": 15748.95
+        }
+      ],
+      "subtotal": 14999,
+      "taxAmount": 749.95,
+      "discountAmount": 500,
+      "totalPayable": 15248.95,
+      "paymentMode": "Cash",
+      "paymentDetails": {
+        "cashTendered": 15500,
+        "changeReturned": 251.05,
+        "upiRef": "",
+        "cardLast4": ""
+      },
+      "status": "Completed",
+      "_id": "pos_1794586214758_s13mv",
+      "createdAt": "2026-11-13T16:10:14.758Z",
+      "updatedAt": "2026-11-13T16:10:14.758Z"
+    },
+    {
+      "_id": "bill_as_001",
+      "billNumber": "BILL-AS-2026-0012",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks (Counter #01)",
+      "cashier": {
+        "id": "usr_pos_001",
+        "name": "Ramesh K"
+      },
+      "customer": {
+        "name": "Ananya Rao",
+        "phone": "+91 98450 12345"
+      },
+      "items": [
+        {
+          "product": "prod_as_002",
+          "name": "Floral Embroidered Festive Anarkali Kurti",
+          "sku": "AS-000002-GRN-M",
+          "barcode": "AS-000002-GRN-M",
+          "price": 1599,
+          "quantity": 1,
+          "total": 1599
+        }
+      ],
+      "subtotal": 1599,
+      "taxAmount": 80,
+      "totalPayable": 1679,
+      "paymentMode": "UPI",
+      "createdAt": "2026-11-12T11:45:00.000Z"
+    },
+    {
+      "_id": "bill_af_002",
+      "billNumber": "BILL-AF-2026-0034",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics (Counter #01)",
+      "cashier": {
+        "id": "usr_pos_001",
+        "name": "Ramesh K"
+      },
+      "customer": {
+        "name": "Kavita Menon",
+        "phone": "+91 98450 67890"
+      },
+      "items": [
+        {
+          "product": "prod_af_002",
+          "name": "Pure Organic Cotton Floral Running Fabric (Per Meter)",
+          "sku": "AF-000002-YEL-1M",
+          "barcode": "AF-000002-YEL-1M",
+          "price": 349,
+          "quantity": 3,
+          "total": 1047
+        }
+      ],
+      "subtotal": 1047,
+      "taxAmount": 52,
+      "totalPayable": 1099,
+      "paymentMode": "Cash",
+      "createdAt": "2026-11-12T15:20:00.000Z"
+    }
+  ],
+  "stockMovements": [
+    {
+      "product": "prod_as_001",
+      "sku": "AS-SAREE-KAN-01",
+      "productName": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+      "movementType": "pos_sale",
+      "quantity": -1,
+      "previousStock": 11,
+      "newStock": 10,
+      "referenceType": "POSBill",
+      "referenceId": "BILL-20261113-4192",
+      "performedBy": "Pooja (Silks Cashier)",
+      "notes": "Offline counter checkout BILL-20261113-4192",
+      "_id": "sto_1794586214752_ysskc",
+      "createdAt": "2026-11-13T16:10:14.752Z",
+      "updatedAt": "2026-11-13T16:10:14.752Z"
+    },
+    {
+      "product": "prod_af_001",
+      "sku": "AF-DM-CHAND-01",
+      "productName": "Hand Block-Printed Chanderi Dress Material (3-Piece)",
+      "movementType": "online_sale",
+      "quantity": -1,
+      "previousStock": 40,
+      "newStock": 39,
+      "referenceType": "Order",
+      "referenceId": "ORD-488764",
+      "performedBy": "Pooja Venkatesh",
+      "notes": "Online checkout order ORD-488764",
+      "_id": "sto_1794586198604_iol2y",
+      "createdAt": "2026-11-13T16:09:58.604Z",
+      "updatedAt": "2026-11-13T16:09:58.604Z"
+    },
+    {
+      "product": "prod_as_001",
+      "sku": "AS-SAREE-KAN-01",
+      "productName": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+      "movementType": "online_sale",
+      "quantity": -1,
+      "previousStock": 12,
+      "newStock": 11,
+      "referenceType": "Order",
+      "referenceId": "ORD-488764",
+      "performedBy": "Pooja Venkatesh",
+      "notes": "Online checkout order ORD-488764",
+      "_id": "sto_1794586198599_wa0t1",
+      "createdAt": "2026-11-13T16:09:58.599Z",
+      "updatedAt": "2026-11-13T16:09:58.599Z"
+    },
+    {
+      "product": "prod_013",
+      "sku": "PRF-014",
+      "productName": "Luxury Velvet Oud Eau De Parfum (100ml)",
+      "movementType": "pos_sale",
+      "quantity": -1,
+      "previousStock": 37,
+      "newStock": 36,
+      "referenceType": "POSBill",
+      "referenceId": "BILL-20261112-6308",
+      "performedBy": "Admin (Super Administrator)",
+      "notes": "Offline counter checkout BILL-20261112-6308",
+      "_id": "sto_1794491293682_l18ty",
+      "createdAt": "2026-11-12T13:48:13.682Z",
+      "updatedAt": "2026-11-12T13:48:13.682Z"
+    },
+    {
+      "product": "prod_013",
+      "sku": "PRF-014",
+      "productName": "Luxury Velvet Oud Eau De Parfum (100ml)",
+      "movementType": "online_sale",
+      "quantity": -1,
+      "previousStock": 38,
+      "newStock": 37,
+      "referenceType": "Order",
+      "referenceId": "ORD-416526",
+      "performedBy": "Rahul Sharma",
+      "notes": "Online checkout order ORD-416526",
+      "_id": "sto_1794491293651_5xp1k",
+      "createdAt": "2026-11-12T13:48:13.651Z",
+      "updatedAt": "2026-11-12T13:48:13.651Z"
+    },
+    {
+      "_id": "mov_001",
+      "product": "prod_004",
+      "sku": "SW-005",
+      "productName": "Smart Watch Pro Ultra Series",
+      "movementType": "online_sale",
+      "quantity": -1,
+      "previousStock": 46,
+      "newStock": 45,
+      "referenceType": "Order",
+      "referenceId": "ORD-589432",
+      "performedBy": "System (Online Checkout)",
+      "notes": "Reserved & Deducted for Customer Order ORD-589432",
+      "createdAt": "2026-11-12T08:33:01.581Z"
+    },
+    {
+      "_id": "mov_002",
+      "product": "prod_010",
+      "sku": "BAG-004",
+      "productName": "Designer Structured Handbag (Emerald Green)",
+      "movementType": "pos_sale",
+      "quantity": -1,
+      "previousStock": 23,
+      "newStock": 22,
+      "referenceType": "POSBill",
+      "referenceId": "BILL-202602-0045",
+      "performedBy": "Deepika Cashier (Counter Terminal 1)",
+      "notes": "Counter Walk-in Sale Bill BILL-202602-0045",
+      "createdAt": "2026-11-12T11:33:01.581Z"
+    },
+    {
+      "_id": "mov_003",
+      "product": "prod_001",
+      "sku": "IPHONE-15-BLU",
+      "productName": "Apple iPhone 15 (128GB, Blue)",
+      "movementType": "purchase_in",
+      "quantity": 20,
+      "previousStock": 0,
+      "newStock": 20,
+      "referenceType": "Purchase",
+      "referenceId": "PO-2026-8891",
+      "performedBy": "Warehouse Manager",
+      "notes": "Initial Bulk Consignment from Apple Distributor",
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    }
+  ],
+  "vendorPayouts": [
+    {
+      "payoutNumber": "PAY-649129",
+      "vendor": "ven_technova_001",
+      "amount": 5000,
+      "status": "pending",
+      "paymentMethod": "Bank Transfer (NEFT/RTGS)",
+      "bankDetails": {
+        "accountName": "TechNova Retail Solutions Pvt Ltd",
+        "accountNumber": "9182736450192",
+        "ifsc": "HDFC0001234",
+        "bankName": "HDFC Bank"
+      },
+      "requestedAt": "2026-11-12T13:48:13.702Z",
+      "_id": "ven_1794491293702_t6zvq",
+      "createdAt": "2026-11-12T13:48:13.702Z",
+      "updatedAt": "2026-11-12T13:48:13.702Z"
+    }
+  ],
+  "stores": [
+    {
+      "_id": "store_silks_001",
+      "name": "Aaradhya Silks",
+      "code": "AS",
+      "prefix": "AS",
+      "currentCounter": 9,
+      "orderCounter": 107,
+      "description": "Exclusive Kanjeevaram pure silk sarees, Banarasi brocades, bridal ensembles and heirloom handwoven silks.",
+      "logo": "/logo.jpeg",
+      "banner": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1200&auto=format&fit=crop&q=80",
+      "phone": "+91 98765 11001",
+      "email": "silks@aaradhya.com",
+      "address": {
+        "street": "12-A, Silk Weaver Street, Main Road",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "country": "India"
+      },
+      "gstin": "29AAAAA0000A1Z5",
+      "walletBalance": 328450,
+      "pendingSettlement": 45200,
+      "totalRevenue": 1246320,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-11-14T11:44:04.966Z"
+    },
+    {
+      "_id": "store_fabrics_002",
+      "name": "Aaradhya Fabrics",
+      "code": "AF",
+      "prefix": "AF",
+      "currentCounter": 7,
+      "orderCounter": 100,
+      "description": "Artisan block-print cottons, unstitched dress materials, pure linen meterage, brocades & chanderi fabrics.",
+      "logo": "/logo.jpeg",
+      "banner": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&auto=format&fit=crop&q=80",
+      "phone": "+91 98765 22002",
+      "email": "fabrics@aaradhya.com",
+      "address": {
+        "street": "Shop 45, Fashion Textile Market, Commercial Street",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "country": "India"
+      },
+      "gstin": "29BBBBB1111B2Z6",
+      "walletBalance": 264820,
+      "pendingSettlement": 38100,
+      "totalRevenue": 982740,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-11-13T16:09:58.610Z"
+    }
+  ],
+  "wallets": [
+    {
+      "_id": "wal_silks_001",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "balance": 343698.95,
+      "pendingSettlement": 60948.95,
+      "totalEarned": 1277317.9,
+      "totalWithdrawn": 872670,
+      "isActive": true,
+      "updatedAt": "2026-11-13T16:10:14.754Z"
+    },
+    {
+      "_id": "wal_fabrics_002",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "balance": 264820,
+      "pendingSettlement": 40093.95,
+      "totalEarned": 984733.95,
+      "totalWithdrawn": 679820,
+      "isActive": true,
+      "updatedAt": "2026-11-13T16:09:58.612Z"
+    }
+  ],
+  "walletTransactions": [
+    {
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "type": "pos_sale",
+      "amount": 15248.95,
+      "previousBalance": 328450,
+      "newBalance": 343698.95,
+      "referenceId": "BILL-20261113-4192",
+      "description": "Counter POS Sale BILL-20261113-4192 (Cash)",
+      "status": "settled",
+      "_id": "wal_1794586214756_1hox7",
+      "createdAt": "2026-11-13T16:10:14.756Z",
+      "updatedAt": "2026-11-13T16:10:14.756Z"
+    },
+    {
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "type": "order_credit",
+      "amount": 1993.95,
+      "previousBalance": 264820,
+      "newBalance": 264820,
+      "referenceId": "AF-ORD-000099",
+      "description": "Order AF-ORD-000099 from parent ORD-488764",
+      "status": "pending",
+      "_id": "wal_1794586198613_jhpvl",
+      "createdAt": "2026-11-13T16:09:58.613Z",
+      "updatedAt": "2026-11-13T16:09:58.613Z"
+    },
+    {
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "type": "order_credit",
+      "amount": 15748.95,
+      "previousBalance": 328450,
+      "newBalance": 328450,
+      "referenceId": "AS-ORD-000106",
+      "description": "Order AS-ORD-000106 from parent ORD-488764",
+      "status": "pending",
+      "_id": "wal_1794586198609_iytto",
+      "createdAt": "2026-11-13T16:09:58.609Z",
+      "updatedAt": "2026-11-13T16:09:58.609Z"
+    },
+    {
+      "_id": "wtx_001",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "type": "order_credit",
+      "amount": 14999,
+      "previousBalance": 313451,
+      "newBalance": 328450,
+      "referenceId": "AS-ORD-000105",
+      "description": "Order settlement for Pure Kanjeevaram Saree",
+      "status": "settled",
+      "createdAt": "2026-11-12T10:00:00.000Z"
+    },
+    {
+      "_id": "wtx_002",
+      "storeId": "store_silks_001",
+      "storeCode": "AS",
+      "type": "pos_sale",
+      "amount": 4598,
+      "previousBalance": 308853,
+      "newBalance": 313451,
+      "referenceId": "BILL-AS-0912",
+      "description": "Counter POS Billing (Cash & UPI)",
+      "status": "settled",
+      "createdAt": "2026-11-12T14:30:00.000Z"
+    },
+    {
+      "_id": "wtx_003",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "type": "order_credit",
+      "amount": 1899,
+      "previousBalance": 262921,
+      "newBalance": 264820,
+      "referenceId": "AF-ORD-000098",
+      "description": "Order settlement for Chanderi Dress Material",
+      "status": "settled",
+      "createdAt": "2026-11-12T11:15:00.000Z"
+    },
+    {
+      "_id": "wtx_004",
+      "storeId": "store_fabrics_002",
+      "storeCode": "AF",
+      "type": "pos_sale",
+      "amount": 3250,
+      "previousBalance": 259671,
+      "newBalance": 262921,
+      "referenceId": "BILL-AF-0844",
+      "description": "Counter POS sale of Linen meterage",
+      "status": "settled",
+      "createdAt": "2026-11-12T16:00:00.000Z"
+    }
+  ],
+  "storePayouts": [
+    {
+      "_id": "pay_req_001",
+      "payoutNumber": "PO-AS-2026-001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "requestedAmount": 150000,
+      "approvedAmount": 150000,
+      "status": "approved",
+      "requestedAt": "2026-11-10T09:17:26.254Z",
+      "processedAt": "2026-11-11T09:17:26.254Z",
+      "paymentReference": "NEFT-HDFC-99283741",
+      "bankDetails": "HDFC Bank • A/C ...8821",
+      "note": "Bi-weekly merchant store disbursement"
+    },
+    {
+      "_id": "pay_req_002",
+      "payoutNumber": "PO-AF-2026-002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "requestedAmount": 120000,
+      "approvedAmount": 120000,
+      "status": "approved",
+      "requestedAt": "2026-11-11T09:17:26.254Z",
+      "processedAt": "2026-11-12T09:17:26.254Z",
+      "paymentReference": "NEFT-ICICI-66172381",
+      "bankDetails": "ICICI Bank • A/C ...3319",
+      "note": "Yardage vendor raw material settlement"
+    },
+    {
+      "_id": "pay_req_003",
+      "payoutNumber": "PO-AS-2026-003",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "requestedAmount": 75000,
+      "approvedAmount": 0,
+      "status": "pending_approval",
+      "requestedAt": "2026-11-14T03:17:26.254Z",
+      "processedAt": null,
+      "paymentReference": "Pending Approval",
+      "bankDetails": "HDFC Bank • A/C ...8821",
+      "note": "Weaver cooperative advance settlement"
+    }
+  ],
+  "settings": [
+    {
+      "_id": "set_platform_001",
+      "platformName": "AARADHYA – Fashion & Fabrics",
+      "brandTagline": "Pure Silk Sarees & Running Yardage",
+      "officialEmail": "support@aaradhya.com",
+      "phone": "+91 40 2389 4400",
+      "headquarters": "Aaradhya Flagship Hub, Road No. 1, KPHB Colony, Hyderabad - 500072",
+      "razorpayStatus": "Active (Sandbox Verified)",
+      "razorpayKeyId": "rzp_test_mv_demo_key",
+      "gstTaxRate": 5,
+      "defaultShippingFee": 99,
+      "freeShippingThreshold": 999,
+      "stores": [
+        {
+          "code": "AS",
+          "name": "Aaradhya Silks",
+          "specialty": "Pure Kanchipuram & Banarasi Sarees",
+          "prefix": "AS"
+        },
+        {
+          "code": "AF",
+          "name": "Aaradhya Fabrics",
+          "specialty": "Artisan Linen & Running Yardage",
+          "prefix": "AF"
+        }
+      ]
+    }
+  ],
+  "storeReturns": [
+    {
+      "_id": "ret_001",
+      "returnNumber": "RET-AS-2026-001",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "suborderNumber": "AS-ORD-488764",
+      "customerName": "Pooja Venkatesh",
+      "customerEmail": "customer@aaradhya.com",
+      "productName": "Kanjeevaram Bridal Silk Saree",
+      "productId": "AS-000001",
+      "sku": "AS-000001-RED-FS",
+      "quantity": 1,
+      "refundAmount": 19939,
+      "reason": "Color tone difference from display",
+      "condition": "Original packaging intact with silk mark tag",
+      "status": "pending_inspection",
+      "restocked": false,
+      "createdAt": "2026-11-13T10:56:35.533Z"
+    },
+    {
+      "_id": "ret_002",
+      "returnNumber": "RET-AF-2026-002",
+      "storeCode": "AF",
+      "storeName": "Aaradhya Fabrics",
+      "suborderNumber": "AF-ORD-488765",
+      "customerName": "Kavita Reddy",
+      "customerEmail": "kavita@gmail.com",
+      "productName": "Pure Mulmul Cotton Running Yardage (5M)",
+      "productId": "AF-000002",
+      "sku": "AF-000002-BLU-5M",
+      "quantity": 1,
+      "refundAmount": 2450,
+      "reason": "Excess meterage ordered",
+      "condition": "Uncut, original fabric fold",
+      "status": "approved",
+      "restocked": true,
+      "createdAt": "2026-11-12T10:56:35.533Z"
+    },
+    {
+      "_id": "ret_003",
+      "returnNumber": "RET-AS-2026-003",
+      "storeCode": "AS",
+      "storeName": "Aaradhya Silks",
+      "suborderNumber": "AS-ORD-488766",
+      "customerName": "Ananya Sharma",
+      "customerEmail": "ananya@gmail.com",
+      "productName": "Banarasi Brocade Silk Dupatta",
+      "productId": "AS-000003",
+      "sku": "AS-000003-GLD-FS",
+      "quantity": 1,
+      "refundAmount": 4850,
+      "reason": "Zari border frayed near edge",
+      "condition": "Damaged in transit",
+      "status": "rejected_restock",
+      "restocked": false,
+      "createdAt": "2026-11-11T10:56:35.533Z"
+    }
+  ]
+}
