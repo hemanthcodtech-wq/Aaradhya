@@ -87,29 +87,22 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
         height: '100%',
       }}
     >
-      {/* 1. Tall Rounded Portrait Image Container matching Nishorama screenshot */}
+      {/* 1. Tall Rounded Portrait Image Container (Exact 3:4 aspect ratio matching Nishorama) */}
       <div
-        className="position-relative overflow-hidden shadow-sm"
+        className="card-media-wrapper position-relative overflow-hidden"
         style={{
-          borderRadius: '22px',
+          borderRadius: '20px',
           backgroundColor: '#F8F6F8',
-          paddingTop: '124%', // Tall portrait aspect ratio
+          paddingTop: '133.333%', // 3:4 portrait ratio matching Nishorama --ratio-percent: 133.33333333333334%
           border: '1px solid #F0E7ED',
         }}
       >
         {/* Floating Pill Badge on Top-Left: "New In" or "% OFF" (White pill with dark text) */}
         <span
-          className="position-absolute shadow-sm fw-semibold text-dark"
+          className="cust-choice-badge"
           style={{
             top: '12px',
             left: '12px',
-            backgroundColor: '#FFFFFF',
-            fontSize: '0.72rem',
-            borderRadius: '999px',
-            padding: '0.22rem 0.65rem',
-            zIndex: 3,
-            letterSpacing: '0.02em',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           }}
         >
           {discount > 0 && resolvedBadge === 'discount' ? `${discount}% OFF` : 'New In'}
@@ -119,25 +112,19 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
         <motion.button
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.88 }}
-          className="position-absolute rounded-circle border-0 d-flex align-items-center justify-content-center shadow-sm"
+          className="wishlist-btn-overlay"
           style={{
             top: '12px',
             right: '12px',
-            width: '34px',
-            height: '34px',
             backgroundColor: isFavorited ? '#FFF0F5' : 'rgba(255, 255, 255, 0.92)',
-            backdropFilter: 'blur(4px)',
-            zIndex: 3,
-            cursor: 'pointer',
             color: isFavorited ? '#E90064' : '#64748B',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           }}
           onClick={handleWishlistToggle}
           title={isFavorited ? 'Remove from Wishlist' : 'Add to Wishlist'}
           aria-label="Wishlist"
         >
           <Heart
-            size={15}
+            size={16}
             fill={isFavorited ? '#E90064' : 'none'}
             color={isFavorited ? '#E90064' : '#64748B'}
           />
@@ -150,8 +137,7 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
             alt={product.name}
             animate={{ scale: isHovered ? 1.05 : 1 }}
             transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
-            className="position-absolute top-0 start-0 w-100 h-100"
-            style={{ objectFit: 'cover' }}
+            className="product-thumb"
             loading="lazy"
           />
         </Link>
@@ -160,10 +146,10 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
       {/* 2. Clean Information Row Below Image matching Nishorama (Title & (Price) on Left, + Add on Right) */}
       <div className="pt-2.5 pb-1 d-flex align-items-center justify-content-between">
         {/* Left Column: Product Name & Formatted Price */}
-        <div className="pe-2 text-truncate" style={{ maxWidth: 'calc(100% - 76px)' }}>
+        <div className="pe-2 text-truncate" style={{ maxWidth: 'calc(100% - 66px)' }}>
           <Link
             to={`/product/${product.slug || product._id}`}
-            className="text-decoration-none fw-semibold d-block text-truncate mb-0.5 text-dark"
+            className="card-info-title text-decoration-none fw-semibold d-block text-truncate mb-0.5 text-dark"
             title={product.name}
             style={{
               fontSize: '0.9rem',
@@ -177,7 +163,7 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
           </Link>
 
           <div
-            className="fw-medium text-secondary small"
+            className="card-info-price fw-medium text-secondary small"
             style={{ fontSize: '0.84rem', color: '#4B5563' }}
           >
             (₹ {product.price?.toLocaleString()})
@@ -188,14 +174,14 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.94 }}
-          className="btn btn-sm rounded-pill fw-semibold d-inline-flex align-items-center justify-content-center gap-1 shadow-sm flex-shrink-0"
+          className="card-add-btn btn btn-sm rounded-pill fw-semibold d-inline-flex align-items-center justify-content-center gap-1 shadow-sm flex-shrink-0"
           style={{
             backgroundColor: added ? '#16A34A' : isHovered ? '#17233B' : '#FFFFFF',
             color: added || isHovered ? '#FFFFFF' : '#17233B',
             border: added ? '1px solid #16A34A' : isHovered ? '1px solid #17233B' : '1px solid #D1D5DB',
             fontSize: '0.78rem',
-            padding: '0.28rem 0.8rem',
-            minWidth: '68px',
+            padding: '0.28rem 0.75rem',
+            minWidth: '64px',
             transition: 'all 0.2s ease',
           }}
           onClick={handleAddToCart}

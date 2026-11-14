@@ -5,9 +5,18 @@ import { useLocation } from 'react-router-dom';
  * ScrollToTop: Automatically scrolls the window to top on route / path change
  */
 const ScrollToTop = () => {
-  const { pathname, search } = useLocation();
+  const { pathname, search, hash } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      setTimeout(() => {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+      }, 100);
+    }
     try {
       window.scrollTo({
         top: 0,
@@ -17,7 +26,7 @@ const ScrollToTop = () => {
     } catch {
       window.scrollTo(0, 0);
     }
-  }, [pathname, search]);
+  }, [pathname, search, hash]);
 
   return null;
 };

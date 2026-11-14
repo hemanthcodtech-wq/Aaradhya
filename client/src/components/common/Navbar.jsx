@@ -169,14 +169,15 @@ const Navbar = () => {
       <header className="sticky-top bg-white border-bottom shadow-sm" style={{ zIndex: 1025 }}>
         {/* 1. Top Announcement Bar */}
         <div
-          className="py-1 px-3 text-white text-nowrap"
+          className="py-1 px-2 px-sm-3 text-white overflow-hidden"
           style={{
             backgroundColor: '#E90064',
             fontSize: '0.78rem',
             letterSpacing: '0.02em',
+            width: '100%',
           }}
         >
-          <div className="container d-flex justify-content-between align-items-center">
+          <div className="container-fluid px-1 px-sm-3 d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center gap-2 overflow-hidden text-truncate w-100 justify-content-center justify-content-sm-start">
               <span className="d-none d-sm-inline-flex align-items-center gap-1.5 fw-medium text-truncate">
                 <AnimatedFaIcon icon={FaTruckFast} size={13} color="#FFFFFF" animation="bounce-subtle" />
@@ -234,56 +235,37 @@ const Navbar = () => {
         </div>
 
         {/* 2. Main Row: Logo, Centered Search Bar, Action Controls */}
-      <div className="main-navbar-row py-2 py-md-2.5 bg-white border-bottom">
-        <div className="container d-flex align-items-center justify-content-between gap-2 gap-md-4">
-          {/* Mobile Hamburger Button */}
-          <button
-            className="navbar-toggler border-0 p-1 d-lg-none text-dark flex-shrink-0"
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation"
-          >
-            <Menu size={24} />
-          </button>
+      <div className="main-navbar-row py-2 py-md-2.5 bg-white border-bottom w-100 overflow-hidden">
+        <div className="container-fluid px-2 px-sm-3 px-lg-4 d-flex align-items-center justify-content-between gap-1 gap-sm-2 gap-md-4">
+          {/* Left: Hamburger + Brand Logo grouped together */}
+          <div className="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
+            {/* Mobile Hamburger Button */}
+            <button
+              className="navbar-toggler border-0 p-1 d-lg-none text-dark flex-shrink-0"
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation"
+            >
+              <Menu size={22} />
+            </button>
 
-          {/* Corrected & Prominently Visible Aaradhya Logo */}
-          <Link to="/" className="d-flex align-items-center gap-2 gap-sm-2.5 text-decoration-none flex-shrink-0">
-            <img
-              src="/logo.jpeg"
-              alt="AARADHYA"
-              className="rounded-2"
-              style={{
-                height: '48px',
-                width: 'auto',
-                objectFit: 'contain',
-              }}
-            />
-            <div className="d-flex flex-column justify-content-center">
-              <span
-                className="fw-bolder"
-                style={{
-                  color: '#E90064',
-                  fontSize: '1.38rem',
-                  letterSpacing: '0.04em',
-                  lineHeight: 1.05,
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                }}
-              >
-                AARADHYA
-              </span>
-              <span
-                className="fw-bold"
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: '#17233B',
-                }}
-              >
-                Fashion & Fabrics
-              </span>
-            </div>
-          </Link>
+            {/* Responsive Aaradhya Logo */}
+            <Link to="/" className="d-flex align-items-center gap-1.5 gap-sm-2 text-decoration-none flex-shrink-0">
+              <img
+                src="/logo.jpeg"
+                alt="AARADHYA"
+                className="rounded-2 nav-brand-logo"
+              />
+              <div className="d-flex flex-column justify-content-center">
+                <span className="nav-brand-title">
+                  AARADHYA
+                </span>
+                <span className="nav-brand-subtitle">
+                  Fashion & Fabrics
+                </span>
+              </div>
+            </Link>
+          </div>
 
           {/* Centered Wide Search Bar with Increased Search Icon (Desktop) */}
           <div
@@ -493,9 +475,9 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Right Action Controls: Products, Login/Register, Wishlist, Cart (Cleanly Aligned, NO Overlap) */}
+          {/* Right Action Controls: Products, Login/Register, Wishlist, Cart (Responsive, Zero Overflow) */}
           <div className="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
-            {/* Direct Products Page Link placed in header space */}
+            {/* Direct Products Page Link placed in header space (Desktop/Tablet) */}
             <Link
               to="/products"
               className="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold small d-none d-md-inline-flex align-items-center gap-1.5 me-1 text-decoration-none transition-all"
@@ -512,49 +494,60 @@ const Navbar = () => {
 
             {/* Direct Login & Register Buttons (when not logged in) */}
             {!user ? (
-              <div className="d-none d-sm-flex align-items-center gap-2 me-1">
+              <>
+                <div className="d-none d-sm-flex align-items-center gap-1.5 me-1">
+                  <Link
+                    to="/login"
+                    className="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold small"
+                    style={{
+                      borderColor: '#E90064',
+                      color: '#E90064',
+                      border: '1px solid #E90064',
+                      fontSize: '0.82rem',
+                    }}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold small text-white shadow-sm"
+                    style={{
+                      backgroundColor: '#E90064',
+                      borderColor: '#E90064',
+                      fontSize: '0.82rem',
+                    }}
+                  >
+                    Register
+                  </Link>
+                </div>
+                {/* Mobile Compact User Login Icon */}
                 <Link
                   to="/login"
-                  className="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold small"
-                  style={{
-                    borderColor: '#E90064',
-                    color: '#E90064',
-                    border: '1px solid #E90064',
-                    fontSize: '0.84rem',
-                  }}
+                  className="d-sm-none nav-action-btn d-inline-flex align-items-center justify-content-center text-dark text-decoration-none"
+                  title="Sign In"
                 >
-                  Sign In
+                  <User size={20} strokeWidth={1.9} />
                 </Link>
-                <Link
-                  to="/register"
-                  className="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold small text-white shadow-sm"
-                  style={{
-                    backgroundColor: '#E90064',
-                    borderColor: '#E90064',
-                    fontSize: '0.84rem',
-                  }}
-                >
-                  Register
-                </Link>
-              </div>
+              </>
             ) : (
               /* User Account Dropdown (when logged in) */
-              <div className="position-relative me-1" ref={accountRef}>
+              <div className="position-relative me-0 me-sm-1" ref={accountRef}>
                 <button
                   type="button"
-                  className="btn btn-light btn-sm d-flex align-items-center gap-1.5 border-0 bg-transparent py-1 px-2 text-dark"
+                  className="btn btn-sm d-flex align-items-center gap-1 border-0 bg-transparent p-0 text-dark"
                   onClick={() => setShowAccountMenu(!showAccountMenu)}
+                  aria-label="User Account"
                 >
                   <div
                     className="rounded-circle d-flex align-items-center justify-content-center text-white"
-                    style={{ width: '32px', height: '32px', backgroundColor: '#E90064' }}
+                    style={{ width: '30px', height: '30px', backgroundColor: '#E90064' }}
                   >
-                    <User size={16} />
+                    <User size={15} />
                   </div>
-                  <span className="small fw-semibold d-none d-md-inline" style={{ fontSize: '0.85rem' }}>
+                  <span className="small fw-semibold d-none d-md-inline ms-1" style={{ fontSize: '0.85rem' }}>
                     {user.name?.split(' ')[0]}
                   </span>
-                  <ChevronDown size={13} className="text-muted" />
+                  <ChevronDown size={12} className="text-muted d-none d-sm-inline" />
                 </button>
 
                 {showAccountMenu && (
@@ -608,28 +601,12 @@ const Navbar = () => {
             <Link
               to={user ? "/wishlist" : "/login"}
               state={!user ? { returnUrl: '/wishlist', message: 'Please sign in to access your Wishlist.' } : undefined}
-              className="position-relative d-inline-flex align-items-center justify-content-center text-dark text-decoration-none"
-              style={{ width: '38px', height: '38px', borderRadius: '50%' }}
+              className="position-relative d-inline-flex align-items-center justify-content-center text-dark text-decoration-none nav-action-btn"
               title="Saved Wishlist"
             >
-              <Heart size={22} strokeWidth={1.9} />
+              <Heart size={20} strokeWidth={1.9} />
               {user && wishlistCount > 0 && (
-                <span
-                  className="position-absolute rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
-                  style={{
-                    top: '2px',
-                    right: '2px',
-                    backgroundColor: '#E90064',
-                    fontSize: '0.62rem',
-                    minWidth: '17px',
-                    height: '17px',
-                    padding: '0 3px',
-                    border: '2px solid #FFFFFF',
-                    lineHeight: 1,
-                  }}
-                >
-                  {wishlistCount}
-                </span>
+                <span className="nav-action-badge">{wishlistCount}</span>
               )}
             </Link>
 
@@ -637,35 +614,19 @@ const Navbar = () => {
             <Link
               to={user ? "/cart" : "/login"}
               state={!user ? { returnUrl: '/cart', message: 'Please sign in to access your Bag.' } : undefined}
-              className="position-relative d-inline-flex align-items-center justify-content-center text-dark text-decoration-none"
-              style={{ width: '38px', height: '38px', borderRadius: '50%' }}
+              className="position-relative d-inline-flex align-items-center justify-content-center text-dark text-decoration-none nav-action-btn"
               title="Shopping Cart"
             >
-              <ShoppingBag size={22} strokeWidth={1.9} />
+              <ShoppingBag size={20} strokeWidth={1.9} />
               {user && totalItemCount > 0 && (
-                <span
-                  className="position-absolute rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
-                  style={{
-                    top: '2px',
-                    right: '2px',
-                    backgroundColor: '#E90064',
-                    fontSize: '0.62rem',
-                    minWidth: '17px',
-                    height: '17px',
-                    padding: '0 3px',
-                    border: '2px solid #FFFFFF',
-                    lineHeight: 1,
-                  }}
-                >
-                  {totalItemCount}
-                </span>
+                <span className="nav-action-badge">{totalItemCount}</span>
               )}
             </Link>
           </div>
         </div>
 
         {/* Mobile Search Row (visible on mobile only) */}
-        <div className="container d-lg-none pt-2" ref={mobileSearchRef}>
+        <div className="container-fluid px-2 px-sm-3 d-lg-none pt-2" ref={mobileSearchRef}>
           <form onSubmit={handleSearchSubmit} className="position-relative">
             <input
               type="text"
@@ -701,9 +662,9 @@ const Navbar = () => {
       </div>
 
       {/* 3. Sub-Navbar Below: Categories, Home, Fashion Men/Women/Kids, Sarees, Fabrics, About, Contact */}
-      <div className="sub-navbar-row d-none d-lg-block bg-white border-bottom py-1.5 position-relative" style={{ zIndex: 1020 }}>
-        <div className="container d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center gap-1 gap-xl-2 text-nowrap">
+      <div className="sub-navbar-row d-none d-lg-block bg-white border-bottom py-1 position-relative" style={{ zIndex: 1020 }}>
+        <div className="container-fluid px-3 px-xl-4 d-flex align-items-center justify-content-between">
+          <div className="d-flex align-items-center gap-1 gap-xl-2 text-nowrap overflow-x-auto scrollbar-hidden">
             {/* All Categories Dropdown Trigger */}
             <div className="dropdown position-relative" ref={categoriesRef} style={{ zIndex: 1030 }}>
               <button
@@ -948,7 +909,7 @@ const Navbar = () => {
 
             <Link
               to="/about"
-              className="text-decoration-none px-2 py-1.5 text-secondary fw-medium small hover-underline"
+              className="text-decoration-none px-2 py-1.5 text-secondary fw-medium small hover-underline d-none d-xl-inline-block"
               style={{ fontSize: '0.86rem' }}
             >
               About Us
@@ -956,7 +917,7 @@ const Navbar = () => {
 
             <Link
               to="/contact"
-              className="text-decoration-none px-2 py-1.5 text-secondary fw-medium small hover-underline"
+              className="text-decoration-none px-2 py-1.5 text-secondary fw-medium small hover-underline d-none d-xl-inline-block"
               style={{ fontSize: '0.86rem' }}
             >
               Contact Us
@@ -964,7 +925,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Side Info */}
-          <div className="d-flex align-items-center gap-3 text-muted small ms-3 flex-shrink-0" style={{ fontSize: '0.78rem' }}>
+          <div className="d-none d-xxl-flex align-items-center gap-3 text-muted small ms-3 flex-shrink-0" style={{ fontSize: '0.78rem' }}>
             <span className="d-flex align-items-center gap-1.5 text-nowrap">
               <Phone size={13} style={{ color: '#E90064' }} />
               <span>Customer Care: +91 98765 11001</span>

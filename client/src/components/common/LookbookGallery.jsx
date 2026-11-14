@@ -1,348 +1,233 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import { FaCameraRetro } from 'react-icons/fa6';
 import AnimatedFaIcon from './AnimatedFaIcon';
-import axiosClient from '../../api/axiosClient';
+
+const DESKTOP_ITEMS = [
+  {
+    id: 'item-1',
+    className: 'item item-1',
+    img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1200&auto=format&fit=crop&q=85',
+    title: 'Pure Kanjeevaram Silks',
+    link: '/products?category=sarees',
+  },
+  {
+    id: 'item-2',
+    className: 'item item-2',
+    img: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=700&auto=format&fit=crop&q=85',
+    title: 'Festive Drapes',
+    link: '/products?category=sarees',
+  },
+  {
+    id: 'item-3',
+    className: 'item item-3',
+    img: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=700&auto=format&fit=crop&q=85',
+    title: 'Artisan Running Fabrics',
+    link: '/products?category=fabrics',
+  },
+  {
+    id: 'item-4',
+    className: 'item item-4',
+    img: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=700&auto=format&fit=crop&q=85',
+    title: 'Banarasi Brocades',
+    link: '/products?category=sarees',
+  },
+  {
+    id: 'item-5',
+    className: 'item item-5',
+    img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=700&auto=format&fit=crop&q=85',
+    title: 'Festive Kurtis & Sets',
+    link: '/products',
+  },
+];
+
+const DESKTOP_ITEMS_2 = [
+  {
+    id: 'item-6',
+    className: 'item item-1',
+    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop&q=85',
+    title: 'Heirloom Celebrations',
+    link: '/products?category=sarees',
+  },
+  {
+    id: 'item-7',
+    className: 'item item-2',
+    img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=700&auto=format&fit=crop&q=85',
+    title: 'Chanderi Gold Zari',
+    link: '/products?category=fabrics',
+  },
+  {
+    id: 'item-8',
+    className: 'item item-3',
+    img: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=700&auto=format&fit=crop&q=85',
+    title: 'Mulmul Cotton Prints',
+    link: '/products?category=fabrics',
+  },
+  {
+    id: 'item-9',
+    className: 'item item-4',
+    img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=700&auto=format&fit=crop&q=85',
+    title: 'Natural Indigo Ajrakh',
+    link: '/products?category=fabrics',
+  },
+  {
+    id: 'item-10',
+    className: 'item item-5',
+    img: 'https://images.unsplash.com/photo-1574634534894-89d7576c8259?w=700&auto=format&fit=crop&q=85',
+    title: 'European Organic Linen',
+    link: '/products?category=fabrics',
+  },
+];
+
+const MOBILE_ITEMS = [
+  {
+    src: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=700&auto=format&fit=crop&q=85',
+    label: 'Pure Silks',
+    link: '/products?category=sarees',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=700&auto=format&fit=crop&q=85',
+    label: 'Festive Drapes',
+    link: '/products?category=sarees',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=700&auto=format&fit=crop&q=85',
+    label: 'Running Fabrics',
+    link: '/products?category=fabrics',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=700&auto=format&fit=crop&q=85',
+    label: 'Designer Kurtis',
+    link: '/products',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=700&auto=format&fit=crop&q=85',
+    label: 'Block Prints',
+    link: '/products?category=fabrics',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=700&auto=format&fit=crop&q=85',
+    label: 'Heirloom Sets',
+    link: '/products',
+  },
+];
 
 const LookbookGallery = () => {
-  const [galleryItems, setGalleryItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    const fetchGallery = async () => {
-      try {
-        const res = await axiosClient.get('/gallery');
-        if (res.success && res.data?.length > 0) {
-          setGalleryItems(res.data);
-        }
-      } catch (err) {
-        console.error('Failed to load gallery items', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGallery();
-  }, []);
-
-  const handleScroll = (direction) => {
-    if (!scrollRef.current) return;
-    const scrollAmount = 450;
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
-
-  // Build dynamic columns: Hero (single full-height wide), Portrait (single full-height), and Stacked (pair of 2)
-  const buildColumns = () => {
-    const columns = [];
-    let i = 0;
-
-    while (i < galleryItems.length) {
-      const item = galleryItems[i];
-
-      if (item.aspect === 'hero') {
-        // Hero / Centerpiece full-height wide column
-        columns.push({
-          type: 'hero',
-          items: [item],
-          key: `hero-${item._id || i}`,
-        });
-        i += 1;
-      } else if (item.aspect === 'portrait') {
-        // Single portrait full-height column
-        columns.push({
-          type: 'portrait',
-          items: [item],
-          key: `portrait-${item._id || i}`,
-        });
-        i += 1;
-      } else {
-        // Stacked column: take up to 2 items
-        const stackedItems = [item];
-        if (i + 1 < galleryItems.length && galleryItems[i + 1].aspect !== 'hero' && galleryItems[i + 1].aspect !== 'portrait') {
-          stackedItems.push(galleryItems[i + 1]);
-          i += 2;
-        } else {
-          i += 1;
-        }
-        columns.push({
-          type: 'stacked',
-          items: stackedItems,
-          key: `stacked-${item._id || i}`,
-        });
-      }
-    }
-
-    return columns;
-  };
-
-  if (!loading && galleryItems.length === 0) return null;
-
-  const columns = buildColumns();
-
   return (
-    <section className="mb-5 lookbook-section">
+    <section className="mb-5 lookbook-section w-100 overflow-hidden" id="lookbook-gallery">
       {/* Header matching Nishorama lookbook */}
-      <div className="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
-        <motion.div
-          initial={{ opacity: 0, x: -15 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="d-flex align-items-center gap-2"
-        >
-          <AnimatedFaIcon icon={FaCameraRetro} size={20} color="#E90064" animation="float" />
-          <div>
-            <h4 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
-              Moments in Aaradhya
-            </h4>
-            <div className="d-flex align-items-center gap-2 mt-0.5">
-              <span className="small text-secondary" style={{ fontSize: '0.78rem' }}>
-                Woven by tradition, styled by you.
-              </span>
-              <a
-                href="https://www.instagram.com/aaradhya_silks_kphb?vrfl=MWQ4OG5lNnFpY3Bzbg=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="badge rounded-pill text-decoration-none px-2.5 py-1 text-white d-inline-flex align-items-center gap-1"
-                style={{ backgroundColor: '#E90064', fontSize: '0.68rem' }}
-              >
-                <span>@aaradhya_silks_kphb</span>
-              </a>
+      <div className="container mb-3">
+        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="d-flex align-items-center gap-2"
+          >
+            <AnimatedFaIcon icon={FaCameraRetro} size={20} color="#E90064" animation="float" />
+            <div>
+              <h4 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
+                Moments in Aaradhya
+              </h4>
+              <div className="d-flex align-items-center gap-2 mt-0.5">
+                <span className="small text-secondary" style={{ fontSize: '0.78rem' }}>
+                  Woven by tradition, styled by you.
+                </span>
+                <a
+                  href="https://www.instagram.com/aaradhya_silks_kphb?vrfl=MWQ4OG5lNnFpY3Bzbg=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="badge rounded-pill text-decoration-none px-2.5 py-1 text-white d-inline-flex align-items-center gap-1"
+                  style={{ backgroundColor: '#E90064', fontSize: '0.68rem' }}
+                >
+                  <span>@aaradhya_silks_kphb</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Navigation & Instagram Link */}
-        <div className="d-flex align-items-center gap-2">
           <a
             href="https://www.instagram.com/aaradhya_fabrics?xtok=cTN3aXVtZnFnY2ls"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-dark btn-sm rounded-pill px-3 py-1.5 fw-semibold d-none d-sm-inline-flex align-items-center gap-1.5"
+            className="btn btn-outline-dark btn-sm rounded-pill px-3.5 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5"
             style={{ fontSize: '0.78rem' }}
           >
             <span>Follow on Instagram</span>
-            <ExternalLink size={12} />
+            <ExternalLink size={13} />
           </a>
-
-          <button
-            type="button"
-            className="btn btn-light rounded-circle border d-flex align-items-center justify-content-center shadow-sm"
-            style={{ width: '36px', height: '36px' }}
-            onClick={() => handleScroll('left')}
-            aria-label="Previous gallery photos"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            type="button"
-            className="btn btn-light rounded-circle border d-flex align-items-center justify-content-center shadow-sm"
-            style={{ width: '36px', height: '36px' }}
-            onClick={() => handleScroll('right')}
-            aria-label="Next gallery photos"
-          >
-            <ChevronRight size={18} />
-          </button>
         </div>
       </div>
 
-      {/* Collage Scroller Track matching Nishorama (media_1794592837374_e2df7b94.jpg) */}
-      <div
-        ref={scrollRef}
-        className="d-flex overflow-x-auto pb-2 scrollbar-hidden"
-        style={{
-          gap: '12px',
-          height: 'clamp(380px, 42vw, 480px)',
-          scrollSnapType: 'x mandatory',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
-        {columns.map((col, colIdx) => {
-          if (col.type === 'hero') {
-            // Wide Centerpiece Hero Image
-            const item = col.items[0];
-            return (
-              <motion.div
-                key={col.key}
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: colIdx * 0.05 }}
-                className="flex-shrink-0 position-relative overflow-hidden shadow-sm"
-                style={{
-                  width: 'clamp(340px, 46vw, 560px)',
-                  height: '100%',
-                  borderRadius: '24px',
-                  scrollSnapAlign: 'start',
-                  backgroundColor: '#F3F4F6',
-                }}
-              >
-                <img
-                  src={item.imageUrl}
-                  alt={item.caption || 'Aaradhya Lookbook'}
-                  className="w-100 h-100"
-                  style={{
-                    objectFit: 'cover',
-                    transition: 'transform 0.45s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  loading="lazy"
-                />
-                {/* Gradient Caption Overlay */}
-                <div
-                  className="position-absolute bottom-0 start-0 end-0 p-3 p-md-4 text-white d-flex flex-column justify-content-end"
-                  style={{
-                    background: 'linear-gradient(to top, rgba(23, 35, 59, 0.85) 0%, rgba(23, 35, 59, 0.3) 60%, transparent 100%)',
-                    zIndex: 2,
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <span
-                    className="badge rounded-pill mb-1 d-inline-block align-self-start fw-bold"
-                    style={{ backgroundColor: '#E90064', fontSize: '0.68rem', padding: '3px 9px' }}
-                  >
-                    {item.tag || 'Lookbook'}
-                  </span>
-                  <div
-                    className="fw-bold text-white text-truncate"
-                    style={{ fontSize: '1.02rem', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
-                  >
-                    {item.caption || 'Moments in Aaradhya'}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          }
+      {/* 1. Desktop View: Infinite Seamless Auto-Sliding Collage Grid matching Nishorama */}
+      <div className="gallery-grid-wrapper desktop">
+        <div className="gallery-grid-main">
+          {/* Grid Block 1 */}
+          <div className="gallery-grid">
+            {DESKTOP_ITEMS.map((item) => (
+              <Link to={item.link} key={item.id} className={item.className}>
+                <img src={item.img} alt={item.title} loading="lazy" />
+                <span className="gallery-tile-label">{item.title}</span>
+              </Link>
+            ))}
+          </div>
 
-          if (col.type === 'portrait') {
-            // Tall Single Portrait Image
-            const item = col.items[0];
-            return (
-              <motion.div
-                key={col.key}
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: colIdx * 0.05 }}
-                className="flex-shrink-0 position-relative overflow-hidden shadow-sm"
-                style={{
-                  width: 'clamp(210px, 24vw, 280px)',
-                  height: '100%',
-                  borderRadius: '24px',
-                  scrollSnapAlign: 'start',
-                  backgroundColor: '#F3F4F6',
-                }}
-              >
-                <img
-                  src={item.imageUrl}
-                  alt={item.caption || 'Aaradhya Lookbook'}
-                  className="w-100 h-100"
-                  style={{
-                    objectFit: 'cover',
-                    transition: 'transform 0.45s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  loading="lazy"
-                />
-                {/* Gradient Caption Overlay */}
-                <div
-                  className="position-absolute bottom-0 start-0 end-0 p-3 text-white d-flex flex-column justify-content-end"
-                  style={{
-                    background: 'linear-gradient(to top, rgba(23, 35, 59, 0.85) 0%, rgba(23, 35, 59, 0.3) 60%, transparent 100%)',
-                    zIndex: 2,
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <span
-                    className="badge rounded-pill mb-1 d-inline-block align-self-start fw-bold"
-                    style={{ backgroundColor: '#E90064', fontSize: '0.62rem', padding: '2px 8px' }}
-                  >
-                    {item.tag || 'Silks'}
-                  </span>
-                  <div
-                    className="fw-bold text-white text-truncate small"
-                    style={{ fontSize: '0.84rem', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
-                  >
-                    {item.caption || 'Moments in Aaradhya'}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          }
+          {/* Grid Block 2 */}
+          <div className="gallery-grid">
+            {DESKTOP_ITEMS_2.map((item) => (
+              <Link to={item.link} key={item.id} className={item.className}>
+                <img src={item.img} alt={item.title} loading="lazy" />
+                <span className="gallery-tile-label">{item.title}</span>
+              </Link>
+            ))}
+          </div>
 
-          // Stacked Column: 2 rounded images stacked vertically
-          return (
-            <div
-              key={col.key}
-              className="flex-shrink-0 d-flex flex-column"
-              style={{
-                width: 'clamp(190px, 21vw, 250px)',
-                height: '100%',
-                gap: '12px',
-                scrollSnapAlign: 'start',
-              }}
-            >
-              {col.items.map((item, itemIdx) => (
-                <motion.div
-                  key={item._id || itemIdx}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.45, delay: (colIdx * 2 + itemIdx) * 0.04 }}
-                  className="position-relative overflow-hidden shadow-sm w-100"
-                  style={{
-                    height: col.items.length === 1 ? '100%' : 'calc(50% - 6px)',
-                    borderRadius: '24px',
-                    backgroundColor: '#F3F4F6',
-                  }}
-                >
-                  <img
-                    src={item.imageUrl}
-                    alt={item.caption || 'Aaradhya Lookbook'}
-                    className="w-100 h-100"
-                    style={{
-                      objectFit: 'cover',
-                      transition: 'transform 0.45s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                    loading="lazy"
-                  />
-                  {/* Gradient Caption Overlay */}
-                  <div
-                    className="position-absolute bottom-0 start-0 end-0 p-2.5 text-white d-flex flex-column justify-content-end"
-                    style={{
-                      background: 'linear-gradient(to top, rgba(23, 35, 59, 0.85) 0%, rgba(23, 35, 59, 0.3) 60%, transparent 100%)',
-                      zIndex: 2,
-                      pointerEvents: 'none',
-                    }}
-                  >
-                    <span
-                      className="badge rounded-pill mb-1 d-inline-block align-self-start fw-bold"
-                      style={{ backgroundColor: '#E90064', fontSize: '0.58rem', padding: '2px 7px' }}
-                    >
-                      {item.tag || 'Fabrics'}
-                    </span>
-                    <div
-                      className="fw-bold text-white text-truncate"
-                      style={{ fontSize: '0.78rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
-                    >
-                      {item.caption || 'Moments in Aaradhya'}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+          {/* Duplicate Block 1 for infinite seamless looping */}
+          <div className="gallery-grid">
+            {DESKTOP_ITEMS.map((item) => (
+              <Link to={item.link} key={`dup-${item.id}`} className={item.className}>
+                <img src={item.img} alt={item.title} loading="lazy" />
+                <span className="gallery-tile-label">{item.title}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Duplicate Block 2 for infinite seamless looping */}
+          <div className="gallery-grid">
+            {DESKTOP_ITEMS_2.map((item) => (
+              <Link to={item.link} key={`dup-${item.id}-2`} className={item.className}>
+                <img src={item.img} alt={item.title} loading="lazy" />
+                <span className="gallery-tile-label">{item.title}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Mobile View: Infinite Auto-Marquee Portrait Cards matching Nishorama Mobile */}
+      <div className="gallery-grid-wrapper mobile">
+        <div className="gallery_hero_marquee">
+          {MOBILE_ITEMS.map((item, idx) => (
+            <div key={`m-${idx}`} className="gallery_hero_card">
+              <img src={item.src} alt={item.label} loading="lazy" />
+              <Link to={item.link} className="explore-btn">
+                {item.label}
+              </Link>
             </div>
-          );
-        })}
+          ))}
+          {/* Duplicate for infinite seamless marquee */}
+          {MOBILE_ITEMS.map((item, idx) => (
+            <div key={`m-dup-${idx}`} className="gallery_hero_card">
+              <img src={item.src} alt={item.label} loading="lazy" />
+              <Link to={item.link} className="explore-btn">
+                {item.label}
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

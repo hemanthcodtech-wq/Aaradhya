@@ -35,6 +35,7 @@ import AnimatedFaIcon from '../../components/common/AnimatedFaIcon';
 import ProductCard from '../../components/common/ProductCard';
 import CuratedFits from '../../components/common/CuratedFits';
 import LookbookGallery from '../../components/common/LookbookGallery';
+import HeroBanner from '../../components/common/HeroBanner';
 import axiosClient from '../../api/axiosClient';
 
 // Animation variants
@@ -130,290 +131,12 @@ const HomePage = () => {
   const bestSellersList = highlights?.bestSellers || [];
 
   return (
-    <div className="container py-3">
-      {/* 1. Hero Section: Balanced, Luxury Fashion Hero Banner (Fully Responsive & Proportionate) */}
-      <motion.section
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-        className="card border-0 rounded-4 mb-4 overflow-hidden shadow-sm position-relative hero-banner-card"
-        style={{
-          background: 'linear-gradient(135deg, #FFF6FA 0%, #FFF0F6 35%, #F4FBF1 75%, #EAF8E2 100%)',
-          border: '1px solid #F0E7ED',
-          minHeight: 'clamp(210px, 28vw, 420px)',
-          borderRadius: '24px',
-        }}
-      >
-        {/* Soft Decorative Ambient Orbs */}
-        <div
-          className="position-absolute"
-          style={{
-            top: '-50px',
-            left: '-50px',
-            width: '240px',
-            height: '240px',
-            background: 'radial-gradient(circle, rgba(184, 224, 0, 0.25) 0%, transparent 70%)',
-            borderRadius: '50%',
-            pointerEvents: 'none',
-          }}
-        />
-        <div
-          className="position-absolute"
-          style={{
-            bottom: '-50px',
-            right: '25%',
-            width: '280px',
-            height: '280px',
-            background: 'radial-gradient(circle, rgba(233, 0, 100, 0.12) 0%, transparent 70%)',
-            borderRadius: '50%',
-            pointerEvents: 'none',
-          }}
-        />
+    <div className="homepage-wrapper">
+      {/* 1. Full-Bleed Edge-to-Edge Hero Slider matching Nishorama (100% width, 92vh desktop, 80vh mobile) */}
+      <HeroBanner />
 
-        {/* Balanced Side-by-Side Responsive Layout (col-7 left, col-5 right on mobile) */}
-        <div className="row g-2 g-md-4 align-items-center h-100 position-relative z-1 p-2.5 p-sm-3 p-md-5" style={{ minHeight: 'inherit' }}>
-          {/* Left Column: Typography & Action CTA (col-7 on mobile) */}
-          <div className="col-7 col-md-7 col-lg-6 d-flex flex-column justify-content-center pe-1 pe-md-3 pe-lg-4">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeBannerIndex}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.45, ease: 'easeOut' }}
-              >
-                {/* Green Script Tagline */}
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="mb-1.5 fw-bold fst-italic"
-                  style={{
-                    color: '#19B927',
-                    fontSize: 'clamp(1rem, 2.4vw, 1.45rem)',
-                    fontFamily: 'cursive, "Brush Script MT", Georgia, serif',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  {currentBanner.scriptTagline || currentBanner.scriptTag || 'Style Your World'}
-                </motion.div>
-
-                {/* Main Headline with Highlight */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: 0.16 }}
-                  className="fw-bolder mb-2 mb-md-3"
-                  style={{
-                    lineHeight: 1.15,
-                    letterSpacing: '-0.5px',
-                    color: '#17233B',
-                    fontSize: 'clamp(1.5rem, 3.6vw, 2.75rem)',
-                  }}
-                >
-                  {currentBanner.title ? (
-                    currentBanner.title.includes(',') ? (
-                      <>
-                        {currentBanner.title.split(',')[0]} <br />
-                        <span style={{ color: '#E90064' }}>{currentBanner.title.split(',')[1]}</span>
-                      </>
-                    ) : (
-                      <>
-                        {currentBanner.title.split(' ').slice(0, 2).join(' ')} <br />
-                        <span style={{ color: '#E90064' }}>{currentBanner.title.split(' ').slice(2).join(' ') || 'Better You'}</span>
-                      </>
-                    )
-                  ) : (
-                    <>
-                      Trendy Fashion <br />
-                      <span style={{ color: '#E90064' }}>Better You</span>
-                    </>
-                  )}
-                </motion.h1>
-
-                {/* Subtitle / Description (Clean 2-line clamp on mobile) */}
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.18 }}
-                  className="text-secondary mb-2 mb-md-4"
-                  style={{
-                    fontSize: 'clamp(0.72rem, 1.2vw, 0.95rem)',
-                    lineHeight: 1.4,
-                    color: '#555555',
-                    maxWidth: '460px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {currentBanner.subtitle || 'Discover the latest handwoven silks and artisan running fabrics for every occasion.'}
-                </motion.p>
-
-                {/* CTA Action & Trust Signals */}
-                <div className="d-flex flex-wrap align-items-center gap-1.5 gap-sm-3">
-                  <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-                    <Link
-                      to={currentBanner.linkUrl || currentBanner.ctaLink || '/products'}
-                      className="btn rounded-pill fw-bold text-white d-inline-flex align-items-center gap-1.5 shadow-sm"
-                      style={{
-                        backgroundColor: '#E90064',
-                        borderColor: '#E90064',
-                        fontSize: 'clamp(0.74rem, 1.2vw, 0.92rem)',
-                        padding: 'clamp(0.35rem, 0.8vw, 0.6rem) clamp(0.85rem, 1.6vw, 1.6rem)',
-                      }}
-                    >
-                      <span>{currentBanner.ctaText || 'Shop Now'}</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </motion.div>
-
-                  <div className="d-none d-sm-flex align-items-center gap-1.5 text-muted small">
-                    <span className="badge bg-white text-dark border rounded-pill px-2.5 py-1 d-inline-flex align-items-center gap-1.5 shadow-2xs" style={{ fontSize: '0.68rem' }}>
-                      <AnimatedFaIcon icon={FaCertificate} size={11} color="#E90064" animation="pulse" />
-                      <span>Silk Mark</span>
-                    </span>
-                    <span className="badge bg-white text-dark border rounded-pill px-2.5 py-1 d-inline-flex align-items-center gap-1.5 shadow-2xs" style={{ fontSize: '0.68rem' }}>
-                      <AnimatedFaIcon icon={FaTruckFast} size={11} color="#19B927" animation="bounce-subtle" />
-                      <span>Free Delivery ₹999+</span>
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Right Column: Model Image (col-5 on mobile, full portrait framing with NO head cutoff) */}
-          <div className="col-5 col-md-5 col-lg-6 d-flex align-items-center justify-content-center justify-content-md-end">
-            <div
-              className="position-relative w-100"
-              style={{
-                maxWidth: '460px',
-                height: 'clamp(170px, 30vw, 360px)',
-              }}
-            >
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={activeBannerIndex}
-                  src={currentBanner.image || currentBanner.imageUrl || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=900&auto=format&fit=crop&q=80'}
-                  alt="Aaradhya Fashion Collection"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
-                  className="rounded-3 rounded-md-4 shadow-sm w-100 h-100"
-                  style={{
-                    objectFit: 'cover',
-                    objectPosition: 'center 15%',
-                    borderRadius: '18px',
-                    boxShadow: '0 8px 24px rgba(233, 0, 100, 0.12)',
-                  }}
-                />
-              </AnimatePresence>
-
-              {/* Floating Circular Badge with Gentle Floating Motion */}
-              <motion.div
-                animate={{
-                  y: [0, -5, 0],
-                  rotate: [0, 2, -2, 0],
-                }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 3,
-                  ease: 'easeInOut',
-                }}
-                className="position-absolute shadow rounded-circle d-flex flex-column align-items-center justify-content-center text-white"
-                style={{
-                  top: '-8px',
-                  right: '-8px',
-                  width: 'clamp(46px, 7vw, 68px)',
-                  height: 'clamp(46px, 7vw, 68px)',
-                  backgroundColor: '#E90064',
-                  border: '2.5px solid #FFFFFF',
-                  boxShadow: '0 4px 14px rgba(233, 0, 100, 0.35)',
-                  zIndex: 3,
-                }}
-              >
-                <span style={{ fontSize: 'clamp(0.48rem, 0.8vw, 0.6rem)', fontWeight: 600, textTransform: 'uppercase' }}>Up to</span>
-                <strong style={{ fontSize: 'clamp(0.78rem, 1.4vw, 1.1rem)', lineHeight: 1 }}>50%</strong>
-                <span style={{ fontSize: 'clamp(0.48rem, 0.8vw, 0.6rem)', fontWeight: 700 }}>OFF</span>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Carousel Navigation Dots */}
-        {banners.length > 1 && (
-          <div className="position-absolute bottom-0 start-50 translate-middle-x mb-2 d-flex gap-1.5 z-2">
-            {banners.map((_, idx) => (
-              <motion.button
-                key={idx}
-                type="button"
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                animate={{
-                  width: activeBannerIndex === idx ? 22 : 7,
-                  backgroundColor: activeBannerIndex === idx ? '#E90064' : '#E2E8F0',
-                }}
-                transition={{ duration: 0.25 }}
-                className="border-0 p-0 rounded-pill"
-                style={{
-                  height: '6px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => setActiveBannerIndex(idx)}
-                aria-label={`Slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Floating Interactive Carousel Navigation Arrows (Desktop / Tablet Only - Swipe on Mobile) */}
-        {banners.length > 1 && (
-          <>
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.15, x: -2 }}
-              whileTap={{ scale: 0.9 }}
-              className="btn position-absolute top-50 start-0 translate-middle-y ms-2 rounded-circle bg-white shadow-sm d-none d-md-flex align-items-center justify-content-center text-dark"
-              style={{
-                width: '34px',
-                height: '34px',
-                zIndex: 10,
-                border: '1px solid #F0E7ED',
-                cursor: 'pointer',
-                opacity: 0.9,
-              }}
-              onClick={() => setActiveBannerIndex((prev) => (prev - 1 + banners.length) % banners.length)}
-              aria-label="Previous Slide"
-            >
-              <ChevronLeft size={18} />
-            </motion.button>
-
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.15, x: 2 }}
-              whileTap={{ scale: 0.9 }}
-              className="btn position-absolute top-50 end-0 translate-middle-y me-2 rounded-circle bg-white shadow-sm d-none d-md-flex align-items-center justify-content-center text-dark"
-              style={{
-                width: '34px',
-                height: '34px',
-                zIndex: 10,
-                border: '1px solid #F0E7ED',
-                cursor: 'pointer',
-                opacity: 0.9,
-              }}
-              onClick={() => setActiveBannerIndex((prev) => (prev + 1) % banners.length)}
-              aria-label="Next Slide"
-            >
-              <ChevronRight size={18} />
-            </motion.button>
-          </>
-        )}
-      </motion.section>
-
-      {/* 2. Explore Categories: Single Horizontal Line, Sleek Circular Avatars (NO Square Cards) */}
+      <div className="container py-4">
+        {/* 2. Explore Categories: Single Horizontal Line, Sleek Circular Avatars (NO Square Cards) */}
       <section className="mb-4 mb-md-5">
         <div className="d-flex align-items-center justify-content-between mb-2 mb-md-3">
           <motion.div
@@ -509,7 +232,7 @@ const HomePage = () => {
       </section>
 
       {/* 3. Popular Collection Section - Exactly 5 products per row on laptop with Staggered Motion */}
-      <section className="mb-5">
+      <section className="mb-5" id="popular-collection">
         <div className="d-flex align-items-center justify-content-between mb-3">
           <motion.div
             initial={{ opacity: 0, x: -15 }}
@@ -532,15 +255,15 @@ const HomePage = () => {
           </Link>
         </div>
 
-        {/* Laptop 5 Products Per Row Grid with Framer Motion Cards */}
-        <div className="product-grid-5">
-          {popularList.slice(0, 5).map((product, idx) => (
+        {/* Nishorama 4 Products Per Row Grid on Desktop, 2 on Mobile */}
+        <div className="product-grid-4">
+          {popularList.slice(0, 8).map((product, idx) => (
             <ProductCard key={product._id} product={product} index={idx} />
           ))}
         </div>
       </section>
 
-      {/* Curated Fits for you Component matching Nishorama (media_1794591772833_8cc3c425.jpg) */}
+      {/* Curated Fits for you Component matching Nishorama */}
       <CuratedFits />
 
       {/* 4. Single Card Length Horizontal Scroller of 3 Cards */}
@@ -739,17 +462,19 @@ const HomePage = () => {
           </Link>
         </div>
 
-        {/* Laptop 5 Products Per Row Grid */}
-        <div className="product-grid-5">
-          {bestSellersList.slice(0, 5).map((product, idx) => (
+        {/* Nishorama 4 Products Per Row Grid on Desktop, 2 on Mobile */}
+        <div className="product-grid-4">
+          {bestSellersList.slice(0, 8).map((product, idx) => (
             <ProductCard key={product._id} product={product} index={idx} />
           ))}
         </div>
       </section>
+      </div>
 
-      {/* Aaradhya Lookbook Gallery Scroller with Cloudinary Uploads matching Nishorama (media_1794591651081_6ec99130.jpg) */}
+      {/* Full-Bleed Infinite Auto-Sliding Gallery matching Nishorama */}
       <LookbookGallery />
 
+      <div className="container py-4">
       {/* 6. Live Order Tracking Flow with Redesigned Luxury Tracker Card */}
       <section className="mb-5">
         <motion.div
@@ -1090,6 +815,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 };
