@@ -115,7 +115,7 @@ const AboutPage = () => {
               A Symphony of Pure Silk & Creative Craftsmanship
             </h2>
             <p className="text-secondary" style={{ lineHeight: 1.7, fontSize: '0.96rem' }}>
-              Founded with a passion for authentic Indian textiles, <strong>AARADHYA – Fashion & Fabrics</strong> curates the finest bridal weaves, heirloom silk sarees, and premium unstitched dress materials from handloom clusters across India.
+              Founded with a passion for authentic Indian textiles, <strong>AARADHYA – Sarees & Silks</strong> curates the finest bridal weaves, heirloom silk sarees, and premium unstitched dress materials from handloom clusters across India.
             </p>
             <p className="text-secondary" style={{ lineHeight: 1.7, fontSize: '0.96rem' }}>
               Whether you are looking for an exquisite royal Kanjeevaram silk saree for your wedding day, contemporary festive kurtis, or unstitched running fabrics for a bespoke couture outfit, Aaradhya brings your style vision to life with timeless craftsmanship.
@@ -254,7 +254,7 @@ const AboutPage = () => {
                   style={{ height: '60px', width: 'auto', objectFit: 'contain' }}
                 />
                 <h5 className="fw-bolder mb-1" style={{ color: '#E90064' }}>AARADHYA</h5>
-                <span className="small text-muted fw-bold d-block mb-3">FASHION & FABRICS</span>
+                <span className="small text-muted fw-bold d-block mb-3">SAREES & SILKS</span>
                 <p className="small text-secondary mb-3">
                   Visit our flagship boutique in KPHB Colony, Hyderabad and experience pure handloom textiles firsthand.
                 </p>

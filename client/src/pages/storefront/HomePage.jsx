@@ -17,21 +17,6 @@ import {
   Heart,
   ChevronLeft,
 } from 'lucide-react';
-import {
-  FaCertificate,
-  FaTruckFast,
-  FaLayerGroup,
-  FaFireFlameCurved,
-  FaCrown,
-  FaCheck,
-  FaBoxOpen,
-  FaHouseCircleCheck,
-  FaQuestion,
-  FaComments,
-  FaChevronDown,
-  FaLocationDot,
-} from 'react-icons/fa6';
-import AnimatedFaIcon from '../../components/common/AnimatedFaIcon';
 import ProductCard from '../../components/common/ProductCard';
 import CuratedFits from '../../components/common/CuratedFits';
 import LookbookGallery from '../../components/common/LookbookGallery';
@@ -68,7 +53,6 @@ const HomePage = () => {
   const [banners, setBanners] = useState([]);
   const [activeBannerIndex, setActiveBannerIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [activeFaq, setActiveFaq] = useState(0);
   const navigate = useNavigate();
 
   // Fetch homepage highlights and banners
@@ -144,10 +128,16 @@ const HomePage = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="d-flex align-items-center gap-2"
           >
-            <AnimatedFaIcon icon={FaLayerGroup} size={18} color="#E90064" animation="float" />
-            <h5 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
+            <h5
+              className="fw-bold mb-0 text-dark"
+              style={{
+                fontSize: 'clamp(1.2rem, 2.5vw, 1.55rem)',
+                letterSpacing: '-0.3px',
+                fontFamily: 'var(--font-heading-family)',
+                color: '#17233B',
+              }}
+            >
               Explore Categories
             </h5>
           </motion.div>
@@ -231,7 +221,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 3. Popular Collection Section - Exactly 5 products per row on laptop with Staggered Motion */}
+      {/* 3. Popular Collection Section */}
       <section className="mb-5" id="popular-collection">
         <div className="d-flex align-items-center justify-content-between mb-3">
           <motion.div
@@ -239,10 +229,16 @@ const HomePage = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="d-flex align-items-center gap-2"
           >
-            <AnimatedFaIcon icon={FaFireFlameCurved} size={19} color="#E90064" animation="pulse" />
-            <h4 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
+            <h4
+              className="fw-bold mb-0 text-dark"
+              style={{
+                fontSize: 'clamp(1.3rem, 2.7vw, 1.7rem)',
+                letterSpacing: '-0.3px',
+                fontFamily: 'var(--font-heading-family)',
+                color: '#17233B',
+              }}
+            >
               Popular Collection
             </h4>
           </motion.div>
@@ -262,9 +258,14 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+      </div>
 
-      {/* Curated Fits for you Component matching Nishorama */}
-      <CuratedFits />
+      {/* Curated Fits for you Component with Expanded Container & 5 per row */}
+      <div className="container-fluid px-3 px-md-4 px-xl-5">
+        <CuratedFits />
+      </div>
+
+      <div className="container py-2">
 
       {/* 4. Single Card Length Horizontal Scroller of 3 Cards */}
       <section className="mb-5">
@@ -446,10 +447,16 @@ const HomePage = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="d-flex align-items-center gap-2"
           >
-            <AnimatedFaIcon icon={FaCrown} size={19} color="#E90064" animation="wiggle" />
-            <h4 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
+            <h4
+              className="fw-bold mb-0 text-dark"
+              style={{
+                fontSize: 'clamp(1.3rem, 2.7vw, 1.7rem)',
+                letterSpacing: '-0.3px',
+                fontFamily: 'var(--font-heading-family)',
+                color: '#17233B',
+              }}
+            >
               Best Sellers
             </h4>
           </motion.div>
@@ -474,348 +481,6 @@ const HomePage = () => {
       {/* Full-Bleed Infinite Auto-Sliding Gallery matching Nishorama */}
       <LookbookGallery />
 
-      <div className="container py-4">
-      {/* 6. Live Order Tracking Flow with Redesigned Luxury Tracker Card */}
-      <section className="mb-5">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.55 }}
-          className="card border-0 rounded-4 p-4 p-md-5 shadow-lg position-relative overflow-hidden text-white"
-          style={{
-            background: 'linear-gradient(135deg, #17233B 0%, #1A2A47 50%, #111A2D 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            borderRadius: '26px',
-          }}
-        >
-          {/* Ambient Lighting Orbs */}
-          <div
-            className="position-absolute"
-            style={{
-              top: '-60px',
-              right: '-60px',
-              width: '260px',
-              height: '260px',
-              background: 'radial-gradient(circle, rgba(233, 0, 100, 0.15) 0%, transparent 70%)',
-              borderRadius: '50%',
-              pointerEvents: 'none',
-            }}
-          />
-          <div
-            className="position-absolute"
-            style={{
-              bottom: '-60px',
-              left: '20%',
-              width: '240px',
-              height: '240px',
-              background: 'radial-gradient(circle, rgba(25, 185, 39, 0.15) 0%, transparent 70%)',
-              borderRadius: '50%',
-              pointerEvents: 'none',
-            }}
-          />
-
-          <div className="row align-items-center g-4 position-relative z-1">
-            <div className="col-lg-5">
-              <span
-                className="badge px-3 py-1.5 rounded-pill mb-2.5 fw-bold text-uppercase d-inline-flex align-items-center gap-1.5"
-                style={{ backgroundColor: 'rgba(25, 185, 39, 0.18)', color: '#4ADE80', fontSize: '0.74rem' }}
-              >
-                <AnimatedFaIcon icon={FaTruckFast} size={12} color="#4ADE80" animation="bounce-subtle" />
-                <span>Aaradhya Express Dispatch</span>
-              </span>
-              <h2 className="display-6 fw-bolder mb-3 text-white" style={{ lineHeight: 1.2 }}>
-                Your order. Every step, in view.
-              </h2>
-              <p className="text-light opacity-75 small mb-4" style={{ fontSize: '0.92rem', lineHeight: 1.6 }}>
-                Track every pure silk saree, unstitched fabric, and kurti directly from our master weavers to your doorstep with real-time updates.
-              </p>
-
-              {/* Instant Order Search Form */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const val = e.target.orderInput?.value?.trim();
-                  if (val) {
-                    navigate(`/orders/track?id=${encodeURIComponent(val)}`);
-                  } else {
-                    navigate('/orders/track');
-                  }
-                }}
-                className="position-relative mb-3"
-                style={{ maxWidth: '380px' }}
-              >
-                <input
-                  name="orderInput"
-                  type="text"
-                  className="form-control rounded-pill border-0 py-2.5 ps-3.5 pe-5 shadow-sm text-dark"
-                  placeholder="Enter Order ID (e.g. ORD-2026-0001)"
-                  style={{ fontSize: '0.86rem', backgroundColor: '#FFFFFF' }}
-                />
-                <button
-                  type="submit"
-                  className="btn rounded-pill position-absolute end-0 top-50 translate-middle-y me-1 px-3 py-1.5 text-white fw-bold shadow-sm"
-                  style={{ backgroundColor: '#E90064', fontSize: '0.78rem' }}
-                >
-                  Track Now
-                </button>
-              </form>
-            </div>
-
-            <div className="col-lg-7">
-              {/* Glassmorphic Dispatch Tracker Card */}
-              <div
-                className="rounded-4 p-4 shadow-sm"
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.07)',
-                  backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(255, 255, 255, 0.14)',
-                }}
-              >
-                <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="small fw-bold text-white-50 text-uppercase tracking-wider" style={{ fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                      SAMPLE DISPATCH PROGRESS
-                    </span>
-                    <span className="badge rounded-pill bg-white text-dark py-0.5 px-2 small" style={{ fontSize: '0.68rem' }}>
-                      #AS-2026-7842
-                    </span>
-                  </div>
-                  <span
-                    className="badge rounded-pill fw-semibold d-inline-flex align-items-center gap-1.5 py-1 px-2.5"
-                    style={{ backgroundColor: 'rgba(25, 185, 39, 0.22)', color: '#4ADE80', fontSize: '0.72rem' }}
-                  >
-                    <span className="rounded-circle d-inline-block" style={{ width: '6px', height: '6px', backgroundColor: '#4ADE80' }}></span>
-                    <span>On Schedule</span>
-                  </span>
-                </div>
-
-                {/* Animated 4-Step Milestone Flow */}
-                <div className="position-relative my-4">
-                  <div className="progress" style={{ height: '4px', overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.15)' }}>
-                    <motion.div
-                      className="progress-bar"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: '70%' }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.2, ease: 'easeOut' }}
-                      style={{
-                        background: 'linear-gradient(90deg, #19B927 0%, #4ADE80 100%)',
-                        boxShadow: '0 0 10px rgba(74, 222, 128, 0.6)',
-                      }}
-                    />
-                  </div>
-
-                  <div className="d-flex justify-content-between position-relative" style={{ marginTop: '-15px' }}>
-                    {/* Step 1 */}
-                    <div className="text-center">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2, type: 'spring' }}
-                        className="rounded-circle text-white d-flex align-items-center justify-content-center mx-auto shadow"
-                        style={{ width: '30px', height: '30px', backgroundColor: '#19B927', fontSize: '0.75rem' }}
-                      >
-                        <FaCheck size={12} />
-                      </motion.div>
-                      <span className="d-block fw-bold text-white small mt-1.5" style={{ fontSize: '0.78rem' }}>Paid</span>
-                      <small className="text-white-50" style={{ fontSize: '0.68rem' }}>Confirmed</small>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div className="text-center">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.4, type: 'spring' }}
-                        className="rounded-circle text-white d-flex align-items-center justify-content-center mx-auto shadow"
-                        style={{ width: '30px', height: '30px', backgroundColor: '#19B927', fontSize: '0.75rem' }}
-                      >
-                        <FaCheck size={12} />
-                      </motion.div>
-                      <span className="d-block fw-bold text-white small mt-1.5" style={{ fontSize: '0.78rem' }}>Packed</span>
-                      <small className="text-white-50" style={{ fontSize: '0.68rem' }}>Loom Verified</small>
-                    </div>
-
-                    {/* Step 3 (Active) */}
-                    <div className="text-center">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.6, type: 'spring' }}
-                        className="rounded-circle text-white d-flex align-items-center justify-content-center mx-auto shadow position-relative"
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          backgroundColor: '#E90064',
-                          border: '2px solid #FFFFFF',
-                          boxShadow: '0 0 12px rgba(233, 0, 100, 0.7)',
-                        }}
-                      >
-                        <AnimatedFaIcon icon={FaTruckFast} size={14} color="#FFFFFF" animation="bounce-subtle" />
-                      </motion.div>
-                      <span className="d-block fw-bold text-white small mt-1.5" style={{ fontSize: '0.78rem' }}>In Transit</span>
-                      <small className="fw-semibold text-warning" style={{ fontSize: '0.68rem' }}>Out for delivery</small>
-                    </div>
-
-                    {/* Step 4 */}
-                    <div className="text-center">
-                      <div
-                        className="rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                        style={{
-                          width: '30px',
-                          height: '30px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          color: 'rgba(255, 255, 255, 0.5)',
-                        }}
-                      >
-                        <FaHouseCircleCheck size={13} />
-                      </div>
-                      <span className="d-block fw-bold text-white-50 small mt-1.5" style={{ fontSize: '0.78rem' }}>Delivered</span>
-                      <small className="text-white-50" style={{ fontSize: '0.68rem' }}>Expected Today</small>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-top border-white border-opacity-10 pt-3 mt-3 d-flex justify-content-between align-items-center small text-white-50">
-                  <span style={{ fontSize: '0.74rem' }} className="d-flex align-items-center gap-1">
-                    <AnimatedFaIcon icon={FaLocationDot} size={11} color="#B8E000" />
-                    <span>Route: Master Weaving Hub → Bengaluru</span>
-                  </span>
-                  <span style={{ fontSize: '0.74rem', color: '#B8E000' }}>Expected: Today, 6:00 PM</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* 7. FAQ Accordion with Redesigned Premium Cards & Fa Icons */}
-      <section className="mb-5">
-        <div className="row g-4">
-          <div className="col-lg-4">
-            <span
-              className="small text-uppercase fw-bold d-inline-flex align-items-center gap-1.5 mb-1"
-              style={{ color: '#E90064', letterSpacing: '0.1em', fontSize: '0.75rem' }}
-            >
-              <AnimatedFaIcon icon={FaQuestion} size={12} color="#E90064" animation="pulse" />
-              <span>HERE TO HELP</span>
-            </span>
-            <h3 className="display-6 fw-bolder mb-3 text-dark" style={{ color: '#17233B', lineHeight: 1.2 }}>
-              A few questions. Clear answers.
-            </h3>
-            <p className="text-secondary small mb-4" style={{ lineHeight: 1.6 }}>
-              Everything you need to know about our silk fabrics, authenticity, shipping, and returns.
-            </p>
-          </div>
-
-          <div className="col-lg-8">
-            <div className="d-flex flex-column gap-3">
-              {[
-                {
-                  tag: 'AUTHENTICITY',
-                  q: 'Are your sarees authentic Silk Mark certified?',
-                  a: 'Yes, 100%. Every silk saree at Aaradhya comes with an authorized Silk Mark India certification tag verifying pure mulberry and Kanchipuram silk purity with genuine zari weaving.',
-                },
-                {
-                  tag: 'SHIPPING & TRANSIT',
-                  q: 'How long does delivery take across India?',
-                  a: 'Orders are dispatched within 24 hours from our centralized hubs. Metro cities typically receive delivery in 2-3 business days, and other regions within 4-5 business days with full live tracking.',
-                },
-                {
-                  tag: 'CUSTOM ORDERS',
-                  q: 'Can I purchase running fabrics in custom lengths (meters)?',
-                  a: 'Absolutely! Our Aaradhya Fabrics collection allows you to purchase running fabrics starting from 1 meter and above in 0.5-meter increments with precision cutting and edge finishing.',
-                },
-                {
-                  tag: 'EASY RETURNS',
-                  q: 'What is your return or exchange policy?',
-                  a: 'We provide a 7-day hassle-free return and exchange policy for unused items with original tags and packaging intact. Reverse pickup is arranged at no additional cost.',
-                },
-                {
-                  tag: 'SECURE PAYMENTS',
-                  q: 'What payment options do you support?',
-                  a: 'We support all major payment methods via secure 256-bit SSL Razorpay encryption, including UPI (Google Pay, PhonePe, Paytm), Credit & Debit cards, NetBanking, and Cash on Delivery (COD).',
-                },
-              ].map((faq, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="card border-0 rounded-4 p-3.5 shadow-sm transition-all"
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: activeFaq === i ? '1.5px solid #E90064' : '1px solid #F0E7ED',
-                    borderRadius: '16px',
-                    boxShadow: activeFaq === i ? '0 8px 24px rgba(233, 0, 100, 0.08)' : '0 2px 6px rgba(0,0,0,0.02)',
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="btn btn-link p-0 text-start text-dark text-decoration-none fw-bold d-flex justify-content-between align-items-center w-100"
-                    style={{ fontSize: '0.94rem' }}
-                    onClick={() => setActiveFaq(activeFaq === i ? -1 : i)}
-                  >
-                    <div className="pe-2">
-                      <span
-                        className="badge rounded-pill mb-1 d-block text-uppercase"
-                        style={{
-                          backgroundColor: activeFaq === i ? '#FFF0F5' : '#F8F6F8',
-                          color: activeFaq === i ? '#E90064' : '#77717C',
-                          fontSize: '0.62rem',
-                          width: 'fit-content',
-                          padding: '2px 8px',
-                        }}
-                      >
-                        {faq.tag}
-                      </span>
-                      <span className="fw-bold" style={{ color: activeFaq === i ? '#E90064' : '#17233B' }}>
-                        {faq.q}
-                      </span>
-                    </div>
-                    <motion.span
-                      animate={{ rotate: activeFaq === i ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        backgroundColor: activeFaq === i ? '#E90064' : '#F8F6F8',
-                        color: activeFaq === i ? '#FFFFFF' : '#17233B',
-                      }}
-                    >
-                      <FaChevronDown size={12} />
-                    </motion.span>
-                  </button>
-
-                  <AnimatePresence>
-                    {activeFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pt-2 text-secondary small border-top mt-2" style={{ lineHeight: 1.6, fontSize: '0.86rem' }}>
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-      </div>
     </div>
   );
 };

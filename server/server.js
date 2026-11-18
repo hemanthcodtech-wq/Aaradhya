@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    service: 'AARADHYA Fashion & Fabrics Core API',
+    service: 'AARADHYA Sarees & Silks Core API',
     status: 'online',
     timestamp: new Date().toISOString(),
     healthCheck: '/api/health',
@@ -49,7 +49,7 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'AARADHYA Two-Store Fashion & Fabrics Core API',
+    service: 'AARADHYA Two-Store Sarees & Silks Core API',
     version: '2.0.0',
     stores: ['Aaradhya Silks (AS)', 'Aaradhya Fabrics (AF)'],
   });

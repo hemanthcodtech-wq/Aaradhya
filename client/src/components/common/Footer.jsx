@@ -63,7 +63,7 @@ const Footer = () => {
                     color: '#17233B',
                   }}
                 >
-                  Fashion & Fabrics
+                  Sarees & Silks
                 </span>
               </div>
             </Link>
@@ -216,7 +216,7 @@ const Footer = () => {
         {/* 6. Copyright Bottom Bar */}
         <div className="border-top mt-4 pt-3 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 small text-muted" style={{ borderColor: '#F0E7ED', fontSize: '0.78rem' }}>
           <div>
-            © {new Date().getFullYear()} <strong>AARADHYA – Fashion & Fabrics</strong>. All Rights Reserved.
+            © {new Date().getFullYear()} <strong>AARADHYA – Sarees & Silks</strong>. All Rights Reserved.
           </div>
           <div>
             Made with <span style={{ color: '#E90064' }}>❤️</span> in India

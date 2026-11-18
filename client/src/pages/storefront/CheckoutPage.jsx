@@ -93,18 +93,18 @@ const CheckoutPage = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="container py-5 text-center">
-        <div className="card card-modern p-5 max-w-lg mx-auto">
-          <ShoppingBag size={48} className="mx-auto text-primary mb-3" style={{ color: '#1D4ED8' }} />
-          <h4 className="fw-bold mb-2">Your Cart is Empty</h4>
-          <p className="text-muted small mb-4">Please add items to your cart before proceeding to checkout.</p>
+      <div className="products-page-wrapper storefront-products-bg min-vh-100 py-5 text-center">
+        <div className="card p-5 mx-auto bg-white shadow-sm" style={{ maxWidth: '480px', borderRadius: '24px', border: '1px solid #F0E7ED' }}>
+          <ShoppingBag size={48} className="mx-auto mb-3" style={{ color: '#E90064' }} />
+          <h4 className="fw-bold mb-2 text-dark" style={{ fontFamily: 'var(--font-heading-family)' }}>Your Cart is Empty</h4>
+          <p className="text-muted small mb-4">Please add items to your bag before proceeding to checkout.</p>
           <div>
             <Link
               to="/products"
-              className="btn btn-primary px-4 py-2 fw-semibold"
-              style={{ backgroundColor: '#1D4ED8', borderColor: '#1D4ED8' }}
+              className="btn rounded-pill px-4 py-2 text-white fw-semibold"
+              style={{ backgroundColor: '#E90064', borderColor: '#E90064', boxShadow: '0 4px 12px rgba(233, 0, 100, 0.28)' }}
             >
-              Browse Catalog
+              Explore Sarees & Silks
             </Link>
           </div>
         </div>
@@ -197,60 +197,65 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div className="container py-3 py-md-4">
-      {/* 1. Header & 3-Step Stepper matching reference screenshot */}
-      <div className="card card-modern p-3 mb-4">
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-          <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
-            <img
-              src="/logo.jpeg"
-              alt="Aaradhya Logo"
-              style={{ width: '38px', height: '38px', objectFit: 'contain', borderRadius: '8px' }}
-            />
-            <div>
-              <span className="fw-bolder fs-5 text-dark" style={{ letterSpacing: '-0.3px' }}>
-                AARADHYA
-              </span>
-              <div className="text-muted small" style={{ fontSize: '0.68rem', marginTop: '-4px' }}>
-                Fashion & Fabrics • Unified Checkout
+    <div className="products-page-wrapper storefront-products-bg min-vh-100 py-3 py-md-4">
+      <div className="container-fluid px-3 px-md-4 px-xl-5">
+        {/* 1. Header & 3-Step Stepper matching luxury boutique theme */}
+        <div
+          className="bg-white p-3 p-md-3.5 mb-4 rounded-4 shadow-sm"
+          style={{ borderRadius: '24px', border: '1px solid #F0E7ED' }}
+        >
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
+              <img
+                src="/logo.jpeg"
+                alt="Aaradhya Logo"
+                style={{ width: '38px', height: '38px', objectFit: 'contain', borderRadius: '10px' }}
+              />
+              <div>
+                <span className="fw-bolder fs-5 text-dark" style={{ letterSpacing: '-0.3px', fontFamily: 'var(--font-heading-family)' }}>
+                  AARADHYA
+                </span>
+                <div className="text-muted small" style={{ fontSize: '0.68rem', marginTop: '-4px', letterSpacing: '0.04em' }}>
+                  Sarees & Silks • Secure Unified Checkout
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Stepper: (1) Address ──── (2) Payment ──── (3) Review */}
-          <div className="d-flex align-items-center gap-2" style={{ maxWidth: '440px', width: '100%' }}>
-            <div className="d-flex align-items-center gap-2">
-              <div className="checkout-step-bullet completed">1</div>
-              <span className="small fw-semibold text-dark">Address</span>
-            </div>
+            {/* Stepper: (1) Address ──── (2) Payment ──── (3) Review */}
+            <div className="d-flex align-items-center gap-2" style={{ maxWidth: '440px', width: '100%' }}>
+              <div className="d-flex align-items-center gap-2">
+                <div className="checkout-step-bullet completed" style={{ backgroundColor: '#19B927', borderColor: '#19B927' }}>1</div>
+                <span className="small fw-semibold text-dark">Address</span>
+              </div>
 
-            <div className="checkout-step-line active"></div>
+              <div className="checkout-step-line active" style={{ backgroundColor: '#E90064' }}></div>
 
-            <div className="d-flex align-items-center gap-2">
-              <div className="checkout-step-bullet active">2</div>
-              <span className="small fw-semibold text-primary">Payment</span>
-            </div>
+              <div className="d-flex align-items-center gap-2">
+                <div className="checkout-step-bullet active" style={{ backgroundColor: '#E90064', borderColor: '#E90064' }}>2</div>
+                <span className="small fw-semibold text-dark">Payment</span>
+              </div>
 
-            <div className="checkout-step-line"></div>
+              <div className="checkout-step-line"></div>
 
-            <div className="d-flex align-items-center gap-2">
-              <div className="checkout-step-bullet pending">3</div>
-              <span className="small fw-medium text-muted">Review</span>
+              <div className="d-flex align-items-center gap-2">
+                <div className="checkout-step-bullet pending">3</div>
+                <span className="small fw-medium text-muted">Review</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
       <div className="row g-4">
         {/* LEFT COLUMN: Address, Delivery Option, Payment Methods */}
         <div className="col-lg-8">
           {/* Section 1: Delivery Address */}
-          <div className="card card-modern p-4 mb-4">
+          <div className="card p-4 mb-4 bg-white shadow-sm" style={{ borderRadius: '20px', border: '1px solid #F0E7ED' }}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="fw-bold text-dark mb-0">Delivery Address</h5>
+              <h5 className="fw-bold text-dark mb-0" style={{ fontFamily: 'var(--font-heading-family)' }}>Delivery Address</h5>
               <button
                 type="button"
-                className="btn btn-link p-0 text-primary fw-semibold small text-decoration-none d-flex align-items-center gap-1"
+                className="btn btn-link p-0 fw-semibold small text-decoration-none d-flex align-items-center gap-1"
+                style={{ color: '#E90064' }}
                 onClick={() => setShowAddAddressModal(true)}
               >
                 <Plus size={16} /> Add New
@@ -264,11 +269,14 @@ const CheckoutPage = () => {
                   <div
                     key={addr.id}
                     className={`p-3 rounded-3 border d-flex align-items-start gap-3 transition-all ${
-                      isSelected ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
+                      isSelected ? 'border-dark' : 'bg-white'
                     }`}
                     style={{
-                      borderColor: isSelected ? '#1D4ED8' : '#E2E8F0',
+                      borderColor: isSelected ? '#E90064' : '#E2E8F0',
+                      borderWidth: isSelected ? '2px' : '1px',
+                      backgroundColor: isSelected ? '#FFF0F6' : '#FFFFFF',
                       cursor: 'pointer',
+                      borderRadius: '14px',
                     }}
                     onClick={() => setSelectedAddressId(addr.id)}
                   >
@@ -278,6 +286,7 @@ const CheckoutPage = () => {
                       name="addressRadio"
                       checked={isSelected}
                       onChange={() => setSelectedAddressId(addr.id)}
+                      style={{ accentColor: '#E90064' }}
                     />
 
                     <div className="flex-grow-1">
@@ -322,17 +331,18 @@ const CheckoutPage = () => {
           </div>
 
           {/* Section 2: Delivery Options matching reference mockup */}
-          <div className="card card-modern p-4 mb-4">
-            <h5 className="fw-bold text-dark mb-3">Delivery Options</h5>
+          <div className="card p-4 mb-4 bg-white shadow-sm" style={{ borderRadius: '20px', border: '1px solid #F0E7ED' }}>
+            <h5 className="fw-bold text-dark mb-3" style={{ fontFamily: 'var(--font-heading-family)' }}>Delivery Options</h5>
 
             <div className="d-flex flex-column gap-2">
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedDelivery === 'standard' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedDelivery === 'standard' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedDelivery === 'standard' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedDelivery === 'standard' ? '2px' : '1px',
+                  backgroundColor: selectedDelivery === 'standard' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -342,6 +352,7 @@ const CheckoutPage = () => {
                     name="deliveryOption"
                     checked={selectedDelivery === 'standard'}
                     onChange={() => setSelectedDelivery('standard')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">Standard Delivery (3–5 days)</span>
@@ -351,12 +362,13 @@ const CheckoutPage = () => {
               </label>
 
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedDelivery === 'express' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedDelivery === 'express' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedDelivery === 'express' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedDelivery === 'express' ? '2px' : '1px',
+                  backgroundColor: selectedDelivery === 'express' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -366,6 +378,7 @@ const CheckoutPage = () => {
                     name="deliveryOption"
                     checked={selectedDelivery === 'express'}
                     onChange={() => setSelectedDelivery('express')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">Express Delivery (1–2 days)</span>
@@ -377,18 +390,19 @@ const CheckoutPage = () => {
           </div>
 
           {/* Section 3: Payment Method matching reference mockup */}
-          <div className="card card-modern p-4 mb-4">
-            <h5 className="fw-bold text-dark mb-3">Payment Method</h5>
+          <div className="card p-4 mb-4 bg-white shadow-sm" style={{ borderRadius: '20px', border: '1px solid #F0E7ED' }}>
+            <h5 className="fw-bold text-dark mb-3" style={{ fontFamily: 'var(--font-heading-family)' }}>Payment Method</h5>
 
             <div className="d-flex flex-column gap-2">
               {/* Razorpay All-in-one */}
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedPayment === 'razorpay' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedPayment === 'razorpay' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedPayment === 'razorpay' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedPayment === 'razorpay' ? '2px' : '1px',
+                  backgroundColor: selectedPayment === 'razorpay' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -398,6 +412,7 @@ const CheckoutPage = () => {
                     name="paymentMethod"
                     checked={selectedPayment === 'razorpay'}
                     onChange={() => setSelectedPayment('razorpay')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">
@@ -405,19 +420,20 @@ const CheckoutPage = () => {
                     </span>
                   </div>
                 </div>
-                <span className="badge bg-primary text-white px-2 py-1 small fw-bold" style={{ backgroundColor: '#1D4ED8' }}>
+                <span className="badge text-white px-2.5 py-1 small fw-bold" style={{ backgroundColor: '#0C2340', borderRadius: '6px' }}>
                   Razorpay
                 </span>
               </label>
 
               {/* Instant UPI */}
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedPayment === 'upi' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedPayment === 'upi' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedPayment === 'upi' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedPayment === 'upi' ? '2px' : '1px',
+                  backgroundColor: selectedPayment === 'upi' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -427,6 +443,7 @@ const CheckoutPage = () => {
                     name="paymentMethod"
                     checked={selectedPayment === 'upi'}
                     onChange={() => setSelectedPayment('upi')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">
@@ -439,12 +456,13 @@ const CheckoutPage = () => {
 
               {/* Credit / Debit Card */}
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedPayment === 'card' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedPayment === 'card' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedPayment === 'card' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedPayment === 'card' ? '2px' : '1px',
+                  backgroundColor: selectedPayment === 'card' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -454,6 +472,7 @@ const CheckoutPage = () => {
                     name="paymentMethod"
                     checked={selectedPayment === 'card'}
                     onChange={() => setSelectedPayment('card')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">Credit / Debit Card</span>
@@ -464,12 +483,13 @@ const CheckoutPage = () => {
 
               {/* Net Banking */}
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedPayment === 'netbanking' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedPayment === 'netbanking' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedPayment === 'netbanking' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedPayment === 'netbanking' ? '2px' : '1px',
+                  backgroundColor: selectedPayment === 'netbanking' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -479,6 +499,7 @@ const CheckoutPage = () => {
                     name="paymentMethod"
                     checked={selectedPayment === 'netbanking'}
                     onChange={() => setSelectedPayment('netbanking')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">Net Banking</span>
@@ -489,12 +510,13 @@ const CheckoutPage = () => {
 
               {/* Cash on Delivery (COD) */}
               <label
-                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                  selectedPayment === 'cod' ? 'border-primary bg-primary bg-opacity-10' : 'bg-white'
-                }`}
+                className={`p-3 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer`}
                 style={{
-                  borderColor: selectedPayment === 'cod' ? '#1D4ED8' : '#E2E8F0',
+                  borderColor: selectedPayment === 'cod' ? '#E90064' : '#E2E8F0',
+                  borderWidth: selectedPayment === 'cod' ? '2px' : '1px',
+                  backgroundColor: selectedPayment === 'cod' ? '#FFF0F6' : '#FFFFFF',
                   cursor: 'pointer',
+                  borderRadius: '14px',
                 }}
               >
                 <div className="d-flex align-items-center gap-3">
@@ -504,6 +526,7 @@ const CheckoutPage = () => {
                     name="paymentMethod"
                     checked={selectedPayment === 'cod'}
                     onChange={() => setSelectedPayment('cod')}
+                    style={{ accentColor: '#E90064' }}
                   />
                   <div>
                     <span className="fw-semibold text-dark small">Cash on Delivery (COD)</span>
@@ -517,8 +540,8 @@ const CheckoutPage = () => {
 
         {/* RIGHT COLUMN: Order Summary matching reference mockup */}
         <div className="col-lg-4">
-          <div className="card card-modern p-4 sticky-top" style={{ top: '80px', zIndex: 10 }}>
-            <h5 className="fw-bold text-dark mb-3">Order Summary</h5>
+          <div className="card p-4 sticky-top bg-white shadow-sm" style={{ top: '80px', zIndex: 10, borderRadius: '20px', border: '1px solid #F0E7ED' }}>
+            <h5 className="fw-bold text-dark mb-3" style={{ fontFamily: 'var(--font-heading-family)' }}>Order Summary</h5>
 
             <div className="d-flex flex-column gap-2 mb-3">
               <div className="d-flex justify-content-between text-muted small">
@@ -540,7 +563,7 @@ const CheckoutPage = () => {
             </div>
 
             {/* Two-Store Split Preview */}
-            <div className="p-2.5 rounded-3 bg-light border mb-3 small">
+            <div className="p-2.5 rounded-3 bg-light border mb-3 small" style={{ borderRadius: '12px' }}>
               <div className="fw-bold text-dark mb-1" style={{ fontSize: '0.74rem' }}>
                 Store-Wise Dispatch Split:
               </div>
@@ -560,38 +583,48 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className="border-top pt-3 mb-3">
+            <div className="border-top pt-3 mb-3" style={{ borderColor: '#F0E7ED' }}>
               <div className="d-flex justify-content-between align-items-baseline mb-2">
-                <span className="fs-5 fw-bold text-dark">Total Amount</span>
+                <span className="fs-5 fw-bold text-dark" style={{ fontFamily: 'var(--font-heading-family)' }}>Total Amount</span>
                 <span className="fs-3 fw-bold" style={{ color: '#E90064', letterSpacing: '-0.5px' }}>
                   ₹{finalPayable.toLocaleString()}
                 </span>
               </div>
 
               {/* Savings Alert Banner matching reference mockup */}
-              <div className="p-2 rounded bg-success bg-opacity-10 text-success small fw-semibold text-center mb-3">
+              <div className="p-2 rounded-3 bg-success bg-opacity-10 text-success small fw-semibold text-center mb-3">
                 <Check size={14} className="me-1" /> You save ₹{calculatedDiscount.toLocaleString()} on this order
               </div>
             </div>
 
             {/* Pay Button matching reference mockup */}
             <button
-              className="btn w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 rounded-pill shadow text-white"
-              style={{ backgroundColor: '#E90064', borderColor: '#E90064', fontSize: '1rem' }}
+              className="btn w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 rounded-pill shadow-sm text-white"
+              style={{
+                backgroundColor: '#E90064',
+                borderColor: '#E90064',
+                fontSize: '0.98rem',
+                letterSpacing: '0.04em',
+                boxShadow: '0 4px 14px rgba(233, 0, 100, 0.35)',
+              }}
               onClick={handlePayClick}
               disabled={isProcessing}
             >
-              <Lock size={18} /> Pay ₹{finalPayable.toLocaleString()} with Razorpay
+              <Lock size={17} />
+              {selectedPayment === 'cod'
+                ? `Place COD Order • ₹${finalPayable.toLocaleString()}`
+                : `Pay ₹${finalPayable.toLocaleString()} • Complete Order`}
             </button>
 
             {/* Trust Footer matching reference */}
             <div className="mt-3 text-center text-muted small d-flex align-items-center justify-content-center gap-1" style={{ fontSize: '0.78rem' }}>
               <ShieldCheck size={16} className="text-success" />
-              <span>100% Secure Payment with Razorpay</span>
+              <span>100% Secure Checkout • Verified Sarees & Silks</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
       {/* Add New Address Modal */}
       {showAddAddressModal && (
@@ -651,8 +684,8 @@ const CheckoutPage = () => {
                         <button
                           key={tag}
                           type="button"
-                          className={`btn btn-sm ${newAddress.label === tag ? 'btn-primary' : 'btn-light border'}`}
-                          style={newAddress.label === tag ? { backgroundColor: '#1D4ED8', borderColor: '#1D4ED8' } : {}}
+                          className={`btn btn-sm ${newAddress.label === tag ? 'text-white' : 'btn-light border'}`}
+                          style={newAddress.label === tag ? { backgroundColor: '#E90064', borderColor: '#E90064' } : {}}
                           onClick={() => setNewAddress({ ...newAddress, label: tag })}
                         >
                           {tag}
@@ -661,18 +694,18 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer border-top px-4 py-3">
+                <div className="modal-footer border-top px-4 py-3" style={{ borderColor: '#F0E7ED' }}>
                   <button
                     type="button"
-                    className="btn btn-light"
+                    className="btn btn-light rounded-pill px-3"
                     onClick={() => setShowAddAddressModal(false)}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-primary px-4 fw-semibold"
-                    style={{ backgroundColor: '#1D4ED8', borderColor: '#1D4ED8' }}
+                    className="btn rounded-pill px-4 fw-semibold text-white"
+                    style={{ backgroundColor: '#E90064', borderColor: '#E90064', boxShadow: '0 4px 12px rgba(233, 0, 100, 0.28)' }}
                   >
                     Save & Use Address
                   </button>
@@ -693,7 +726,7 @@ const CheckoutPage = () => {
             <div className="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
               <div className="p-3 text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: '#0C2340' }}>
                 <div className="d-flex align-items-center gap-2">
-                  <div className="bg-primary text-white p-1 rounded">
+                  <div className="bg-primary text-white p-1 rounded" style={{ backgroundColor: '#E90064' }}>
                     <CreditCard size={18} />
                   </div>
                   <strong>Razorpay Trusted Payment</strong>
@@ -703,20 +736,20 @@ const CheckoutPage = () => {
               <div className="p-4 text-center">
                 <h5 className="fw-bold mb-2">Simulating Secure Payment Authorization</h5>
                 <p className="text-muted small mb-4">
-                  Merchant: <strong>ShopMart India Retail Ltd.</strong>
+                  Merchant: <strong>Aaradhya Sarees & Silks Pvt. Ltd.</strong>
                   <br />
                   Order Amount: <strong>₹{finalPayable.toLocaleString()}</strong>
                 </p>
-                <div className="spinner-border text-primary mb-3" role="status" style={{ color: '#1D4ED8' }}></div>
+                <div className="spinner-border text-danger mb-3" role="status" style={{ color: '#E90064' }}></div>
                 <div className="d-flex justify-content-center gap-2 mt-2">
                   <button
-                    className="btn btn-success fw-semibold px-4"
+                    className="btn btn-success fw-semibold px-4 rounded-pill"
                     onClick={() => completeOrder('razorpay')}
                   >
                     Authorize Payment (Success)
                   </button>
                   <button
-                    className="btn btn-outline-danger px-3"
+                    className="btn btn-outline-danger px-3 rounded-pill"
                     onClick={() => {
                       setPaymentModalOpen(false);
                       setIsProcessing(false);

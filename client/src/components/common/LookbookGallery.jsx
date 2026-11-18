@@ -125,11 +125,17 @@ const LookbookGallery = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="d-flex align-items-center gap-2"
           >
-            <AnimatedFaIcon icon={FaCameraRetro} size={20} color="#E90064" animation="float" />
             <div>
-              <h4 className="fw-bolder mb-0 text-dark" style={{ letterSpacing: '-0.3px', color: '#17233B' }}>
+              <h4
+                className="fw-bold mb-0 text-dark"
+                style={{
+                  fontSize: 'clamp(1.3rem, 2.7vw, 1.7rem)',
+                  letterSpacing: '-0.3px',
+                  fontFamily: 'var(--font-heading-family)',
+                  color: '#17233B',
+                }}
+              >
                 Moments in Aaradhya
               </h4>
               <div className="d-flex align-items-center gap-2 mt-0.5">

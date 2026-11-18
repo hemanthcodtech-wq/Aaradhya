@@ -193,7 +193,7 @@ const ForgotPassword = ({ onBackToLogin, onResetPasswordWithToken }) => {
 
       {/* 4. Footer */}
       <div className="mt-4 pt-3 border-top text-center text-muted small" style={{ borderColor: '#F0E7ED', fontSize: '0.74rem' }}>
-        © 2026 Aaradhya Fashion & Fabrics. All rights reserved.
+        © 2026 Aaradhya Sarees & Silks. All rights reserved.
       </div>
     </div>
   );

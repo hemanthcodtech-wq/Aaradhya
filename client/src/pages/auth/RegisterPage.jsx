@@ -60,7 +60,7 @@ const RegisterPage = () => {
             Create Account
           </h3>
           <p className="text-secondary small mb-0">
-            Join Aaradhya Fashion & Fabrics today
+            Join Aaradhya Sarees & Silks today
           </p>
         </div>
 

@@ -216,7 +216,7 @@ const AdminBanners = () => {
                     {b.title}
                   </h5>
                   <p className="text-muted small mb-3 line-clamp-2" style={{ fontSize: '0.8rem' }}>
-                    {b.subtitle || 'Discover latest fashion and fabrics.'}
+                    {b.subtitle || 'Discover latest sarees and silks.'}
                   </p>
 
                   <div className="d-flex align-items-center justify-content-between pt-2 border-top mt-auto small">

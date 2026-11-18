@@ -63,7 +63,7 @@ const LoginPage = () => {
         <div className="text-center mb-4">
           <img
             src="/logo.jpeg"
-            alt="Aaradhya Fashion & Fabrics"
+            alt="Aaradhya Sarees & Silks"
             style={{ width: '64px', height: '64px', objectFit: 'contain' }}
             className="mb-2"
           />
@@ -71,7 +71,7 @@ const LoginPage = () => {
             AARADHYA
           </h3>
           <p className="small text-secondary mb-0" style={{ fontSize: '0.82rem' }}>
-            Fashion & Fabrics • Centralized Platform Login
+            Sarees & Silks • Centralized Platform Login
           </p>
         </div>
 

@@ -215,7 +215,7 @@ const AdminGallery = () => {
 
                 <div className="p-3 d-flex flex-column flex-grow-1">
                   <h6 className="fw-bold text-dark text-truncate mb-1" title={img.caption}>
-                    {img.caption || 'Aaradhya Fashion Moment'}
+                    {img.caption || 'Aaradhya Sarees & Silks Moment'}
                   </h6>
                   <div className="d-flex align-items-center justify-content-between mt-auto pt-2 border-top">
                     <span className="small text-muted" style={{ fontSize: '0.72rem' }}>

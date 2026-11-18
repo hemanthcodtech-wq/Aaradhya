@@ -795,7 +795,7 @@ const AdminOrders = () => {
 
                 {/* Footer Declaration */}
                 <div className="pt-2 border-top text-center text-muted" style={{ fontSize: '0.68rem' }}>
-                  This is a computer-generated official receipt for Aaradhya Fashion &amp; Fabrics platform orders. No physical signature required.
+                  This is a computer-generated official receipt for Aaradhya Sarees &amp; Silks platform orders. No physical signature required.
                 </div>
               </div>
 

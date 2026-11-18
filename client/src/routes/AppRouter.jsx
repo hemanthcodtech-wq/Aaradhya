@@ -30,6 +30,7 @@ import StoreSettings from '../pages/store/StoreSettings';
 // Storefront Pages
 import HomePage from '../pages/storefront/HomePage';
 import ProductListingPage from '../pages/storefront/ProductListingPage';
+import CategoriesPage from '../pages/storefront/CategoriesPage';
 import ProductDetailPage from '../pages/storefront/ProductDetailPage';
 import CartPage from '../pages/storefront/CartPage';
 import WishlistPage from '../pages/storefront/WishlistPage';
@@ -99,11 +100,11 @@ const AppRouter = () => {
       <Route path="/" element={<StorefrontLayout />}>
         <Route index element={<HomePage />} />
         <Route path="products" element={<ProductListingPage />} />
-        <Route path="categories" element={<ProductListingPage />} />
+        <Route path="categories" element={<CategoriesPage />} />
         <Route path="category/:slug" element={<ProductListingPage />} />
         <Route path="product/:identifier" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="wishlist" element={<WishlistPage />} />
+        <Route path="wishlist" element={<Navigate to="/products" replace />} />
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="order-confirmation/:orderNumber" element={<OrderConfirmationPage />} />
         <Route path="orders/track" element={<OrderTrackingPage />} />

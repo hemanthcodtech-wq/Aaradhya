@@ -155,7 +155,7 @@ const migrate = () => {
     },
   ];
 
-  // 4. Categories tailored to Aaradhya Fashion & Fabrics
+  // 4. Categories tailored to Aaradhya Sarees & Silks
   data.categories = [
     {
       _id: 'cat_sarees',

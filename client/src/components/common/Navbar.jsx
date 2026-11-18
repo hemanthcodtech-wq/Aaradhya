@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   User,
-  Heart,
   ShoppingBag,
   ChevronDown,
   ChevronRight,
@@ -28,7 +27,6 @@ import { FaTruckFast, FaTags, FaGem, FaScroll, FaWhatsapp, FaCertificate, FaStor
 import AnimatedFaIcon from './AnimatedFaIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { useWishlist } from '../../context/WishlistContext';
 import axiosClient from '../../api/axiosClient';
 
 const Navbar = () => {
@@ -36,7 +34,6 @@ const Navbar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const { totalItemCount } = useCart();
-  const { wishlistCount } = useWishlist();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -261,7 +258,7 @@ const Navbar = () => {
                   AARADHYA
                 </span>
                 <span className="nav-brand-subtitle">
-                  Fashion & Fabrics
+                  Sarees & Silks
                 </span>
               </div>
             </Link>
@@ -575,13 +572,6 @@ const Navbar = () => {
                     >
                       My Orders
                     </Link>
-                    <Link
-                      to="/wishlist"
-                      className="dropdown-item rounded-2 py-1.5 small"
-                      onClick={() => setShowAccountMenu(false)}
-                    >
-                      My Wishlist
-                    </Link>
                     <div className="dropdown-divider my-1"></div>
                     <button
                       className="dropdown-item rounded-2 py-1.5 small text-danger d-flex align-items-center gap-1.5"
@@ -596,19 +586,6 @@ const Navbar = () => {
                 )}
               </div>
             )}
-
-            {/* Wishlist Icon - Requires login; badge only renders if logged in and count > 0 */}
-            <Link
-              to={user ? "/wishlist" : "/login"}
-              state={!user ? { returnUrl: '/wishlist', message: 'Please sign in to access your Wishlist.' } : undefined}
-              className="position-relative d-inline-flex align-items-center justify-content-center text-dark text-decoration-none nav-action-btn"
-              title="Saved Wishlist"
-            >
-              <Heart size={20} strokeWidth={1.9} />
-              {user && wishlistCount > 0 && (
-                <span className="nav-action-badge">{wishlistCount}</span>
-              )}
-            </Link>
 
             {/* Cart Icon / Bag - Requires login; badge only renders if logged in and count > 0 */}
             <Link
@@ -965,7 +942,7 @@ const Navbar = () => {
                       AARADHYA
                     </strong>
                     <span className="text-muted fw-bold" style={{ fontSize: '0.58rem', letterSpacing: '0.18em' }}>
-                      FASHION & FABRICS
+                      SAREES & SILKS
                     </span>
                   </div>
                 </Link>
@@ -1032,14 +1009,6 @@ const Navbar = () => {
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Orders
-                      </Link>
-                      <Link
-                        to="/wishlist"
-                        className="btn btn-sm btn-white border rounded-pill py-1 px-2.5 small flex-grow-1 text-dark fw-medium text-center"
-                        style={{ fontSize: '0.74rem' }}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Wishlist ({wishlistCount})
                       </Link>
                       <button
                         className="btn btn-sm btn-outline-danger rounded-pill py-1 px-2.5 small fw-medium"

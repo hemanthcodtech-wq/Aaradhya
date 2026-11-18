@@ -323,7 +323,7 @@ const LoginForm = ({
         </div>
 
         <div className="text-muted small" style={{ fontSize: '0.72rem' }}>
-          © 2026 Aaradhya Fashion & Fabrics. All rights reserved.
+          © 2026 Aaradhya Sarees & Silks. All rights reserved.
         </div>
       </div>
     </div>

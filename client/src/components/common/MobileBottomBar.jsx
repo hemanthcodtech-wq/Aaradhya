@@ -3,20 +3,17 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   Home,
   LayoutGrid,
-  Heart,
+  Sparkles,
   ShoppingBag,
   User,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
-import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
 
 const MobileBottomBar = () => {
   const location = useLocation();
   const cart = useCart();
   const totalItemCount = cart?.totalItemCount || 0;
-  const wishlist = useWishlist();
-  const wishlistCount = wishlist?.wishlistCount || 0;
   const auth = useAuth();
   const user = auth?.user || null;
 
@@ -28,17 +25,17 @@ const MobileBottomBar = () => {
       isActive: location.pathname === '/',
     },
     {
-      label: 'Products',
+      label: 'Categories',
       icon: LayoutGrid,
-      path: '/products',
-      isActive: location.pathname === '/products' || location.pathname.startsWith('/category'),
+      path: '/categories',
+      isActive: location.pathname === '/categories' || location.pathname.startsWith('/category'),
     },
     {
-      label: 'Wishlist',
-      icon: Heart,
-      path: user ? '/wishlist' : '/login',
-      badge: user ? wishlistCount : 0,
-      isActive: location.pathname === '/wishlist',
+      label: 'Products',
+      icon: Sparkles,
+      path: '/products',
+      isCenter: true,
+      isActive: location.pathname === '/products',
     },
     {
       label: 'Bag',

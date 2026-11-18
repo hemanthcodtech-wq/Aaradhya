@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Check, Plus } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { useWishlist } from '../../context/WishlistContext';
 
 const ProductCard = ({ product, badgeType, index = 0 }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { addToCart } = useCart();
-  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const [added, setAdded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   if (!product) return null;
 
-  const isFavorited = isInWishlist(product._id);
   const discount =
     product.discountPercent ||
     (product.mrp && product.mrp > product.price
@@ -47,24 +44,6 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
     addToCart(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
-  };
-
-  const handleWishlistToggle = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Enforce login requirement
-    if (!user) {
-      navigate('/login', {
-        state: {
-          message: 'Please sign in to save items to your wishlist.',
-          returnUrl: window.location.pathname,
-        },
-      });
-      return;
-    }
-
-    toggleWishlist(product);
   };
 
   const imageSrc =
@@ -107,28 +86,6 @@ const ProductCard = ({ product, badgeType, index = 0 }) => {
         >
           {discount > 0 && resolvedBadge === 'discount' ? `${discount}% OFF` : 'New In'}
         </span>
-
-        {/* Floating Circular Wishlist Heart on Top-Right */}
-        <motion.button
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.88 }}
-          className="wishlist-btn-overlay"
-          style={{
-            top: '12px',
-            right: '12px',
-            backgroundColor: isFavorited ? '#FFF0F5' : 'rgba(255, 255, 255, 0.92)',
-            color: isFavorited ? '#E90064' : '#64748B',
-          }}
-          onClick={handleWishlistToggle}
-          title={isFavorited ? 'Remove from Wishlist' : 'Add to Wishlist'}
-          aria-label="Wishlist"
-        >
-          <Heart
-            size={16}
-            fill={isFavorited ? '#E90064' : 'none'}
-            color={isFavorited ? '#E90064' : '#64748B'}
-          />
-        </motion.button>
 
         {/* Product Image with Smooth Zoom - Direct Link to Product Detail */}
         <Link to={`/product/${product.slug || product._id}`} className="d-block w-100 h-100">

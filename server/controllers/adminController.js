@@ -1069,7 +1069,7 @@ const getSettings = async (req, res, next) => {
     if (!settings) {
       settings = {
         _id: 'set_platform_001',
-        platformName: 'AARADHYA – Fashion & Fabrics',
+        platformName: 'AARADHYA – Sarees & Silks',
         brandTagline: 'Pure Silk Sarees & Running Yardage',
         officialEmail: 'support@aaradhya.com',
         phone: '+91 40 2389 4400',

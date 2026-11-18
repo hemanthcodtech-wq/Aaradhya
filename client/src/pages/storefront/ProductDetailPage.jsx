@@ -1,70 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Star,
   ShieldCheck,
   Truck,
   RotateCcw,
-  Heart,
   Share2,
-  ShoppingCart,
-  Zap,
-  MapPin,
-  CheckCircle2,
-  AlertCircle,
-  Store,
   Check,
   Maximize2,
-  Lock,
-  ChevronRight,
-  MessageSquare,
+  ChevronDown,
+  ChevronUp,
+  Banknote,
+  Sparkles,
+  Info,
+  MapPin,
   HelpCircle,
-  Tag,
-  Barcode,
 } from 'lucide-react';
-import { FaCertificate } from 'react-icons/fa6';
-import AnimatedFaIcon from '../../components/common/AnimatedFaIcon';
 import ProductCard from '../../components/common/ProductCard';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { useWishlist } from '../../context/WishlistContext';
 import axiosClient from '../../api/axiosClient';
+
+const SIZES = ['XXS', 'XS', 'S', 'M', 'L', 'XL'];
+
+// Size measurements mapping matching Nishorama Image 3
+const SIZE_MEASUREMENTS = {
+  inches: {
+    XXS: { chest: '28-30 inch', waist: '24-26 inch', hip: '30-32 inch' },
+    XS: { chest: '30-32 inch', waist: '26-28 inch', hip: '32-34 inch' },
+    S: { chest: '32-34 inch', waist: '28-30 inch', hip: '34-36 inch' },
+    M: { chest: '34-36 inch', waist: '30-32 inch', hip: '36-38 inch' },
+    L: { chest: '36-38 inch', waist: '32-34 inch', hip: '38-40 inch' },
+    XL: { chest: '38-40 inch', waist: '34-36 inch', hip: '40-42 inch' },
+  },
+  cm: {
+    XXS: { chest: '71-76 cm', waist: '61-66 cm', hip: '76-81 cm' },
+    XS: { chest: '76-81 cm', waist: '66-71 cm', hip: '81-86 cm' },
+    S: { chest: '81-86 cm', waist: '71-76 cm', hip: '86-91 cm' },
+    M: { chest: '86-91 cm', waist: '76-81 cm', hip: '91-97 cm' },
+    L: { chest: '91-97 cm', waist: '81-86 cm', hip: '97-102 cm' },
+    XL: { chest: '97-102 cm', waist: '86-91 cm', hip: '102-107 cm' },
+  },
+};
 
 const ProductDetailPage = () => {
   const { identifier } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { addToCart } = useCart();
-  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [activeImage, setActiveImage] = useState('');
-  const [selectedVariant, setSelectedVariant] = useState(null);
-  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
-  const [activeTab, setActiveTab] = useState('description');
+  const [addedToast, setAddedToast] = useState(false);
 
-  // Fashion & Fabrics variant selections
-  const [selectedSize, setSelectedSize] = useState('M');
-  const [selectedColor, setSelectedColor] = useState('Royal Magenta');
+  // Nishorama Interactive Attributes State (Image 3)
+  const [selectedSize, setSelectedSize] = useState('XS');
+  const [unitMode, setUnitMode] = useState('inches'); // 'inches' | 'cm'
+  const [openAccordion, setOpenAccordion] = useState('details'); // 'details' | 'shipping' | 'returns' | null
+  const [showSizeModal, setShowSizeModal] = useState(false);
 
-  const colorOptions = [
-    { name: 'Royal Magenta', hex: '#E90064' },
-    { name: 'Peacock Blue', hex: '#087CE5' },
-    { name: 'Emerald Green', hex: '#19B927' },
-    { name: 'Mustard Gold', hex: '#D97706' },
-    { name: 'Midnight Navy', hex: '#17233B' },
-  ];
-
-  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'Free Size'];
-
-  // Delivery Pincode checker state
-  const [pincodeInput, setPincodeInput] = useState('560004'); // Bengaluru default
-  const [pincodeResult, setPincodeResult] = useState(null);
-  const [isChangingPincode, setIsChangingPincode] = useState(false);
-  const [checkingPincode, setCheckingPincode] = useState(false);
+  // Pincode Delivery Checker
+  const [pincode, setPincode] = useState('560001');
+  const [pincodeChecked, setPincodeChecked] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -72,705 +73,743 @@ const ProductDetailPage = () => {
       try {
         const res = await axiosClient.get(`/products/${identifier}`);
         if (res.success && res.data) {
-          const prod = res.data.product;
-          setProduct(prod);
-          setRelated(res.data.relatedProducts || []);
-          setActiveImage(prod.images?.[0] || '');
-          if (prod.variants && prod.variants.length > 0) {
-            setSelectedVariant(prod.variants[0]);
+          const prodData = res.data.product || res.data;
+          setProduct(prodData);
+          if (Array.isArray(res.data.relatedProducts)) {
+            setRelated(res.data.relatedProducts);
           }
+          const defaultImg =
+            prodData.images?.[0] ||
+            prodData.image ||
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=85';
+          setActiveImage(defaultImg);
         }
       } catch (err) {
-        console.error('Failed to load product details', err);
+        console.error('Error fetching product detail:', err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [identifier]);
-
-  // Handle live delivery pincode check
-  const handleCheckPincode = async (e) => {
-    e?.preventDefault();
-    if (!pincodeInput || pincodeInput.length !== 6) return;
-
-    setCheckingPincode(true);
-    try {
-      const res = await axiosClient.get(`/shipping/check-pincode/${pincodeInput}`);
-      if (res.success) {
-        setPincodeResult(res.data);
-        setIsChangingPincode(false);
-      }
-    } catch (err) {
-      setPincodeResult({ isServiceable: true, city: 'Bengaluru' });
-    } finally {
-      setCheckingPincode(false);
-    }
-  };
-
-  useEffect(() => {
-    handleCheckPincode();
-  }, []);
-
-  const handleShare = () => {
-    navigator.clipboard?.writeText(window.location.href);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
 
   if (loading) {
     return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border text-primary" style={{ color: '#E90064' }} role="status"></div>
-        <p className="mt-2 text-muted">Loading Aaradhya details...</p>
+      <div className="products-page-wrapper storefront-products-bg min-vh-100 d-flex align-items-center justify-content-center py-5">
+        <div className="text-center p-5 bg-white rounded-4 shadow-sm" style={{ maxWidth: '360px' }}>
+          <div className="spinner-border text-danger mb-3" role="status"></div>
+          <h6 className="fw-bold mb-0 text-dark" style={{ fontFamily: 'var(--font-heading-family)' }}>
+            Loading Aaradhya Creation...
+          </h6>
+        </div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="container py-5 text-center">
-        <h4>Product Not Found</h4>
-        <Link to="/products" className="btn btn-primary mt-3" style={{ backgroundColor: '#E90064', borderColor: '#E90064' }}>
-          Browse Catalog
-        </Link>
+      <div className="products-page-wrapper storefront-products-bg min-vh-100 py-5 text-center">
+        <div className="card p-5 border-0 shadow-sm rounded-4 bg-white mx-auto" style={{ maxWidth: '520px' }}>
+          <h4 className="fw-bold text-dark mb-2">Product Not Found</h4>
+          <p className="text-muted small mb-4">The item you are looking for may have been archived or moved.</p>
+          <Link to="/products" className="btn text-white rounded-pill px-4 py-2 fw-semibold" style={{ backgroundColor: '#E90064' }}>
+            Explore All Collections
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const isSilks = (product.storeCode || 'AS').toUpperCase() === 'AS';
-  const storeTitle = isSilks ? 'Aaradhya Silks' : 'Aaradhya Fabrics';
-  const storeLocation = isSilks ? 'Basavanagudi, Bengaluru' : 'Commercial Street, Bengaluru';
-  const primaryBrandColor = isSilks ? '#E90064' : '#087CE5';
+  const imagesList =
+    product.images && product.images.length > 0
+      ? product.images
+      : [product.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=85'];
 
-  const currentPrice = selectedVariant?.price || product.price;
-  const currentMrp = selectedVariant?.mrp || product.mrp || Math.round(currentPrice * 1.3);
   const discount =
-    currentMrp > currentPrice
-      ? Math.round(((currentMrp - currentPrice) / currentMrp) * 100)
-      : 25;
+    product.discountPercent ||
+    (product.mrp && product.mrp > product.price
+      ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
+      : 0);
 
-  const isFavorited = isInWishlist(product._id);
+  const measurements =
+    SIZE_MEASUREMENTS[unitMode]?.[selectedSize] || SIZE_MEASUREMENTS.inches.XS;
 
+  // Add to cart action
   const handleAddToCart = () => {
     if (!user) {
       navigate('/login', {
         state: {
-          message: 'Please sign in to add items to your cart.',
-          returnUrl: window.location.pathname,
+          message: 'Please sign in to add items to your bag.',
+          returnUrl: `/product/${product.slug || product._id}`,
         },
       });
       return;
     }
-    addToCart(
-      {
-        ...product,
-        storeCode: product.storeCode || (isSilks ? 'AS' : 'AF'),
-        storeName: storeTitle,
-      },
-      quantity,
-      {
-        ...selectedVariant,
-        size: selectedSize,
-        color: selectedColor,
-      }
-    );
+
+    addToCart(product, 1, { size: selectedSize });
+    setAddedToast(true);
+    setTimeout(() => setAddedToast(false), 2400);
   };
 
+  // Direct checkout action (BUY IT NOW matching Image 3)
   const handleBuyNow = () => {
     if (!user) {
       navigate('/login', {
         state: {
-          message: 'Please sign in to proceed with your order.',
-          returnUrl: window.location.pathname,
+          message: 'Please sign in to complete your checkout.',
+          returnUrl: '/checkout',
         },
       });
       return;
     }
-    handleAddToCart();
+
+    addToCart(product, 1, { size: selectedSize });
     navigate('/checkout');
   };
 
-  const imagesList =
-    product.images && product.images.length > 0
-      ? product.images
-      : [
-          'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=800&auto=format&fit=crop&q=80',
-        ];
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
+  };
+
+  const toggleAccordion = (name) => {
+    setOpenAccordion(openAccordion === name ? null : name);
+  };
 
   return (
-    <div className="container py-3 py-md-4">
-      {/* Breadcrumbs */}
-      <nav aria-label="breadcrumb" className="mb-3">
-        <ol className="breadcrumb small">
-          <li className="breadcrumb-item">
-            <Link to="/" className="text-decoration-none text-muted">Home</Link>
-          </li>
-          <li className="breadcrumb-item">
-            <Link to="/products" className="text-decoration-none text-muted">
-              Collections
-            </Link>
-          </li>
-          <li className="breadcrumb-item">
-            <span className="text-muted">{product.category?.name || 'Fashion'}</span>
-          </li>
-          <li className="breadcrumb-item active text-truncate fw-semibold text-dark" style={{ maxWidth: '300px' }}>
-            {product.name}
-          </li>
-        </ol>
-      </nav>
-
-      {/* Main Product Layout */}
-      <div className="card card-modern p-3 p-md-4 mb-4 border shadow-sm rounded-4" style={{ borderRadius: '22px', borderColor: '#F0E7ED' }}>
-        <div className="row g-3 g-md-4">
-          {/* Left Column: Responsive Thumbnails + Main Stage */}
-          <div className="col-12 col-lg-6">
-            <div className="d-flex flex-column flex-lg-row gap-2 gap-md-3">
-              {/* Desktop Vertical Thumbnails List */}
-              <div className="d-none d-lg-flex flex-column gap-2 flex-shrink-0" style={{ width: '68px' }}>
-                {imagesList.map((img, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    className={`btn p-1 border rounded-2 ${
-                      activeImage === img ? 'border-2 shadow-sm' : 'border-light'
-                    }`}
-                    style={{
-                      width: '68px',
-                      height: '68px',
-                      backgroundColor: '#ffffff',
-                      borderColor: activeImage === img ? '#E90064' : '#E2E8F0',
-                    }}
-                    onClick={() => setActiveImage(img)}
+    <div className="products-page-wrapper storefront-products-bg min-vh-100 py-3 py-md-4">
+      <div className="container-fluid px-3 px-md-4 px-xl-5">
+        {/* Main Product Card Container matching Nishorama Image 3 Layout */}
+        <div
+          className="bg-white rounded-4 shadow-sm p-3 p-md-4 p-xl-5 mb-4"
+          style={{
+            borderRadius: '26px',
+            border: '1px solid #F0E7ED',
+          }}
+        >
+          <div className="pdp-showcase-grid">
+            {/* =========================================================
+                COLUMN 1 (LEFT): Tags, Rating, Title, Attributes, Specs & Accordions
+                ========================================================= */}
+            <div className="pdp-col-details d-flex flex-column justify-content-between h-100">
+              {/* Top Section */}
+              <div>
+                {/* Feature Tags */}
+                <div className="d-flex flex-wrap gap-1.5 mb-2">
+                  <span className="badge rounded-pill bg-light text-dark border px-2.5 py-1 small fw-semibold" style={{ fontSize: '0.72rem' }}>
+                    {product.category?.name || 'Handcrafted'}
+                  </span>
+                  <span className="badge rounded-pill bg-light text-dark border px-2.5 py-1 small fw-semibold" style={{ fontSize: '0.72rem' }}>
+                    {product.storeCode === 'AF' ? 'Aaradhya Fabrics' : 'Aaradhya Silks'}
+                  </span>
+                  <span
+                    className="badge rounded-pill px-2.5 py-1 small fw-semibold"
+                    style={{ backgroundColor: '#FFF0F6', color: '#E90064', border: '1px solid #FCE7F1', fontSize: '0.72rem' }}
                   >
-                    <img
-                      src={img}
-                      alt={`Thumbnail ${idx}`}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
-                    />
-                  </button>
-                ))}
+                    Silk Mark Genuine
+                  </span>
+                </div>
+
+                {/* Rating Stars */}
+                <div className="d-flex align-items-center gap-1.5 mb-2">
+                  <div className="d-flex text-warning">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={13} fill="#F59E0B" stroke="#F59E0B" />
+                    ))}
+                  </div>
+                  <span className="small fw-bold text-dark" style={{ fontSize: '0.8rem' }}>4.9</span>
+                  <span className="text-muted small" style={{ fontSize: '0.76rem' }}>(142 verified reviews)</span>
+                </div>
+
+                {/* Product Title */}
+                <h1
+                  className="fw-bolder mb-2 text-dark"
+                  style={{
+                    fontFamily: 'var(--font-heading-family)',
+                    fontSize: 'clamp(1.35rem, 1.85vw, 1.75rem)',
+                    letterSpacing: '-0.3px',
+                    lineHeight: 1.25,
+                  }}
+                >
+                  {product.name}
+                </h1>
+
+                {/* Editorial Model & Style Attributes */}
+                <div className="d-flex flex-column gap-1 text-muted small mb-3 pb-2.5 border-bottom" style={{ fontSize: '0.82rem' }}>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-secondary fw-medium">Style</span>
+                    <span className="text-dark fw-semibold">{product.category?.name || 'Handloom Silhouette'}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-secondary fw-medium">Color</span>
+                    <span className="text-dark fw-semibold">{product.color || 'Heritage Natural'}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-secondary fw-medium">Model Fit Check</span>
+                    <span className="text-dark fw-semibold">Model is wearing {selectedSize} • 5'8"</span>
+                  </div>
+                </div>
+
+                {/* Weave & Fabric Specifications Grid */}
+                <div className="row g-2 mb-3">
+                  <div className="col-6">
+                    <div className="p-2 rounded-2 bg-light border text-start">
+                      <div className="text-muted" style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Weave Quality</div>
+                      <div className="fw-bold text-dark small" style={{ fontSize: '0.78rem' }}>Pure Mulberry Silk</div>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="p-2 rounded-2 bg-light border text-start">
+                      <div className="text-muted" style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Artisan Origin</div>
+                      <div className="fw-bold text-dark small" style={{ fontSize: '0.78rem' }}>Handloom Certified</div>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="p-2 rounded-2 bg-light border text-start">
+                      <div className="text-muted" style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Wash Care</div>
+                      <div className="fw-bold text-dark small" style={{ fontSize: '0.78rem' }}>Dry Clean Recommended</div>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="p-2 rounded-2 bg-light border text-start">
+                      <div className="text-muted" style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Dispatch</div>
+                      <div className="fw-bold text-dark small" style={{ fontSize: '0.78rem' }}>24–48 Business Hrs</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Large Main Product Image Stage (Proportionate on Mobile & Laptop) */}
+              {/* Bottom Section of Left Column: Accordions & Artisan Seal */}
+              <div>
+                {/* Collapsible Accordions */}
+                <div className="product-accordions border-top pt-1 mb-2.5">
+                  {/* 1. Details & Description */}
+                  <div className="border-bottom py-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordion('details')}
+                      className="w-100 bg-transparent border-0 p-0 d-flex justify-content-between align-items-center text-dark text-uppercase fw-bold text-start"
+                      style={{ fontSize: '0.76rem', letterSpacing: '0.05em' }}
+                    >
+                      <span>DETAILS & DESCRIPTION</span>
+                      {openAccordion === 'details' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </button>
+                    <AnimatePresence>
+                      {openAccordion === 'details' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-secondary small mt-1.5 mb-1.5" style={{ fontSize: '0.78rem', lineHeight: 1.5 }}>
+                            {product.description ||
+                              'Carefully handcrafted with authentic Indian silk weaves. Features fine zari border embellishments, natural dyes, and breathable handspun threads curated from master artisans.'}
+                          </p>
+                          <ul className="text-muted small ps-3 mb-0" style={{ fontSize: '0.74rem' }}>
+                            <li>100% Genuine Certified Weave</li>
+                            <li>Dry clean only for first 2 washes</li>
+                            <li>SKU: {product.sku || 'AS-2026-WEAVE'}</li>
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 2. Shipping & Delivery */}
+                  <div className="border-bottom py-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordion('shipping')}
+                      className="w-100 bg-transparent border-0 p-0 d-flex justify-content-between align-items-center text-dark text-uppercase fw-bold text-start"
+                      style={{ fontSize: '0.76rem', letterSpacing: '0.05em' }}
+                    >
+                      <span>SHIPPING & DELIVERY</span>
+                      {openAccordion === 'shipping' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </button>
+                    <AnimatePresence>
+                      {openAccordion === 'shipping' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-secondary small mt-1.5 mb-1" style={{ fontSize: '0.78rem' }}>
+                            Standard insured express delivery across all India pincodes:
+                          </p>
+                          <ul className="text-muted small ps-3 mb-1" style={{ fontSize: '0.74rem' }}>
+                            <li>Dispatched within 24-48 business hours</li>
+                            <li>Delivery within 3-5 days in metros</li>
+                            <li>Free shipping on all prepaid orders over ₹999</li>
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 3. Return & Exchange */}
+                  <div className="border-bottom py-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordion('returns')}
+                      className="w-100 bg-transparent border-0 p-0 d-flex justify-content-between align-items-center text-dark text-uppercase fw-bold text-start"
+                      style={{ fontSize: '0.76rem', letterSpacing: '0.05em' }}
+                    >
+                      <span>RETURN & EXCHANGE</span>
+                      {openAccordion === 'returns' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </button>
+                    <AnimatePresence>
+                      {openAccordion === 'returns' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-secondary small mt-1.5 mb-0" style={{ fontSize: '0.78rem', lineHeight: 1.45 }}>
+                            Hassle-free 7-day doorstep return and size exchange. Item must be in original condition with intact Silk Mark tags.
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                {/* Master Loom Guarantee Seal */}
+                <div
+                  className="p-2.5 rounded-3 d-flex align-items-center gap-2.5"
+                  style={{ backgroundColor: '#FAF7F5', border: '1px solid #F0E7ED' }}
+                >
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{ width: '32px', height: '32px', backgroundColor: '#FFF0F6', color: '#E90064' }}
+                  >
+                    <Sparkles size={15} />
+                  </div>
+                  <div>
+                    <div className="fw-bold text-dark small" style={{ fontSize: '0.76rem' }}>Master Weavers Loom Guarantee</div>
+                    <div className="text-muted" style={{ fontSize: '0.7rem' }}>Authentic handloom craftsmanship direct from Varanasi & Kanchi</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* =========================================================
+                COLUMN 2 (CENTER): Big Portrait Model Image & Thumbnails
+                ========================================================= */}
+            <div className="pdp-col-image d-flex flex-column align-items-center h-100">
               <div
-                className="position-relative rounded-3 rounded-md-4 overflow-hidden flex-grow-1 d-flex align-items-center justify-content-center bg-white border"
+                className="position-relative overflow-hidden shadow-2xs border w-100"
                 style={{
-                  height: 'clamp(300px, 72vw, 450px)',
-                  borderColor: '#F0E7ED',
-                  backgroundColor: '#FAFAFA',
-                  borderRadius: '18px',
+                  borderRadius: '22px',
+                  backgroundColor: '#F8F6F8',
+                  height: '520px',
+                  maxHeight: '560px',
                 }}
               >
                 <img
-                  src={activeImage || imagesList[0]}
+                  src={activeImage}
                   alt={product.name}
-                  className="img-fluid p-2"
-                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                  className="w-100 h-100"
+                  style={{ objectFit: 'cover' }}
                 />
 
-                {/* Silk Mark Genuine Certified Badge */}
-                <span
-                  className="badge position-absolute top-0 start-0 m-2.5 m-md-3 bg-white text-dark border shadow-sm d-inline-flex align-items-center gap-1.5"
-                  style={{ fontSize: '0.72rem', padding: '0.35rem 0.65rem', borderRadius: '999px' }}
-                >
-                  <AnimatedFaIcon icon={FaCertificate} size={11} color="#E90064" animation="pulse" />
-                  <span>100% Authentic Handloom</span>
-                </span>
+                {/* Top Badge: Discount or Silk Mark */}
+                {discount > 0 && (
+                  <span
+                    className="cust-choice-badge position-absolute"
+                    style={{ top: '14px', left: '14px' }}
+                  >
+                    {discount}% OFF
+                  </span>
+                )}
 
-                {/* Expand / Zoom icon */}
+                {/* Zoom / Fullscreen Preview */}
                 <button
-                  className="btn btn-light btn-sm position-absolute bottom-0 end-0 m-2.5 m-md-3 rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center"
+                  type="button"
+                  onClick={() => window.open(activeImage, '_blank')}
+                  className="btn btn-sm btn-light rounded-circle position-absolute bottom-0 end-0 m-3 shadow-sm p-2 d-flex align-items-center justify-content-center"
                   style={{ width: '36px', height: '36px' }}
-                  title="Zoom Image"
-                  onClick={() => window.open(activeImage || imagesList[0], '_blank')}
+                  title="View full-size photo"
                 >
-                  <Maximize2 size={16} className="text-secondary" />
+                  <Maximize2 size={16} />
                 </button>
               </div>
 
-              {/* Mobile Horizontal Thumbnails Strip (Appears beneath main image on mobile) */}
+              {/* Image Thumbnails Strip beneath center image */}
               {imagesList.length > 1 && (
                 <div
-                  className="d-flex d-lg-none gap-2 overflow-x-auto pb-1 mt-1 scrollbar-hidden"
-                  style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
-                    WebkitOverflowScrolling: 'touch',
-                  }}
+                  className="d-flex justify-content-center gap-2 overflow-x-auto pb-1 mt-3 w-100 scrollbar-hidden"
+                  style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
                 >
                   {imagesList.map((img, idx) => (
                     <button
                       key={idx}
                       type="button"
-                      className={`btn p-1 border rounded-2 flex-shrink-0 ${
-                        activeImage === img ? 'border-2 shadow-sm' : 'border-light'
+                      className={`btn p-0 rounded-3 overflow-hidden flex-shrink-0 ${
+                        activeImage === img ? 'border-2 shadow-sm' : 'border'
                       }`}
                       style={{
-                        width: '56px',
-                        height: '56px',
-                        backgroundColor: '#ffffff',
-                        borderColor: activeImage === img ? '#E90064' : '#E2E8F0',
+                        width: '62px',
+                        height: '78px',
+                        borderColor: activeImage === img ? '#E90064' : '#E5E7EB',
+                        borderRadius: '12px',
+                        boxShadow: activeImage === img ? '0 2px 8px rgba(233, 0, 100, 0.3)' : 'none',
                       }}
                       onClick={() => setActiveImage(img)}
                     >
-                      <img
-                        src={img}
-                        alt={`Thumbnail ${idx}`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
-                      />
+                      <img src={img} alt={`Thumb ${idx}`} className="w-100 h-100" style={{ objectFit: 'cover' }} />
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* 4 Value Proposition Badges (2x2 on Mobile, 4 in a row on Desktop) */}
-            <div className="row g-2 mt-2 pt-2.5 border-top text-center">
-              <div className="col-6 col-md-3">
-                <div className="p-2 rounded-3 bg-light border h-100 d-flex flex-column align-items-center justify-content-center">
-                  <ShieldCheck size={17} className="text-success mb-1" />
-                  <span className="fw-semibold text-dark" style={{ fontSize: '0.72rem' }}>Silk Mark Certified</span>
-                </div>
-              </div>
-              <div className="col-6 col-md-3">
-                <div className="p-2 rounded-3 bg-light border h-100 d-flex flex-column align-items-center justify-content-center">
-                  <RotateCcw size={17} className="text-primary mb-1" />
-                  <span className="fw-semibold text-dark" style={{ fontSize: '0.72rem' }}>7-Day Exchange</span>
-                </div>
-              </div>
-              <div className="col-6 col-md-3">
-                <div className="p-2 rounded-3 bg-light border h-100 d-flex flex-column align-items-center justify-content-center">
-                  <Truck size={17} className="text-success mb-1" />
-                  <span className="fw-semibold text-dark" style={{ fontSize: '0.72rem' }}>Free Shipping ₹999+</span>
-                </div>
-              </div>
-              <div className="col-6 col-md-3">
-                <div className="p-2 rounded-3 bg-light border h-100 d-flex flex-column align-items-center justify-content-center">
-                  <Lock size={17} className="text-danger mb-1" />
-                  <span className="fw-semibold text-dark" style={{ fontSize: '0.72rem' }}>Genuine Handloom</span>
-                </div>
-              </div>
-            </div>
-          </div>
+            {/* =========================================================
+                COLUMN 3 (RIGHT): Measurements, Sizes, Offers, Purchase & Services
+                ========================================================= */}
+            <div className="pdp-col-purchase d-flex flex-column justify-content-between h-100">
+              {/* Top Section */}
+              <div>
+                {/* Measurement Unit Toggle + What's My Size? */}
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setUnitMode('inches')}
+                      className="btn btn-link p-0 text-decoration-none fw-bold small"
+                      style={{
+                        fontSize: '0.8rem',
+                        color: unitMode === 'inches' ? '#E90064' : '#6B7280',
+                        borderBottom: unitMode === 'inches' ? '2px solid #E90064' : '2px solid transparent',
+                        paddingBottom: '2px',
+                      }}
+                    >
+                      Inches
+                    </button>
+                    <span className="text-muted small">/</span>
+                    <button
+                      type="button"
+                      onClick={() => setUnitMode('cm')}
+                      className="btn btn-link p-0 text-decoration-none fw-bold small"
+                      style={{
+                        fontSize: '0.8rem',
+                        color: unitMode === 'cm' ? '#E90064' : '#6B7280',
+                        borderBottom: unitMode === 'cm' ? '2px solid #E90064' : '2px solid transparent',
+                        paddingBottom: '2px',
+                      }}
+                    >
+                      CM
+                    </button>
+                  </div>
 
-          {/* Right Column: Title, Ratings, Pricing, Variants & Controls */}
-          <div className="col-12 col-lg-6">
-            {/* Top row: Category tag & Share/Wishlist buttons */}
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <div className="d-flex align-items-center gap-2">
-                <span className="badge bg-light text-dark border" style={{ fontSize: '0.72rem', padding: '0.3rem 0.6rem' }}>
-                  AARADHYA • {product.category?.name || 'Exclusive Edit'}
-                </span>
-                <span className="badge bg-success bg-opacity-10 text-success" style={{ fontSize: '0.7rem' }}>
-                  ✓ In Stock
-                </span>
-              </div>
-              <div className="d-flex align-items-center gap-2">
-                <button
-                  className="btn btn-light btn-sm rounded-circle p-2 border"
-                  onClick={handleShare}
-                  title="Share Product"
-                >
-                  <Share2 size={16} className="text-muted" />
-                </button>
-                <button
-                  className={`btn btn-light btn-sm rounded-circle p-2 border ${isFavorited ? 'text-danger' : 'text-muted'}`}
-                  onClick={() => {
-                    if (!user) {
-                      navigate('/login', {
-                        state: {
-                          message: 'Please sign in to save items to your wishlist.',
-                          returnUrl: window.location.pathname,
-                        },
-                      });
-                      return;
-                    }
-                    toggleWishlist(product);
-                  }}
-                  title="Wishlist"
-                >
-                  <Heart size={16} fill={isFavorited ? '#E90064' : 'none'} color={isFavorited ? '#E90064' : 'currentColor'} />
-                </button>
-              </div>
-            </div>
-
-            {copiedLink && (
-              <div className="alert alert-success py-1 px-2 small mb-2 text-center" style={{ fontSize: '0.75rem' }}>
-                Product link copied to clipboard!
-              </div>
-            )}
-
-            {/* Product Title */}
-            <h1 className="fw-bolder mb-2 text-dark" style={{ letterSpacing: '-0.3px', fontSize: 'clamp(1.25rem, 2.8vw, 1.85rem)', lineHeight: 1.25 }}>
-              {product.name}
-            </h1>
-
-            {/* Ratings & Sold counts */}
-            <div className="d-flex align-items-center gap-2 mb-3 small text-muted">
-              <div className="d-flex align-items-center gap-1">
-                <Star size={15} fill="#F59E0B" color="#F59E0B" />
-                <span className="fw-bold text-dark">{product.rating || 4.8}</span>
-                <span>({product.reviewCount?.toLocaleString() || '1,240'} reviews)</span>
-              </div>
-              <span className="mx-1 opacity-50">|</span>
-              <span className="text-success fw-semibold">Ready for Express Dispatch</span>
-            </div>
-
-            {/* Price Section */}
-            <div className="mb-3 pb-3 border-bottom">
-              <div className="d-flex align-items-baseline gap-3 mb-1">
-                <span className="fw-bolder" style={{ color: primaryBrandColor, letterSpacing: '-0.8px', fontSize: 'clamp(1.75rem, 4vw, 2.4rem)' }}>
-                  ₹{currentPrice?.toLocaleString()}
-                </span>
-                {currentMrp > currentPrice && (
-                  <span className="fs-5 text-muted text-decoration-line-through">
-                    ₹{currentMrp?.toLocaleString()}
-                  </span>
-                )}
-                {discount > 0 && (
-                  <span className="badge badge-discount fs-6 fw-bold">
-                    {discount}% OFF
-                  </span>
-                )}
-              </div>
-              <div className="text-muted small">Inclusive of 5% Apparel GST</div>
-            </div>
-
-            {/* Colour Swatch Selector */}
-            <div className="mb-3">
-              <div className="small fw-semibold text-dark mb-2">
-                Colour: <span className="text-muted fw-normal">{selectedColor}</span>
-              </div>
-              <div className="d-flex gap-2 align-items-center">
-                {colorOptions.map((c) => (
                   <button
-                    key={c.name}
                     type="button"
-                    className={`rounded-circle border p-0 ${selectedColor === c.name ? 'ring-2' : ''}`}
+                    onClick={() => setShowSizeModal(true)}
+                    className="btn btn-sm rounded-pill px-3 py-1 small fw-semibold text-white"
                     style={{
-                      width: '28px',
-                      height: '28px',
-                      backgroundColor: c.hex,
-                      outline: selectedColor === c.name ? `3px solid ${c.hex}` : 'none',
-                      outlineOffset: '2px',
+                      backgroundColor: '#E90064',
+                      borderColor: '#E90064',
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.02em',
+                      boxShadow: '0 2px 8px rgba(233, 0, 100, 0.25)',
                     }}
-                    onClick={() => setSelectedColor(c.name)}
-                    title={c.name}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Available Sizes Pills */}
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="small fw-semibold text-dark">Available Sizes:</span>
-                <span className="small text-primary cursor-pointer fw-semibold" style={{ fontSize: '0.75rem' }}>Size Guide</span>
-              </div>
-              <div className="d-flex gap-2 flex-wrap">
-                {sizeOptions.map((sz) => (
-                  <button
-                    key={sz}
-                    type="button"
-                    className={`btn btn-sm rounded-pill px-3 py-1 fw-bold ${
-                      selectedSize === sz ? 'text-white' : 'btn-light border text-dark'
-                    }`}
-                    style={{
-                      backgroundColor: selectedSize === sz ? primaryBrandColor : '#ffffff',
-                      borderColor: selectedSize === sz ? primaryBrandColor : '#E2E8F0',
-                      fontSize: '0.78rem',
-                    }}
-                    onClick={() => setSelectedSize(sz)}
                   >
-                    {sz}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Deliver To Pincode Card */}
-            <div className="p-3 rounded-3 bg-light border mb-4">
-              <div className="d-flex justify-content-between align-items-center mb-1">
-                <div className="d-flex align-items-center gap-2">
-                  <MapPin size={16} style={{ color: '#E90064' }} />
-                  <span className="small fw-semibold text-dark">
-                    Deliver to {pincodeResult?.city || 'Bengaluru'} - {pincodeInput}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-link btn-sm p-0 text-decoration-none fw-semibold"
-                  style={{ color: '#E90064' }}
-                  onClick={() => setIsChangingPincode(!isChangingPincode)}
-                >
-                  Change
-                </button>
-              </div>
-
-              {isChangingPincode ? (
-                <form onSubmit={handleCheckPincode} className="d-flex gap-2 mt-2">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    className="form-control form-control-sm"
-                    placeholder="Enter 6-digit Pincode"
-                    value={pincodeInput}
-                    onChange={(e) => setPincodeInput(e.target.value.replace(/\D/g, ''))}
-                  />
-                  <button
-                    type="submit"
-                    className="btn btn-sm px-3 text-white fw-bold"
-                    style={{ backgroundColor: '#E90064', borderColor: '#E90064' }}
-                    disabled={checkingPincode}
-                  >
-                    {checkingPincode ? 'Checking...' : 'Check'}
-                  </button>
-                </form>
-              ) : (
-                <div className="small text-muted ps-4" style={{ fontSize: '0.78rem' }}>
-                  Standard dispatch in 24 hours | <span className="text-success fw-semibold">FREE Shipping</span>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons: Responsive for Mobile & Laptop */}
-            <div className="d-flex flex-column flex-sm-row align-items-stretch gap-2 mb-2">
-              <div className="d-flex align-items-center gap-2 flex-grow-1">
-                {/* Stepper */}
-                <div className="input-group" style={{ width: '105px' }}>
-                  <button
-                    className="btn btn-outline-secondary btn-sm"
-                    type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={quantity <= 1}
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm text-center fw-bold bg-white"
-                    value={quantity}
-                    readOnly
-                  />
-                  <button
-                    className="btn btn-outline-secondary btn-sm"
-                    type="button"
-                    onClick={() => setQuantity(Math.min(product.stock || 10, quantity + 1))}
-                    disabled={quantity >= (product.stock || 10)}
-                  >
-                    +
+                    What's my size?
                   </button>
                 </div>
 
-                {/* Add to Bag */}
-                <button
-                  className="btn flex-grow-1 py-2.5 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm rounded-pill text-white"
-                  style={{ backgroundColor: '#E90064', borderColor: '#E90064' }}
-                  onClick={handleAddToCart}
-                  disabled={product.stock <= 0}
-                >
-                  <ShoppingCart size={18} /> Add to Bag
-                </button>
-              </div>
-
-              {/* Buy Now (Full width on small mobile, auto on desktop) */}
-              <button
-                className="btn py-2.5 px-4 fw-bold d-flex align-items-center justify-content-center gap-2 rounded-pill"
-                style={{ borderColor: '#E90064', color: '#E90064', border: '1.5px solid #E90064' }}
-                onClick={handleBuyNow}
-                disabled={product.stock <= 0}
-              >
-                <Zap size={18} /> Buy Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Product Information Tabs */}
-      <div className="card card-modern p-3 p-md-4 mb-4 mb-md-5 border shadow-sm rounded-4" style={{ borderRadius: '20px', borderColor: '#F0E7ED' }}>
-        <ul className="nav nav-tabs border-bottom mb-3 mb-md-4 flex-nowrap overflow-x-auto scrollbar-hidden" role="tablist" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-          <li className="nav-item">
-            <button
-              className={`nav-link fw-bold px-3 px-md-4 py-2 text-nowrap ${activeTab === 'description' ? 'active' : 'text-muted'}`}
-              onClick={() => setActiveTab('description')}
-              style={activeTab === 'description' ? { borderBottom: '2.5px solid #E90064', color: '#E90064', fontSize: '0.88rem' } : { fontSize: '0.88rem' }}
-            >
-              Description & Craft
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={`nav-link fw-bold px-3 px-md-4 py-2 text-nowrap ${activeTab === 'specifications' ? 'active' : 'text-muted'}`}
-              onClick={() => setActiveTab('specifications')}
-              style={activeTab === 'specifications' ? { borderBottom: '2.5px solid #E90064', color: '#E90064', fontSize: '0.88rem' } : { fontSize: '0.88rem' }}
-            >
-              Fabric Specifications
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={`nav-link fw-bold px-3 px-md-4 py-2 text-nowrap ${activeTab === 'reviews' ? 'active' : 'text-muted'}`}
-              onClick={() => setActiveTab('reviews')}
-              style={activeTab === 'reviews' ? { borderBottom: '2.5px solid #E90064', color: '#E90064', fontSize: '0.88rem' } : { fontSize: '0.88rem' }}
-            >
-              Customer Reviews ({product.reviewCount || 1240})
-            </button>
-          </li>
-        </ul>
-
-        {activeTab === 'description' && (
-          <div>
-            <h5 className="fw-bold text-dark mb-3">About this creation</h5>
-            <p className="text-secondary mb-4" style={{ maxWidth: '850px', lineHeight: '1.7' }}>
-              {product.description ||
-                'Crafted with heritage artisan weaving techniques, this exquisite piece features pure zari work, intricate temple border detailing, and luxurious drape.'}
-            </p>
-
-            <div className="row g-4 align-items-center">
-              <div className="col-md-7">
-                <div className="d-flex flex-column gap-2 mb-3">
-                  {[
-                    '100% Authentic Handloom Pure Silk / Natural Fabric certified with Silk Mark',
-                    'Intricate zari pallu and contrast border detailing',
-                    'Soft, breathable texture suitable for weddings, festive occasions and celebrations',
-                    'Comes with unstitched matching blouse / lining fabric piece',
-                    'Directly sourced from traditional master weavers of South India',
-                  ].map((feature, i) => (
-                    <div key={i} className="d-flex align-items-center gap-2">
-                      <div className="rounded-circle bg-success bg-opacity-10 text-success p-1 d-flex align-items-center justify-content-center">
-                        <Check size={14} />
-                      </div>
-                      <span className="text-dark small fw-medium">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Brand Promo Box */}
-              <div className="col-md-5">
+                {/* Dynamic Size Measurements Table */}
                 <div
-                  className="rounded-4 p-4 text-white position-relative overflow-hidden shadow-sm"
-                  style={{
-                    background: 'linear-gradient(135deg, #17233B 0%, #E90064 100%)',
-                    minHeight: '170px',
-                  }}
+                  className="p-2.5 rounded-3 mb-2.5 bg-light border d-flex flex-column gap-1"
+                  style={{ fontSize: '0.8rem', borderColor: '#E5E7EB' }}
                 >
-                  <span className="badge bg-white text-dark mb-2">Exclusive Edition</span>
-                  <h4 className="fw-bold mb-1">Aaradhya Fashion & Fabrics</h4>
-                  <p className="small text-white-50 mb-0">
-                    Heritage South Indian Weaves • Handpicked Perfection
-                  </p>
+                  <div className="d-flex justify-content-between text-muted">
+                    <span>Chest</span>
+                    <span className="fw-semibold text-dark">{measurements.chest}</span>
+                  </div>
+                  <div className="d-flex justify-content-between text-muted">
+                    <span>High Waist</span>
+                    <span className="fw-semibold text-dark">{measurements.waist}</span>
+                  </div>
+                  <div className="d-flex justify-content-between text-muted">
+                    <span>Hip</span>
+                    <span className="fw-semibold text-dark">{measurements.hip}</span>
+                  </div>
+                </div>
+
+                {/* Size Selectors */}
+                <div className="mb-3">
+                  <div className="d-flex gap-2 flex-wrap">
+                    {SIZES.map((size) => {
+                      const isSizeActive = selectedSize === size;
+                      return (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => setSelectedSize(size)}
+                          className="btn fw-bold d-flex align-items-center justify-content-center"
+                          style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '12px',
+                            backgroundColor: isSizeActive ? '#E90064' : '#FFFFFF',
+                            color: isSizeActive ? '#FFFFFF' : '#17233B',
+                            border: isSizeActive ? '2px solid #E90064' : '1px solid #D1D5DB',
+                            fontSize: '0.85rem',
+                            boxShadow: isSizeActive ? '0 4px 14px rgba(233, 0, 100, 0.32)' : 'none',
+                            transition: 'all 0.18s ease',
+                          }}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Price Display */}
+                <div className="mb-2.5">
+                  <div className="d-flex align-items-baseline gap-2">
+                    <span
+                      className="fw-bolder text-dark"
+                      style={{
+                        fontFamily: 'var(--font-heading-family)',
+                        fontSize: '1.45rem',
+                      }}
+                    >
+                      (₹ {product.price?.toLocaleString('en-IN')})
+                    </span>
+                    {product.mrp && product.mrp > product.price && (
+                      <span className="text-muted text-decoration-line-through small" style={{ fontSize: '0.95rem' }}>
+                        ₹{product.mrp?.toLocaleString('en-IN')}
+                      </span>
+                    )}
+                    {discount > 0 && (
+                      <span className="badge rounded-pill bg-success-subtle text-success small fw-bold">
+                        Save {discount}%
+                      </span>
+                    )}
+                  </div>
+                  <small className="text-muted d-block" style={{ fontSize: '0.74rem' }}>
+                    Inclusive of all taxes • Handloom certified
+                  </small>
+                </div>
+
+                {/* Special Festive Offers Strip */}
+                <div
+                  className="p-2 rounded-3 mb-3 d-flex align-items-center justify-content-between"
+                  style={{ backgroundColor: '#FFF0F6', border: '1px dashed #FBCFE8' }}
+                >
+                  <div className="d-flex align-items-center gap-1.5">
+                    <span className="badge rounded-pill text-white" style={{ backgroundColor: '#E90064', fontSize: '0.65rem' }}>
+                      OFFER
+                    </span>
+                    <span className="small fw-semibold text-dark" style={{ fontSize: '0.74rem' }}>
+                      Flat 10% OFF code: <strong>FESTIVE10</strong>
+                    </span>
+                  </div>
+                  <span className="badge text-success bg-white border small fw-bold" style={{ fontSize: '0.65rem' }}>
+                    APPLIED
+                  </span>
+                </div>
+
+                {/* Action Buttons (Side by Side matching Nishorama reference) */}
+                <div className="d-flex gap-2 mb-3">
+                  {/* ADD TO CART */}
+                  <button
+                    type="button"
+                    onClick={handleAddToCart}
+                    className="btn flex-fill py-2.5 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-1.5 shadow-2xs"
+                    style={{
+                      border: '1.5px solid #E90064',
+                      color: '#E90064',
+                      fontSize: '0.84rem',
+                      letterSpacing: '0.04em',
+                      backgroundColor: '#FFF0F6',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {addedToast ? (
+                      <>
+                        <Check size={16} /> Added
+                      </>
+                    ) : (
+                      'ADD TO CART'
+                    )}
+                  </button>
+
+                  {/* BUY IT NOW */}
+                  <button
+                    type="button"
+                    onClick={handleBuyNow}
+                    className="btn flex-fill py-2.5 rounded-pill fw-bold text-uppercase text-white d-flex align-items-center justify-content-center gap-1.5 shadow-sm"
+                    style={{
+                      backgroundColor: '#E90064',
+                      borderColor: '#E90064',
+                      fontSize: '0.84rem',
+                      letterSpacing: '0.04em',
+                      boxShadow: '0 4px 14px rgba(233, 0, 100, 0.35)',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    BUY IT NOW
+                  </button>
+                </div>
+              </div>
+
+              {/* Bottom Section of Right Column: Pincode, Trust Badges, Share & Stock */}
+              <div>
+                {/* Pincode Delivery Estimator */}
+                <div className="p-2.5 rounded-3 mb-2 bg-light border">
+                  <div className="d-flex align-items-center justify-content-between mb-1.5">
+                    <span className="d-flex align-items-center gap-1.5 text-dark fw-bold small" style={{ fontSize: '0.76rem' }}>
+                      <Truck size={14} style={{ color: '#E90064' }} />
+                      <span>Delivery & Services</span>
+                    </span>
+                    <span className="text-success small fw-semibold" style={{ fontSize: '0.72rem' }}>Free Shipping</span>
+                  </div>
+                  <div className="input-group input-group-sm mb-1.5">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter 6-digit Pincode"
+                      value={pincode}
+                      onChange={(e) => {
+                        setPincode(e.target.value);
+                        setPincodeChecked(false);
+                      }}
+                      maxLength={6}
+                      style={{ fontSize: '0.78rem' }}
+                    />
+                    <button
+                      className="btn text-white px-3 fw-semibold"
+                      type="button"
+                      style={{ backgroundColor: '#E90064', fontSize: '0.76rem' }}
+                      onClick={() => setPincodeChecked(true)}
+                    >
+                      Check
+                    </button>
+                  </div>
+                  <div className="d-flex flex-column gap-0.5 text-muted" style={{ fontSize: '0.72rem' }}>
+                    <span className="text-dark fw-medium">
+                      {pincodeChecked ? `✓ Delivery to ${pincode}: Free by Saturday` : '✓ Standard metro delivery within 3–5 business days'}
+                    </span>
+                    <span>✓ Cash on Delivery available</span>
+                  </div>
+                </div>
+
+                {/* Trust Badges */}
+                <div className="d-flex flex-column gap-1 pt-1 text-muted small mb-2" style={{ fontSize: '0.76rem' }}>
+                  <div className="d-flex align-items-center gap-2">
+                    <Banknote size={15} className="text-dark flex-shrink-0" />
+                    <span className="text-dark fw-medium">Cash On Delivery Available</span>
+                  </div>
+                  <div className="d-flex align-items-center gap-2">
+                    <RotateCcw size={15} className="text-dark flex-shrink-0" />
+                    <span className="text-dark fw-medium">Easy 7 Days Returns and Exchange</span>
+                  </div>
+                </div>
+
+                {/* Share Button & Stock Status */}
+                <div className="pt-2 border-top d-flex justify-content-between align-items-center">
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="btn btn-sm btn-link p-0 text-muted text-decoration-none d-flex align-items-center gap-1.5 small"
+                    style={{ fontSize: '0.76rem' }}
+                  >
+                    <Share2 size={13} />
+                    <span>{copiedLink ? 'Link Copied!' : 'Share Product'}</span>
+                  </button>
+
+                  <span className="badge rounded-pill bg-light text-muted border small" style={{ fontSize: '0.68rem' }}>
+                    {product.stock > 0 ? 'In Stock' : 'Low Stock'}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {activeTab === 'specifications' && (
-          <div className="table-responsive">
-            <table className="table table-bordered table-sm small">
-              <tbody>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary" style={{ width: '30%' }}>Brand</td>
-                  <td className="fw-bold">AARADHYA – Fashion & Fabrics</td>
-                </tr>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary">Fabric Material</td>
-                  <td>{product.fabricType || 'Pure Handloom Silk / Chanderi Cotton'}</td>
-                </tr>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary">Certification</td>
-                  <td><span className="badge bg-success bg-opacity-10 text-success fw-bold">Silk Mark Certified Authentic</span></td>
-                </tr>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary">Weave Type</td>
-                  <td>Traditional Handloom Artisan Weave</td>
-                </tr>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary">Wash & Care Instructions</td>
-                  <td>Dry Clean Only to preserve natural luster and zari shine</td>
-                </tr>
-                <tr>
-                  <td className="bg-light fw-semibold text-secondary">GST Tax Rate</td>
-                  <td>5% Apparel GST (included in price)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {activeTab === 'reviews' && (
-          <div>
-            <div className="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded-3">
-              <div className="text-center pe-3 border-end">
-                <div className="fs-2 fw-bold text-dark">{product.rating || 4.8}</div>
-                <div className="d-flex text-warning">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} fill="#F59E0B" />
-                  ))}
-                </div>
-                <small className="text-muted">{product.reviewCount || 1240} Verified Buyers</small>
-              </div>
-              <div className="flex-grow-1">
-                <div className="d-flex align-items-center gap-2 small text-muted mb-1">
-                  <span>5 ★</span>
-                  <div className="progress flex-grow-1" style={{ height: '6px' }}>
-                    <div className="progress-bar bg-success" style={{ width: '88%' }}></div>
-                  </div>
-                  <span>88%</span>
-                </div>
-                <div className="d-flex align-items-center gap-2 small text-muted">
-                  <span>4 ★</span>
-                  <div className="progress flex-grow-1" style={{ height: '6px' }}>
-                    <div className="progress-bar" style={{ width: '10%', backgroundColor: '#E90064' }}></div>
-                  </div>
-                  <span>10%</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="d-flex flex-column gap-3">
-              <div className="border-bottom pb-3">
-                <div className="d-flex justify-content-between mb-1">
-                  <strong className="text-dark small">Deepika Ramanathan</strong>
-                  <span className="text-muted small">Verified Purchase • 3 days ago</span>
-                </div>
-                <div className="d-flex text-warning mb-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={12} fill="#F59E0B" />
-                  ))}
-                </div>
-                <p className="text-secondary small mb-0">
-                  The silk luster and zari work are beyond beautiful! Real silk mark authenticity and pristine packaging from Aaradhya Silks. Delivered in Bengaluru in just 2 days.
-                </p>
-              </div>
+        {/* You May Also Like (Related Products Grid) */}
+        {related.length > 0 && (
+          <div className="mt-5">
+            <h3
+              className="fw-bolder mb-3 text-dark"
+              style={{
+                fontFamily: 'var(--font-heading-family)',
+                fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
+              }}
+            >
+              You May Also Like
+            </h3>
+            <div className="product-grid-4">
+              {related.slice(0, 4).map((p, idx) => (
+                <ProductCard key={p._id} product={p} index={idx} />
+              ))}
             </div>
           </div>
         )}
       </div>
 
-      {/* Similar Products Section */}
-      <div className="mb-4">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="fw-bold mb-0 text-dark">You May Also Like</h4>
-          <Link to="/products" className="fw-semibold small text-decoration-none" style={{ color: '#E90064' }}>
-            View Full Collection &gt;
-          </Link>
+      {/* Size Guide Modal */}
+      {showSizeModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(4px)', zIndex: 1070 }}
+          onClick={() => setShowSizeModal(false)}
+        >
+          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content rounded-4 border-0 shadow-lg p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <h5 className="fw-bold mb-0 text-dark" style={{ fontFamily: 'var(--font-heading-family)' }}>
+                  Aaradhya Size Chart
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowSizeModal(false)} />
+              </div>
+              <div className="table-responsive">
+                <table className="table table-bordered table-sm text-center small mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Size</th>
+                      <th>Bust / Chest</th>
+                      <th>Waist</th>
+                      <th>Hip</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>XXS</td><td>30" (76 cm)</td><td>26" (66 cm)</td><td>32" (81 cm)</td></tr>
+                    <tr><td>XS</td><td>32" (81 cm)</td><td>28" (71 cm)</td><td>34" (86 cm)</td></tr>
+                    <tr><td>S</td><td>34" (86 cm)</td><td>30" (76 cm)</td><td>36" (91 cm)</td></tr>
+                    <tr><td>M</td><td>36" (91 cm)</td><td>32" (81 cm)</td><td>38" (97 cm)</td></tr>
+                    <tr><td>L</td><td>38" (97 cm)</td><td>34" (86 cm)</td><td>40" (102 cm)</td></tr>
+                    <tr><td>XL</td><td>40" (102 cm)</td><td>36" (91 cm)</td><td>42" (107 cm)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-muted small mt-3 mb-0" style={{ fontSize: '0.76rem' }}>
+                * All pure silk sarees come in standard length of 5.5 meters with an attached 0.8 meter blouse piece.
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* 7 per row on big screen */}
-        <div className="product-grid-7">
-          {(related.length > 0 ? related : [...Array(7)].map(() => product)).slice(0, 7).map((item, idx) => (
-            <ProductCard key={item._id || idx} product={item} />
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 };

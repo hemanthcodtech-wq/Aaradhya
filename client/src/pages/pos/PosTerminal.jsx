@@ -567,7 +567,7 @@ const PosTerminal = () => {
                   <div className="fw-bold text-uppercase" style={{ color: primaryColor }}>
                     {completedBill.storeName}
                   </div>
-                  <div className="text-muted" style={{ fontSize: '10px' }}>Fashion & Fabrics</div>
+                  <div className="text-muted" style={{ fontSize: '10px' }}>Sarees & Silks</div>
                   <div className="text-muted" style={{ fontSize: '10px' }}>{completedBill.address}</div>
                   <div className="text-muted" style={{ fontSize: '10px' }}>GSTIN: {completedBill.gstin}</div>
                   <div className="text-muted" style={{ fontSize: '10px' }}>Tel: {completedBill.phone}</div>

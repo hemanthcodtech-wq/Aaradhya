@@ -94,7 +94,7 @@ const HeroBanner = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       role="region"
-      aria-label="Aaradhya Fashion Hero Slideshow"
+      aria-label="Aaradhya Sarees & Silks Hero Slideshow"
     >
       {/* Slides with AnimatePresence for cinematic cross-fade */}
       <AnimatePresence mode="wait">

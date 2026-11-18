@@ -160,7 +160,7 @@ const LoginBranding = ({ portalType = 'super_admin' }) => {
                 color: '#17233B',
               }}
             >
-              Fashion & Fabrics
+              Sarees & Silks
             </div>
           </div>
         </div>
