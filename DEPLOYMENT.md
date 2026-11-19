@@ -1,6 +1,6 @@
 # AARADHYA - PRODUCTION DEPLOYMENT GUIDE
 
-This guide details how to deploy the **Aaradhya Fashion & Fabrics** platform:
+This guide details how to deploy the **Aaradhya Sarees & Silks** platform:
 - **Backend (Node.js/Express):** Deployed on **Render**
 - **Frontend (React.js/Vite):** Deployed on **Vercel**
 

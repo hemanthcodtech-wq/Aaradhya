@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const { getStatus } = require('../config/db');
 const { getInitialSeedData } = require('./seedData');
 
@@ -20,6 +21,42 @@ const WalletTransaction = require('../models/WalletTransaction');
 
 const DATA_DIR = path.join(__dirname, '../data');
 const STORE_FILE = path.join(DATA_DIR, 'store.json');
+
+// Collection mapping between DataStore keys and MongoDB Atlas collection names
+const getMongoColName = (colName) => {
+  const map = {
+    posBills: 'posbills',
+    walletTransactions: 'wallettransactions',
+    stockMovements: 'stockmovements',
+  };
+  return map[colName] || colName.toLowerCase();
+};
+
+// Real-time asynchronous write-through to MongoDB Atlas
+const syncToMongo = (collectionName, op, id, data) => {
+  try {
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      const col = mongoose.connection.db.collection(getMongoColName(collectionName));
+      if (op === 'create' || op === 'upsert') {
+        const { _id, ...fields } = data;
+        col.updateOne({ _id: data._id }, { $set: fields }, { upsert: true }).catch((e) => {
+          console.warn(`[MongoDB Sync] ${collectionName} insert notice:`, e.message);
+        });
+      } else if (op === 'update') {
+        const { _id, ...fields } = data;
+        col.updateOne({ _id: id }, { $set: fields }, { upsert: true }).catch((e) => {
+          console.warn(`[MongoDB Sync] ${collectionName} update notice:`, e.message);
+        });
+      } else if (op === 'delete') {
+        col.deleteOne({ _id: id }).catch((e) => {
+          console.warn(`[MongoDB Sync] ${collectionName} delete notice:`, e.message);
+        });
+      }
+    }
+  } catch (err) {
+    // Non-blocking sync
+  }
+};
 
 class DataStore {
   constructor() {
@@ -51,6 +88,44 @@ class DataStore {
       fs.writeFileSync(STORE_FILE, JSON.stringify(this.memoryData, null, 2), 'utf8');
     } catch (err) {
       console.error('[DataStore] Failed to persist data to store.json', err.message);
+    }
+  }
+
+  // Load and synchronize all collections from MongoDB Atlas into memory
+  async loadFromMongoDB() {
+    try {
+      if (!mongoose.connection || mongoose.connection.readyState !== 1) return;
+      const db = mongoose.connection.db;
+      const collectionKeys = [
+        'stores',
+        'categories',
+        'brands',
+        'vendors',
+        'products',
+        'users',
+        'orders',
+        'posBills',
+        'wallets',
+        'walletTransactions',
+        'stockMovements',
+        'coupons',
+        'banners',
+      ];
+
+      let totalSynced = 0;
+      for (const key of collectionKeys) {
+        const mongoName = getMongoColName(key);
+        const col = db.collection(mongoName);
+        const docs = await col.find({}).toArray();
+        if (docs.length > 0) {
+          this.memoryData[key] = docs;
+          totalSynced += docs.length;
+        }
+      }
+      this.saveToFile();
+      console.log(`[DataStore] ✅ Synchronized ${totalSynced} live records from MongoDB Atlas into memory & store.json.`);
+    } catch (err) {
+      console.warn('[DataStore] Notice: MongoDB live sync skipped:', err.message);
     }
   }
 
@@ -109,6 +184,8 @@ class DataStore {
     };
     list.unshift(newItem);
     this.saveToFile();
+    // Real-time write through to MongoDB Atlas
+    syncToMongo(collectionName, 'create', newItem._id, newItem);
     return newItem;
   }
 
@@ -125,6 +202,8 @@ class DataStore {
     };
     list[index] = updated;
     this.saveToFile();
+    // Real-time write through to MongoDB Atlas
+    syncToMongo(collectionName, 'update', id, updated);
     return updated;
   }
 
@@ -135,6 +214,8 @@ class DataStore {
 
     const deleted = list.splice(index, 1)[0];
     this.saveToFile();
+    // Real-time write through to MongoDB Atlas
+    syncToMongo(collectionName, 'delete', id);
     return deleted;
   }
 
@@ -202,10 +283,10 @@ class DataStore {
     const previousStock = product.stock;
     const newStock = previousStock - quantity;
 
-    // Update main product stock
+    // Update main product stock (writes to MongoDB Atlas)
     this.findByIdAndUpdate('products', productId, { stock: newStock });
 
-    // Record audit stock movement
+    // Record audit stock movement (writes to MongoDB Atlas)
     this.create('stockMovements', {
       product: productId,
       sku: sku || product.sku,
@@ -258,6 +339,7 @@ const store = new DataStore();
 module.exports = {
   store,
   models: {
+    Store,
     User,
     Vendor,
     Category,
@@ -268,6 +350,7 @@ module.exports = {
     StockMovement,
     Coupon,
     Banner,
+    Wallet,
+    WalletTransaction,
   },
 };
-

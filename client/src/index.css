@@ -2460,6 +2460,120 @@ header.sticky-top {
   }
 }
 
+/* ==========================================================================
+   FLOATING SCROLL-TO-TOP BUTTON
+   ========================================================================== */
+.floating-scroll-top-btn {
+  z-index: 1040 !important;
+  bottom: 78px; /* Above mobile bottom bar */
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  background-color: #E90064 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(233, 0, 100, 0.4) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@media (min-width: 768px) {
+  .floating-scroll-top-btn {
+    bottom: 28px !important;
+    right: 28px !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+}
+
+.floating-scroll-top-btn:hover {
+  background-color: #D00058 !important;
+  box-shadow: 0 8px 24px rgba(233, 0, 100, 0.5) !important;
+}
+
+/* ==========================================================================
+   PRODUCT CARD UNIFORM GRID ALIGNMENT
+   ========================================================================== */
+.nishorama-fashion-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  justify-content: flex-start !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.nishorama-fashion-card .card-media-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 133.333% !important; /* 3:4 portrait aspect ratio matching Nishorama */
+  border-radius: 18px !important;
+  overflow: hidden;
+  background-color: #F8F6F8;
+  border: 1px solid #F0E7ED;
+}
+
+.nishorama-fashion-card .card-info-title {
+  font-family: var(--font-body-family, 'Assistant', sans-serif);
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #17233B !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.3 !important;
+  height: 1.3em !important;
+}
+
+.nishorama-fashion-card .card-info-price {
+  font-family: var(--font-body-family, 'Assistant', sans-serif);
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #4B5563 !important;
+  line-height: 1.2 !important;
+}
+
+.nishorama-fashion-card .card-add-btn {
+  font-family: var(--font-body-family, 'Assistant', sans-serif);
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ==========================================================================
+   CATALOG PAGINATION CONTROLS
+   ========================================================================== */
+.catalog-pagination-bar {
+  border-top-color: #EAECF0 !important;
+}
+
+.pagination-nav-btn {
+  color: #17233B;
+  border-color: #EAECF0 !important;
+  transition: all 0.18s ease;
+}
+
+.pagination-nav-btn:hover:not(:disabled) {
+  background-color: #FFF0F5 !important;
+  border-color: #E90064 !important;
+  color: #E90064 !important;
+}
+
+.pagination-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-num-btn {
+  transition: all 0.18s ease;
+}
+
+.pagination-num-btn:hover:not([style*="background-color: rgb(233, 0, 100)"]) {
+  background-color: #FFF0F5 !important;
+  border-color: #E90064 !important;
+  color: #E90064 !important;
+}
+
+
 
 
 

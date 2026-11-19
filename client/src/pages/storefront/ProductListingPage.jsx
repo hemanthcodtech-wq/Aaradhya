@@ -9,12 +9,19 @@ import {
   Search,
   RotateCcw,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Sparkles,
+  Store,
+  Tag,
+  ArrowUpDown,
 } from 'lucide-react';
 import ProductCard from '../../components/common/ProductCard';
 import axiosClient from '../../api/axiosClient';
 
-// Nishorama-Style Visual Category Thumbnails for Mobile & Tablet (Image 3)
+// Nishorama-Style Visual Category Thumbnails for Mobile & Tablet
 const VISUAL_CATEGORIES = [
   {
     id: 'shop-all',
@@ -101,9 +108,16 @@ const VISUAL_CATEGORIES = [
     slug: 'mens-wear',
     image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&auto=format&fit=crop&q=80',
   },
+  {
+    id: 'kids-wear',
+    name: "Kids Wear",
+    label: "KIDS WEAR",
+    slug: 'kids-wear',
+    image: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=400&auto=format&fit=crop&q=80',
+  },
 ];
 
-// Nishorama Filter Pills for Desktop (Image 2)
+// Nishorama Filter Pills for Desktop
 const DESKTOP_PILLS = [
   { label: 'Shop All', slug: '', type: 'all' },
   { label: 'Most Wanted', slug: 'most-wanted', type: 'sort', value: 'popular' },
@@ -118,6 +132,7 @@ const DESKTOP_PILLS = [
   { label: 'Bottoms', slug: 'bottoms', type: 'search', value: 'Bottom' },
   { label: 'Dresses', slug: 'dresses', type: 'category' },
   { label: "Men's Wear", slug: 'mens-wear', type: 'category' },
+  { label: 'Kids Wear', slug: 'kids-wear', type: 'category' },
   { label: 'Accessories', slug: 'accessories', type: 'category' },
 ];
 
@@ -129,7 +144,15 @@ const ProductListingPage = () => {
   const [loading, setLoading] = useState(true);
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
 
-  // Active filter params
+  // Pagination metadata from API response
+  const [paginationMeta, setPaginationMeta] = useState({
+    total: 0,
+    page: 1,
+    limit: 12,
+    totalPages: 1,
+  });
+
+  // Active filter params from URL
   const categoryParam = searchParams.get('category') || '';
   const searchParam = searchParams.get('search') || '';
   const sortParam = searchParams.get('sort') || 'newest';
@@ -137,6 +160,8 @@ const ProductListingPage = () => {
   const maxPriceParam = searchParams.get('maxPrice') || '';
   const inStockParam = searchParams.get('inStock') === 'true';
   const storeParam = searchParams.get('store') || '';
+  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const limitParam = parseInt(searchParams.get('limit') || '12', 10);
 
   const [localMinPrice, setLocalMinPrice] = useState(minPriceParam);
   const [localMaxPrice, setLocalMaxPrice] = useState(maxPriceParam);
@@ -148,6 +173,16 @@ const ProductListingPage = () => {
     (inStockParam ? 1 : 0) +
     (storeParam ? 1 : 0) +
     (searchParam ? 1 : 0);
+
+  // Smooth scroll to catalog top
+  const scrollToCatalogTop = () => {
+    const el = document.getElementById('products-catalog-anchor');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   // Load backend categories
   useEffect(() => {
@@ -173,6 +208,21 @@ const ProductListingPage = () => {
         const res = await axiosClient.get(`/products?${query}`);
         if (res.success && Array.isArray(res.data)) {
           setProducts(res.data);
+          if (res.meta) {
+            setPaginationMeta({
+              total: res.meta.total || res.data.length,
+              page: res.meta.page || pageParam,
+              limit: res.meta.limit || limitParam,
+              totalPages: res.meta.totalPages || 1,
+            });
+          } else {
+            setPaginationMeta({
+              total: res.data.length,
+              page: pageParam,
+              limit: limitParam,
+              totalPages: Math.ceil(res.data.length / limitParam) || 1,
+            });
+          }
         }
       } catch (err) {
         console.error('Error loading products:', err);
@@ -189,7 +239,7 @@ const ProductListingPage = () => {
     setLocalMaxPrice(maxPriceParam);
   }, [minPriceParam, maxPriceParam]);
 
-  // Update a single filter in query params
+  // Update a single filter in query params (resets page to 1)
   const updateFilter = (key, value) => {
     const next = new URLSearchParams(searchParams);
     if (value === null || value === '' || value === false) {
@@ -197,11 +247,33 @@ const ProductListingPage = () => {
     } else {
       next.set(key, value);
     }
-    next.set('page', '1');
+    if (key !== 'page') {
+      next.set('page', '1');
+    }
     setSearchParams(next);
   };
 
-  // Click handler for desktop & mobile pills
+  // Handle page number change with smooth scroll to top of catalog
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > paginationMeta.totalPages || newPage === paginationMeta.page) {
+      return;
+    }
+    const next = new URLSearchParams(searchParams);
+    next.set('page', String(newPage));
+    setSearchParams(next);
+    setTimeout(scrollToCatalogTop, 50);
+  };
+
+  // Handle items per page change
+  const handleLimitChange = (newLimit) => {
+    const next = new URLSearchParams(searchParams);
+    next.set('limit', String(newLimit));
+    next.set('page', '1');
+    setSearchParams(next);
+    setTimeout(scrollToCatalogTop, 50);
+  };
+
+  // Click handler for desktop & mobile category pills
   const handlePillClick = (pill) => {
     const next = new URLSearchParams();
     if (pill.type === 'category') {
@@ -211,7 +283,10 @@ const ProductListingPage = () => {
     } else if (pill.type === 'search') {
       next.set('search', pill.value);
     }
+    next.set('page', '1');
+    if (limitParam !== 12) next.set('limit', String(limitParam));
     setSearchParams(next);
+    setTimeout(scrollToCatalogTop, 50);
   };
 
   // Click handler for mobile visual category thumbnails
@@ -224,15 +299,21 @@ const ProductListingPage = () => {
     } else if (item.slug) {
       next.set('category', item.slug);
     }
+    next.set('page', '1');
+    if (limitParam !== 12) next.set('limit', String(limitParam));
     setSearchParams(next);
+    setTimeout(scrollToCatalogTop, 50);
   };
 
   // Clear all filters
   const clearAllFilters = () => {
     setLocalMinPrice('');
     setLocalMaxPrice('');
-    setSearchParams({});
+    const next = new URLSearchParams();
+    if (limitParam !== 12) next.set('limit', String(limitParam));
+    setSearchParams(next);
     setShowFilterDrawer(false);
+    setTimeout(scrollToCatalogTop, 50);
   };
 
   // Apply custom price filter
@@ -248,6 +329,7 @@ const ProductListingPage = () => {
     next.set('page', '1');
     setSearchParams(next);
     setShowFilterDrawer(false);
+    setTimeout(scrollToCatalogTop, 50);
   };
 
   // Set quick price chip
@@ -265,23 +347,52 @@ const ProductListingPage = () => {
 
   // Determine current active display title
   let currentTitle = 'Shop All';
+  let activeCatObj = null;
   if (categoryParam) {
-    const foundCat = categories.find((c) => c.slug === categoryParam);
-    currentTitle = foundCat ? foundCat.name : categoryParam.replace('-', ' ');
+    activeCatObj = categories.find((c) => c.slug === categoryParam);
+    currentTitle = activeCatObj ? activeCatObj.name : categoryParam.replace('-', ' ');
   } else if (searchParam) {
     currentTitle = `Results for "${searchParam}"`;
   } else if (sortParam === 'popular') {
     currentTitle = 'Most Wanted';
+  } else if (sortParam === 'newest') {
+    currentTitle = 'New Arrivals';
   }
+
+  // Calculate current record window range
+  const currentTotal = paginationMeta.total || products.length;
+  const startIndex = currentTotal === 0 ? 0 : (paginationMeta.page - 1) * paginationMeta.limit + 1;
+  const endIndex = Math.min(paginationMeta.page * paginationMeta.limit, currentTotal);
+
+  // Generate page numbers array for pagination pills
+  const generatePageNumbers = () => {
+    const total = paginationMeta.totalPages;
+    const current = paginationMeta.page;
+    if (total <= 5) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    const pages = [];
+    if (current <= 3) {
+      pages.push(1, 2, 3, 4, '...', total);
+    } else if (current >= total - 2) {
+      pages.push(1, '...', total - 3, total - 2, total - 1, total);
+    } else {
+      pages.push(1, '...', current - 1, current, current + 1, '...', total);
+    }
+    return pages;
+  };
 
   return (
     <div className="products-page-wrapper storefront-products-bg min-vh-100">
-      {/* 1. Mobile Top Hero Banner Matching Nishorama Image 3 */}
+      {/* Top Anchor for Smooth Scroll */}
+      <div id="products-catalog-anchor" style={{ position: 'relative', top: '-10px' }} />
+
+      {/* 1. Mobile Top Hero Banner Matching Nishorama Luxury Aesthetic */}
       <div className="d-block d-md-none px-3 pt-3 pb-2">
         <div
           className="position-relative overflow-hidden shadow-sm text-white p-4 d-flex flex-column justify-content-center"
           style={{
-            minHeight: '150px',
+            minHeight: '140px',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=85)',
             backgroundSize: 'cover',
@@ -289,12 +400,11 @@ const ProductListingPage = () => {
             borderRadius: '20px',
           }}
         >
-          {/* Subtle dark gradient overlay */}
           <div
             className="position-absolute top-0 start-0 end-0 bottom-0"
             style={{
               background:
-                'linear-gradient(to right, rgba(23, 35, 59, 0.75) 0%, rgba(23, 35, 59, 0.45) 100%)',
+                'linear-gradient(to right, rgba(23, 35, 59, 0.78) 0%, rgba(23, 35, 59, 0.45) 100%)',
             }}
           />
           <div className="position-relative z-1 text-center">
@@ -306,14 +416,14 @@ const ProductListingPage = () => {
                 letterSpacing: '0.08em',
               }}
             >
-              Collection 2026
+              AARADHYA SAREES & SILKS
             </span>
             <h2
               className="fw-bolder mb-0 text-white text-capitalize"
               style={{
                 fontFamily: 'var(--font-heading-family)',
                 letterSpacing: '-0.4px',
-                fontSize: '1.85rem',
+                fontSize: '1.75rem',
               }}
             >
               {currentTitle}
@@ -322,7 +432,7 @@ const ProductListingPage = () => {
         </div>
       </div>
 
-      {/* 2. Mobile Visual Category Thumbnail Scroller Matching Nishorama Image 3 */}
+      {/* 2. Mobile Visual Category Thumbnail Scroller */}
       <div className="d-block d-md-none px-3 mb-2">
         <div
           className="d-flex gap-2.5 overflow-x-auto pb-2 scrollbar-hidden"
@@ -340,7 +450,7 @@ const ProductListingPage = () => {
                 key={item.id}
                 onClick={() => handleVisualCategoryClick(item)}
                 className="text-center flex-shrink-0"
-                style={{ width: '82px', cursor: 'pointer' }}
+                style={{ width: '80px', cursor: 'pointer' }}
               >
                 <div
                   className="category-thumb-card mb-1.5 shadow-2xs"
@@ -348,6 +458,9 @@ const ProductListingPage = () => {
                     border: isSelected ? '2.5px solid #E90064' : '1px solid #EAECF0',
                     transform: isSelected ? 'scale(1.04)' : 'scale(1)',
                     boxShadow: isSelected ? '0 4px 12px rgba(233, 0, 100, 0.25)' : 'none',
+                    borderRadius: '16px',
+                    height: '80px',
+                    overflow: 'hidden',
                   }}
                 >
                   <img
@@ -377,32 +490,60 @@ const ProductListingPage = () => {
 
       {/* Main Content Container (Full Width, Zero Permanent Sidebar) */}
       <div className="container-fluid px-3 px-md-4 px-xl-5 py-2 py-md-4">
-        {/* 3. Desktop Header Row Matching Nishorama Image 2 */}
+        {/* 3. Desktop Header Row: Title, Record Count, Items Per Page, Sort & Filter */}
         <div className="d-none d-md-flex align-items-end justify-content-between mb-3 px-1">
           <div>
             <h1
               className="fw-bolder mb-1 text-dark text-capitalize"
               style={{
                 fontFamily: 'var(--font-heading-family)',
-                fontSize: 'clamp(2rem, 3.2vw, 2.7rem)',
+                fontSize: 'clamp(1.9rem, 3.1vw, 2.6rem)',
                 letterSpacing: '-0.5px',
                 color: '#17233B',
               }}
             >
               {currentTitle}
             </h1>
-            <p className="text-muted small mb-0" style={{ fontSize: '0.9rem' }}>
-              In the near future, your wardrobe could look like this.
+            <p className="text-muted small mb-0" style={{ fontSize: '0.88rem' }}>
+              Handcrafted pure silks and luxury fabrics directly from our physical stores.
             </p>
           </div>
 
-          <div className="d-flex align-items-center gap-3">
-            <span className="text-muted small fw-medium" style={{ fontSize: '0.86rem' }}>
-              {products.length} products
+          <div className="d-flex align-items-center gap-2.5 flex-wrap justify-content-end">
+            {/* Record Count Badge */}
+            <span
+              className="badge bg-white text-dark border px-3 py-2 rounded-pill fw-semibold shadow-xs"
+              style={{ fontSize: '0.82rem', borderColor: '#EAECF0' }}
+            >
+              {currentTotal > 0 ? (
+                <span>
+                  Showing <strong>{startIndex}–{endIndex}</strong> of <strong>{currentTotal}</strong>
+                </span>
+              ) : (
+                <span>0 products</span>
+              )}
             </span>
+
+            {/* Items Per Page Selector */}
+            <div className="d-flex align-items-center gap-1.5 bg-white border rounded-pill px-2.5 py-1 shadow-xs">
+              <span className="small text-muted fw-semibold" style={{ fontSize: '0.78rem' }}>Show:</span>
+              <select
+                aria-label="Items per page"
+                className="form-select form-select-sm border-0 bg-transparent p-0 fw-bold text-dark cursor-pointer"
+                style={{ width: 'auto', fontSize: '0.8rem', outline: 'none', boxShadow: 'none' }}
+                value={limitParam}
+                onChange={(e) => handleLimitChange(e.target.value)}
+              >
+                <option value="8">8</option>
+                <option value="12">12</option>
+                <option value="16">16</option>
+                <option value="24">24</option>
+              </select>
+            </div>
 
             {/* Quick Sort Dropdown */}
             <select
+              aria-label="Sort products"
               className="form-select form-select-sm rounded-pill fw-semibold border shadow-xs"
               style={{
                 width: 'auto',
@@ -422,7 +563,7 @@ const ProductListingPage = () => {
               <option value="rating">Top Rated</option>
             </select>
 
-            {/* Filter Trigger Button (Opens Modern Filter Drawer) */}
+            {/* Filter Trigger Button (Opens Filter Drawer) */}
             <button
               type="button"
               onClick={() => setShowFilterDrawer(true)}
@@ -448,9 +589,9 @@ const ProductListingPage = () => {
           </div>
         </div>
 
-        {/* 4. Category Filter Pills Scroller Matching Nishorama Image 2 */}
+        {/* 4. Sticky Category Filter Pills Scroller */}
         <div
-          className="d-flex gap-2 overflow-x-auto pb-2.5 mb-3 mb-md-4 scrollbar-hidden text-nowrap"
+          className="d-flex gap-2 overflow-x-auto pb-2.5 mb-2.5 mb-md-3 scrollbar-hidden text-nowrap align-items-center"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
         >
           {DESKTOP_PILLS.map((pill) => {
@@ -473,17 +614,126 @@ const ProductListingPage = () => {
           })}
         </div>
 
-        {/* 5. Full-Width Product Grid (4 Per Row on Desktop, 3 on Tablet, 2 on Mobile - No Sidebar!) */}
+        {/* 5. Active Filters Chips Strip (Interactive Badges) */}
+        {activeFiltersCount > 0 && (
+          <div className="d-flex align-items-center gap-2 flex-wrap mb-3 px-1">
+            <span className="small text-muted fw-bold text-uppercase" style={{ fontSize: '0.72rem', letterSpacing: '0.04em' }}>
+              Active Filters:
+            </span>
+
+            {categoryParam && (
+              <span
+                className="badge rounded-pill d-inline-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold border shadow-2xs"
+                style={{ backgroundColor: '#FFF0F5', color: '#E90064', borderColor: '#F0E7ED', fontSize: '0.78rem' }}
+              >
+                <span>Category: {activeCatObj?.name || categoryParam}</span>
+                <X
+                  size={13}
+                  className="cursor-pointer hover-opacity"
+                  onClick={() => updateFilter('category', '')}
+                  title="Remove Category"
+                />
+              </span>
+            )}
+
+            {storeParam && (
+              <span
+                className="badge rounded-pill d-inline-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold border shadow-2xs"
+                style={{ backgroundColor: '#EEF4FF', color: '#087CE5', borderColor: '#D0E1FD', fontSize: '0.78rem' }}
+              >
+                <Store size={12} />
+                <span>Store: {storeParam === 'AS' ? 'Aaradhya Silks' : 'Aaradhya Fabrics'}</span>
+                <X
+                  size={13}
+                  className="cursor-pointer hover-opacity"
+                  onClick={() => updateFilter('store', '')}
+                  title="Remove Store Filter"
+                />
+              </span>
+            )}
+
+            {(minPriceParam || maxPriceParam) && (
+              <span
+                className="badge rounded-pill d-inline-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold border shadow-2xs"
+                style={{ backgroundColor: '#F8F9FA', color: '#17233B', borderColor: '#E2E8F0', fontSize: '0.78rem' }}
+              >
+                <Tag size={12} />
+                <span>
+                  Price: ₹{minPriceParam || '0'} – ₹{maxPriceParam || 'Max'}
+                </span>
+                <X
+                  size={13}
+                  className="cursor-pointer hover-opacity"
+                  onClick={() => {
+                    setLocalMinPrice('');
+                    setLocalMaxPrice('');
+                    const next = new URLSearchParams(searchParams);
+                    next.delete('minPrice');
+                    next.delete('maxPrice');
+                    next.set('page', '1');
+                    setSearchParams(next);
+                  }}
+                  title="Remove Price Filter"
+                />
+              </span>
+            )}
+
+            {inStockParam && (
+              <span
+                className="badge rounded-pill d-inline-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold border shadow-2xs"
+                style={{ backgroundColor: '#F0FDF4', color: '#16A34A', borderColor: '#DCFCE7', fontSize: '0.78rem' }}
+              >
+                <Check size={12} />
+                <span>In Stock Only</span>
+                <X
+                  size={13}
+                  className="cursor-pointer hover-opacity"
+                  onClick={() => updateFilter('inStock', false)}
+                  title="Remove In Stock Filter"
+                />
+              </span>
+            )}
+
+            {searchParam && (
+              <span
+                className="badge rounded-pill d-inline-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold border shadow-2xs"
+                style={{ backgroundColor: '#F8F9FA', color: '#17233B', borderColor: '#E2E8F0', fontSize: '0.78rem' }}
+              >
+                <Search size={12} />
+                <span>"{searchParam}"</span>
+                <X
+                  size={13}
+                  className="cursor-pointer hover-opacity"
+                  onClick={() => updateFilter('search', '')}
+                  title="Remove Search"
+                />
+              </span>
+            )}
+
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="btn btn-link btn-sm p-0 text-decoration-none fw-bold small ms-1"
+              style={{ color: '#DC2626', fontSize: '0.78rem' }}
+            >
+              Reset All
+            </button>
+          </div>
+        )}
+
+        {/* 6. Full-Width Responsive Product Grid (4 Per Row Desktop, 3 Tablet, 2 Mobile - Zero Sidebar) */}
         {loading ? (
           <div className="product-grid-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            {Array.from({ length: limitParam > 8 ? 8 : limitParam }).map((_, i) => (
               <div
                 key={i}
-                className="card border-0 shadow-sm p-4 text-center rounded-4 bg-white"
-                style={{ minHeight: '320px', borderRadius: '20px' }}
+                className="card border-0 shadow-sm p-4 text-center rounded-4 bg-white d-flex flex-column align-items-center justify-content-center"
+                style={{ minHeight: '340px', borderRadius: '20px' }}
               >
-                <div className="spinner-border text-danger mx-auto mb-2" role="status"></div>
-                <span className="small text-muted">Loading boutique collection...</span>
+                <div className="spinner-border spinner-border-sm text-danger mb-2" role="status"></div>
+                <span className="small text-muted" style={{ fontSize: '0.82rem' }}>
+                  Loading boutique catalog...
+                </span>
               </div>
             ))}
           </div>
@@ -492,10 +742,10 @@ const ProductListingPage = () => {
             className="card border-0 shadow-sm p-5 text-center rounded-4 bg-white mx-auto my-4"
             style={{ maxWidth: '600px', borderColor: '#F0E7ED', borderRadius: '24px' }}
           >
-            <Search size={48} className="mx-auto text-muted mb-3" />
+            <Search size={44} className="mx-auto text-muted mb-3" />
             <h4 className="fw-bold text-dark">No Products Found</h4>
             <p className="text-muted small mb-4">
-              We couldn't find items matching your selected criteria. Try selecting another category or resetting filters.
+              We couldn't find items matching your selected criteria. Try selecting another category or clearing filters.
             </p>
             <div>
               <button
@@ -503,7 +753,7 @@ const ProductListingPage = () => {
                 style={{ backgroundColor: '#E90064' }}
                 onClick={clearAllFilters}
               >
-                Reset All Filters
+                Clear All Filters
               </button>
             </div>
           </div>
@@ -514,9 +764,108 @@ const ProductListingPage = () => {
             ))}
           </div>
         )}
+
+        {/* 7. Fully Responsive Pagination & Records Navigation Bar */}
+        {!loading && paginationMeta.totalPages > 1 && (
+          <div className="catalog-pagination-bar mt-4 pt-3 pb-2 border-top d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
+            {/* Left: Record Range & Page Status */}
+            <div className="text-muted small fw-medium text-center text-sm-start" style={{ fontSize: '0.86rem' }}>
+              Showing <strong className="text-dark">{startIndex}–{endIndex}</strong> of{' '}
+              <strong className="text-dark">{paginationMeta.total}</strong> products &bull; Page{' '}
+              <strong className="text-dark">{paginationMeta.page}</strong> of{' '}
+              <strong className="text-dark">{paginationMeta.totalPages}</strong>
+            </div>
+
+            {/* Center/Right: Numbered Page Buttons & Navigation Arrows */}
+            <div className="d-flex align-items-center gap-1.5 flex-wrap justify-content-center">
+              {/* First Page Button */}
+              <button
+                type="button"
+                className="btn btn-sm rounded-circle p-1.5 d-flex align-items-center justify-content-center bg-white border shadow-2xs pagination-nav-btn"
+                disabled={paginationMeta.page <= 1}
+                onClick={() => handlePageChange(1)}
+                title="First Page"
+                aria-label="First Page"
+              >
+                <ChevronsLeft size={16} />
+              </button>
+
+              {/* Prev Page Button */}
+              <button
+                type="button"
+                className="btn btn-sm rounded-pill px-2.5 py-1.5 d-flex align-items-center gap-1 bg-white border shadow-2xs pagination-nav-btn"
+                disabled={paginationMeta.page <= 1}
+                onClick={() => handlePageChange(paginationMeta.page - 1)}
+                title="Previous Page"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft size={16} />
+                <span className="d-none d-sm-inline small fw-semibold">Prev</span>
+              </button>
+
+              {/* Numbered Page Buttons */}
+              <div className="d-flex align-items-center gap-1">
+                {generatePageNumbers().map((num, i) => {
+                  if (num === '...') {
+                    return (
+                      <span key={`dots-${i}`} className="px-1 text-muted small fw-bold">
+                        &hellip;
+                      </span>
+                    );
+                  }
+                  const isCurrent = num === paginationMeta.page;
+                  return (
+                    <button
+                      key={`page-${num}`}
+                      type="button"
+                      onClick={() => handlePageChange(num)}
+                      className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center fw-bold pagination-num-btn"
+                      style={{
+                        width: '34px',
+                        height: '34px',
+                        backgroundColor: isCurrent ? '#E90064' : '#FFFFFF',
+                        color: isCurrent ? '#FFFFFF' : '#17233B',
+                        border: isCurrent ? '1px solid #E90064' : '1px solid #EAECF0',
+                        fontSize: '0.84rem',
+                        boxShadow: isCurrent ? '0 2px 8px rgba(233, 0, 100, 0.3)' : 'none',
+                      }}
+                    >
+                      {num}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Next Page Button */}
+              <button
+                type="button"
+                className="btn btn-sm rounded-pill px-2.5 py-1.5 d-flex align-items-center gap-1 bg-white border shadow-2xs pagination-nav-btn"
+                disabled={paginationMeta.page >= paginationMeta.totalPages}
+                onClick={() => handlePageChange(paginationMeta.page + 1)}
+                title="Next Page"
+                aria-label="Next Page"
+              >
+                <span className="d-none d-sm-inline small fw-semibold">Next</span>
+                <ChevronRight size={16} />
+              </button>
+
+              {/* Last Page Button */}
+              <button
+                type="button"
+                className="btn btn-sm rounded-circle p-1.5 d-flex align-items-center justify-content-center bg-white border shadow-2xs pagination-nav-btn"
+                disabled={paginationMeta.page >= paginationMeta.totalPages}
+                onClick={() => handlePageChange(paginationMeta.totalPages)}
+                title="Last Page"
+                aria-label="Last Page"
+              >
+                <ChevronsRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* 6. Sticky Bottom Advance Filter Bar (Mobile View Only - Matching Image 3) */}
+      {/* 8. Sticky Bottom Advance Filter Bar (Mobile View Only) */}
       <div
         className="sticky-mobile-filter-bar d-flex d-md-none"
         onClick={() => setShowFilterDrawer(true)}
@@ -525,7 +874,7 @@ const ProductListingPage = () => {
           className="text-white opacity-75 fw-semibold text-uppercase"
           style={{ fontSize: '0.74rem', letterSpacing: '0.06em' }}
         >
-          {products.length} PRODUCTS
+          {paginationMeta.total || products.length} PRODUCTS
         </span>
         <div className="d-flex align-items-center gap-1.5 text-white fw-bold text-uppercase" style={{ fontSize: '0.76rem', letterSpacing: '0.06em' }}>
           <span>ADVANCE FILTER</span>
@@ -546,7 +895,7 @@ const ProductListingPage = () => {
         </div>
       </div>
 
-      {/* 7. Modern Slide-Over Filter Drawer (Offcanvas for Desktop & Bottom-Sheet for Mobile) */}
+      {/* 9. Modern Slide-Over Filter Drawer (Offcanvas Desktop & Bottom-Sheet Mobile) */}
       <AnimatePresence>
         {showFilterDrawer && (
           <div
@@ -601,8 +950,43 @@ const ProductListingPage = () => {
 
               {/* Drawer Body */}
               <div className="p-4 overflow-y-auto flex-grow-1 custom-scrollbar bg-white">
-                {/* Categories */}
+                {/* Store Filter (Aaradhya Silks vs Fabrics) */}
                 <div className="mb-4">
+                  <h6
+                    className="fw-bold small mb-2.5 text-uppercase text-muted"
+                    style={{ fontSize: '0.72rem', letterSpacing: '0.05em' }}
+                  >
+                    Store Identity
+                  </h6>
+                  <div className="d-flex flex-wrap gap-2">
+                    {[
+                      { label: 'All Stores', val: '' },
+                      { label: 'Aaradhya Silks (AS)', val: 'AS' },
+                      { label: 'Aaradhya Fabrics (AF)', val: 'AF' },
+                    ].map((st) => (
+                      <button
+                        key={st.val}
+                        type="button"
+                        className={`btn btn-sm rounded-pill px-3 py-1.5 fw-semibold ${
+                          storeParam === st.val
+                            ? 'text-white shadow-sm'
+                            : 'btn-light border text-dark'
+                        }`}
+                        style={{
+                          backgroundColor: storeParam === st.val ? '#17233B' : '#F8FAFC',
+                          borderColor: storeParam === st.val ? '#17233B' : '#E2E8F0',
+                          fontSize: '0.8rem',
+                        }}
+                        onClick={() => updateFilter('store', st.val)}
+                      >
+                        {st.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Categories */}
+                <div className="mb-4 border-top pt-3">
                   <h6
                     className="fw-bold small mb-2.5 text-uppercase text-muted"
                     style={{ fontSize: '0.72rem', letterSpacing: '0.05em' }}
@@ -746,41 +1130,6 @@ const ProductListingPage = () => {
                   </div>
                 </div>
 
-                {/* Store Filter */}
-                <div className="mb-4 border-top pt-3">
-                  <h6
-                    className="fw-bold small mb-2.5 text-uppercase text-muted"
-                    style={{ fontSize: '0.72rem', letterSpacing: '0.05em' }}
-                  >
-                    Store Identity
-                  </h6>
-                  <div className="d-flex flex-wrap gap-2">
-                    {[
-                      { label: 'All Stores', val: '' },
-                      { label: 'Aaradhya Silks (AS)', val: 'AS' },
-                      { label: 'Aaradhya Fabrics (AF)', val: 'AF' },
-                    ].map((st) => (
-                      <button
-                        key={st.val}
-                        type="button"
-                        className={`btn btn-sm rounded-pill px-3 py-1.5 fw-semibold ${
-                          storeParam === st.val
-                            ? 'text-white shadow-sm'
-                            : 'btn-light border text-dark'
-                        }`}
-                        style={{
-                          backgroundColor: storeParam === st.val ? '#17233B' : '#F8FAFC',
-                          borderColor: storeParam === st.val ? '#17233B' : '#E2E8F0',
-                          fontSize: '0.8rem',
-                        }}
-                        onClick={() => updateFilter('store', st.val)}
-                      >
-                        {st.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* In Stock Availability */}
                 <div className="border-top pt-3 mb-2">
                   <div className="form-check form-switch d-flex justify-content-between align-items-center ps-0">
@@ -819,7 +1168,7 @@ const ProductListingPage = () => {
                   style={{ backgroundColor: '#E90064', borderColor: '#E90064', fontSize: '0.88rem' }}
                   onClick={applyPriceFilter}
                 >
-                  Apply Filters ({products.length} Items)
+                  Apply Filters ({paginationMeta.total || products.length} Items)
                 </button>
               </div>
             </motion.div>
@@ -827,7 +1176,7 @@ const ProductListingPage = () => {
         )}
       </AnimatePresence>
 
-      {/* Bottom spacer for mobile bars clearance (Sticky Filter Bar 48px + Bottom Bar 56px + breathing room) */}
+      {/* Bottom clearance for mobile footer & filter bars */}
       <div style={{ height: '110px' }} className="d-md-none" />
     </div>
   );

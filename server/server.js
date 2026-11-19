@@ -77,7 +77,11 @@ app.use(errorHandler);
 
 // Connect DB and Start Server
 const startServer = async () => {
-  await connectDB();
+  const connected = await connectDB();
+  if (connected) {
+    const { store } = require('./services/dbAdapter');
+    await store.loadFromMongoDB();
+  }
   const server = app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`🚀 Multi-Vendor Backend API running on port ${PORT}`);

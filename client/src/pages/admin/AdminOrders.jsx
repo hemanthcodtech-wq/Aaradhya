@@ -639,7 +639,7 @@ const AdminOrders = () => {
                         AARADHYA
                       </h4>
                       <div className="small fw-semibold" style={{ color: '#E90064', fontSize: '0.7rem', letterSpacing: '0.08em' }}>
-                        FASHION &amp; FABRICS
+                        SAREES &amp; SILKS
                       </div>
                       <div className="text-muted" style={{ fontSize: '0.7rem' }}>
                         Pure Handloom Silks &bull; Running Yardage Textiles
