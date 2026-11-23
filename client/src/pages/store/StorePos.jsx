@@ -135,8 +135,10 @@ const StorePos = () => {
     setLoading(true);
     try {
       const res = await axiosClient.get(`/pos/products?storeCode=${store.activeStore}`);
-      if (res.data?.success && res.data.data?.length > 0) {
-        setProducts(res.data.data);
+      const payload = res?.data || res;
+      const list = Array.isArray(payload) ? payload : (payload?.data || []);
+      if (list && list.length > 0) {
+        setProducts(list);
       } else {
         setProducts(getFallbackProducts());
       }
@@ -252,17 +254,33 @@ const StorePos = () => {
           },
         ];
 
-  // Barcode processing (Handles both Hardware Machine Scans and Manual Input)
-  const processScannedBarcode = (code) => {
+  // Barcode processing (Handles Hardware Machine Scans and Manual Input)
+  const processScannedBarcode = async (code) => {
     if (!code) return;
     const clean = code.trim().toLowerCase();
 
-    const matched = products.find(
+    // 1. Match local catalog products
+    let matched = products.find(
       (p) =>
         (p.barcode && p.barcode.trim().toLowerCase() === clean) ||
         (p.sku && p.sku.toLowerCase() === clean) ||
         (p.productId && p.productId.toLowerCase() === clean)
     );
+
+    // 2. If not found locally, query live backend POS scan endpoint
+    if (!matched) {
+      try {
+        const scanRes = await axiosClient.get(`/pos/scan/${encodeURIComponent(clean)}`);
+        const payload = scanRes?.data || scanRes;
+        const found = payload?.data || payload;
+        if (found && (found.productId || found.sku || found._id)) {
+          matched = found;
+          setProducts((prev) => [...prev, found]);
+        }
+      } catch (scanErr) {
+        // Not in backend either
+      }
+    }
 
     if (matched) {
       playScannerBeep(true);
@@ -364,11 +382,18 @@ const StorePos = () => {
     const billPayload = {
       storeCode: store.activeStore,
       customerName: customerName || 'Walk-in Customer',
-      customerPhone: customerPhone || '9876543210',
+      customerPhone: customerPhone || '',
+      customer: {
+        name: customerName || 'Walk-in Customer',
+        phone: customerPhone || '',
+        email: '',
+      },
       items: cart.map((i) => ({
+        product: i._id,
         productId: i.productId,
         name: i.name,
         sku: i.sku,
+        barcode: i.barcode,
         hsn: i.hsn,
         price: i.price,
         quantity: i.quantity,
@@ -376,15 +401,20 @@ const StorePos = () => {
       })),
       subtotal,
       tax: gstAmount,
+      taxAmount: gstAmount,
       discount: Number(discountAmount || 0),
+      discountAmount: Number(discountAmount || 0),
       total: netPayable,
+      totalPayable: netPayable,
       paymentMethod: paymentMode,
+      paymentMode: paymentMode,
       cashier: user?.name || (store.isSilks ? 'Silks Cashier 1' : 'Fabrics Cashier 1'),
     };
 
     try {
       const res = await axiosClient.post('/pos/bills', billPayload);
-      const generatedBill = res.data?.data || {
+      const payload = res?.data || res;
+      const generatedBill = payload?.data || payload || {
         ...billPayload,
         billNumber: `${store.storeCode}-POS-${Math.floor(1000 + Math.random() * 9000)}`,
         createdAt: new Date().toISOString(),
@@ -396,6 +426,13 @@ const StorePos = () => {
       setCustomerName('');
       setCustomerPhone('');
       setDiscountAmount(0);
+
+      // Auto-trigger 80mm Epson thermal receipt print for rapid counter checkout
+      try {
+        printPosReceipt({ bill: generatedBill, store });
+      } catch (printErr) {
+        console.warn('Receipt print dialog:', printErr);
+      }
 
       // Refresh products to reflect reduced inventory
       fetchPosProducts();
@@ -409,6 +446,9 @@ const StorePos = () => {
       setCompletedBill(fallbackBill);
       setShowReceipt(true);
       setCart([]);
+      try {
+        printPosReceipt({ bill: fallbackBill, store });
+      } catch (e) {}
     } finally {
       setCheckoutLoading(false);
     }

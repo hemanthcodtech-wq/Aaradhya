@@ -28,8 +28,10 @@ const StoreTransactions = () => {
     setLoading(true);
     try {
       const res = await axiosClient.get(`/stores/${store.activeStore}/wallet`);
-      if (res.data?.success && res.data.data?.transactions?.length > 0) {
-        setTransactions(res.data.data.transactions);
+      const payload = res?.data || res;
+      const txs = payload?.transactions || payload?.data?.transactions;
+      if (Array.isArray(txs) && txs.length > 0) {
+        setTransactions(txs);
       } else {
         setTransactions(getFallbackTransactions());
       }

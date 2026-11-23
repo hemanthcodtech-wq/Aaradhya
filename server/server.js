@@ -8,7 +8,8 @@ const { connectDB } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load environment configuration
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config(); // fallback to cwd
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -62,6 +63,7 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/banners', require('./routes/bannerRoutes'));
 app.use('/api/gallery', require('./routes/galleryRoutes'));
+app.use('/api/instagram', require('./routes/instagramRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/pos', require('./routes/posRoutes'));

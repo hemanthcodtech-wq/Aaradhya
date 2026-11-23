@@ -55,12 +55,12 @@ const AdminLoginPage = ({ initialPortalType = null }) => {
 
       // Redirect strictly based on authenticated backend role & store assignment
       const returnUrl = location.state?.returnUrl;
-      if (returnUrl && (returnUrl.includes('/admin') || returnUrl.includes('/dashboard'))) {
+      if (returnUrl && (returnUrl.includes('/admin') || returnUrl.includes('/dashboard') || returnUrl.includes('/pos'))) {
         navigate(returnUrl);
       } else if (role === 'silks_admin' || storeCode === 'AS') {
-        navigate('/silks-admin/dashboard');
+        navigate('/silks-admin/pos');
       } else if (role === 'fabrics_admin' || storeCode === 'AF') {
-        navigate('/fabrics-admin/dashboard');
+        navigate('/fabrics-admin/pos');
       } else {
         navigate('/super-admin/dashboard');
       }

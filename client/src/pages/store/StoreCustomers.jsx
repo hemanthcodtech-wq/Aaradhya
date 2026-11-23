@@ -28,8 +28,10 @@ const StoreCustomers = () => {
     setLoading(true);
     try {
       const res = await axiosClient.get(`/stores/${store.activeStore}/customers`);
-      if (res.data?.success && res.data.data?.length > 0) {
-        setCustomers(res.data.data);
+      const payload = res?.data || res;
+      const list = Array.isArray(payload) ? payload : (payload?.data || []);
+      if (list && list.length > 0) {
+        setCustomers(list);
       } else {
         setCustomers(getFallbackCustomers());
       }

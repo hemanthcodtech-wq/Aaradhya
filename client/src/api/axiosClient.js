@@ -21,9 +21,38 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Intercept responses for consistent error handling
+// Intercept responses for consistent error handling and dual-access compatibility
 axiosClient.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    const payload = response.data;
+    if (payload && typeof payload === 'object') {
+      try {
+        if (payload.data && typeof payload.data === 'object') {
+          if (!('success' in payload.data)) {
+            Object.defineProperty(payload.data, 'success', {
+              get() {
+                return payload.success;
+              },
+              configurable: true,
+              enumerable: false,
+            });
+          }
+          if (!('data' in payload.data)) {
+            Object.defineProperty(payload.data, 'data', {
+              get() {
+                return payload.data;
+              },
+              configurable: true,
+              enumerable: false,
+            });
+          }
+        }
+      } catch {
+        // Fallback silently if immutable
+      }
+    }
+    return payload;
+  },
   (error) => {
     const message =
       (error.response && error.response.data && error.response.data.message) ||

@@ -58,8 +58,14 @@ const StoreAdminLayout = () => {
 
   const base = store.baseRoute;
 
-  // The 5 Specific Groups Defined in Master Prompt Section 6
+  // The Navigation Groups - Placed POS at the Very Top for Instant Cashier Access
   const navigationGroups = [
+    {
+      groupTitle: 'POINT OF SALE / BILLING',
+      items: [
+        { label: 'Counter / POS', path: `${base}/pos`, icon: Terminal, highlight: true },
+      ],
+    },
     {
       groupTitle: 'OVERVIEW',
       items: [
@@ -80,7 +86,6 @@ const StoreAdminLayout = () => {
       groupTitle: 'SALES & ORDERS',
       items: [
         { label: 'Online Orders', path: `${base}/orders`, icon: ShoppingCart },
-        { label: 'Counter / POS', path: `${base}/pos`, icon: Terminal },
         { label: 'Sales & Invoices', path: `${base}/sales`, icon: FileText },
         { label: 'Returns & Exchanges', path: `${base}/returns`, icon: RotateCcw },
       ],
@@ -208,6 +213,24 @@ const StoreAdminLayout = () => {
               <X size={16} />
             </button>
           )}
+        </div>
+
+        {/* Top Prominent POS Counter Shortcut */}
+        <div className="px-2.5 pt-2 pb-1">
+          <Link
+            to={`${base}/pos`}
+            className="btn w-100 rounded-3 text-white fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm py-2"
+            style={{
+              backgroundColor: store.primaryColor,
+              borderColor: store.primaryColor,
+              fontSize: '0.84rem',
+              letterSpacing: '0.02em',
+            }}
+            title="Open Billing Counter (POS)"
+          >
+            <Terminal size={17} />
+            {!isCompact && <span>Open Billing Counter</span>}
+          </Link>
         </div>
 
         {/* 2. Scrollable Navigation List (Single Column) */}
@@ -437,8 +460,8 @@ const StoreAdminLayout = () => {
             {/* Quick POS Launch Button */}
             <Link
               to={`${base}/pos`}
-              className="btn btn-sm text-white rounded-pill px-3 py-1.5 fw-semibold d-none d-sm-inline-flex align-items-center gap-1.5 shadow-2xs"
-              style={{ backgroundColor: store.primaryColor, borderColor: store.primaryColor, fontSize: '0.76rem' }}
+              className="btn btn-sm text-white rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm"
+              style={{ backgroundColor: store.primaryColor, borderColor: store.primaryColor, fontSize: '0.78rem' }}
             >
               <Terminal size={14} />
               <span>Launch POS Counter</span>

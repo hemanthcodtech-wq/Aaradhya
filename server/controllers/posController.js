@@ -105,19 +105,35 @@ const createPosBill = async (req, res, next) => {
   try {
     const {
       items,
-      customer = { name: 'Walk-in Customer', phone: '', email: '' },
+      customer: inputCustomer,
+      customerName,
+      customerPhone,
+      customerEmail,
       discountAmount = 0,
+      discount = 0,
       paymentMode = 'Cash',
+      paymentMethod,
       paymentDetails = {},
-      storeId = 'STORE-01',
-      storeName = 'ShopMart Flagship Store #001',
+      storeId,
+      storeName,
+      storeCode: inputStoreCode,
     } = req.body;
+
+    const customer = {
+      name: inputCustomer?.name || customerName || 'Walk-in Customer',
+      phone: inputCustomer?.phone || customerPhone || '',
+      email: inputCustomer?.email || customerEmail || '',
+    };
+
+    const finalPaymentMode = paymentMode || paymentMethod || 'Cash';
+    const disc = Number(discountAmount || discount || 0);
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return sendError(res, 'Cart is empty. Please add items before generating a bill.', 400);
     }
 
-    const billNumber = `BILL-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const detectedStoreCode = (inputStoreCode || (storeName && storeName.toLowerCase().includes('fabric') ? 'AF' : 'AS')).toUpperCase();
+    const billNumber = `${detectedStoreCode}-POS-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     let subtotal = 0;
     let totalGst = 0;
@@ -125,7 +141,11 @@ const createPosBill = async (req, res, next) => {
 
     // Verify stock and compute GST per item
     for (const item of items) {
-      const product = store.findById('products', item.product || item._id);
+      const product =
+        store.findById('products', item.product || item._id) ||
+        store.findOne('products', { productId: item.productId }) ||
+        store.findOne('products', { sku: item.sku }) ||
+        store.findOne('products', { barcode: item.barcode });
       if (!product) {
         return sendError(res, `Product ${item.name} not found`, 404);
       }
@@ -163,7 +183,6 @@ const createPosBill = async (req, res, next) => {
       });
     }
 
-    const disc = Number(discountAmount || 0);
     const finalPayable = Math.max(0, Math.round((subtotal + totalGst - disc) * 100) / 100);
 
     // Atomically decrement stock
@@ -177,7 +196,7 @@ const createPosBill = async (req, res, next) => {
       });
     }
 
-    const storeCode = (req.body.storeCode || (storeName.toLowerCase().includes('fabric') ? 'AF' : 'AS')).toUpperCase();
+    const storeCode = detectedStoreCode;
     const finalStoreName = storeCode === 'AF' ? 'Aaradhya Fabrics' : 'Aaradhya Silks';
 
     // Credit Store Wallet immediately for in-store POS collection
@@ -195,8 +214,10 @@ const createPosBill = async (req, res, next) => {
         previousBalance: wallet.balance || 0,
         newBalance: (wallet.balance || 0) + finalPayable,
         referenceId: billNumber,
-        description: `Counter POS Sale ${billNumber} (${paymentMode})`,
+        reference: billNumber,
+        description: `Counter POS Sale ${billNumber} (${finalPaymentMode})`,
         status: 'settled',
+        createdAt: new Date().toISOString(),
       });
     }
 
@@ -220,7 +241,7 @@ const createPosBill = async (req, res, next) => {
       taxAmount: Math.round(totalGst * 100) / 100,
       discountAmount: disc,
       totalPayable: finalPayable,
-      paymentMode,
+      paymentMode: finalPaymentMode,
       paymentDetails: {
         cashTendered: paymentDetails.cashTendered || finalPayable,
         changeReturned: paymentDetails.changeReturned || 0,

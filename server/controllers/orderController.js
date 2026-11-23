@@ -1,4 +1,5 @@
 const { store } = require('../services/dbAdapter');
+const shiprocketService = require('../services/shiprocketService');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
 
 // @desc    Create a new customer order (Supports multi-vendor items)
@@ -461,6 +462,33 @@ const updateSuborderStatus = async (req, res, next) => {
     targetSuborder.status = status;
     if (courier) targetSuborder.courier = courier;
     if (trackingNumber) targetSuborder.trackingNumber = trackingNumber;
+
+    // Automatic Shiprocket Integration when order is packed or shipped
+    if ((status === 'shipped' || status === 'packed') && !targetSuborder.trackingNumber) {
+      try {
+        const srResult = await shiprocketService.createOrder({
+          orderNumber: suborderNumber,
+          customer: {
+            name: targetOrder.customerName || 'Customer',
+            email: targetOrder.customerEmail || 'customer@aaradhya.com',
+            phone: targetOrder.customerPhone || targetOrder.shippingAddress?.phone || '9876543210',
+          },
+          shippingAddress: targetOrder.shippingAddress || {},
+          items: targetSuborder.items || [],
+          paymentMethod: targetOrder.paymentMethod || 'Prepaid',
+          subtotal: targetSuborder.totalAmount || 0,
+        });
+
+        targetSuborder.courier = srResult.courierName || 'BlueDart Express via Shiprocket';
+        targetSuborder.trackingNumber = srResult.awb || `SR${Math.floor(100000000 + Math.random() * 900000000)}IN`;
+        targetSuborder.shiprocketOrderId = srResult.shiprocketOrderId;
+        targetSuborder.shiprocketShipmentId = srResult.shiprocketShipmentId;
+        targetSuborder.labelUrl = srResult.labelUrl;
+        targetSuborder.trackingUrl = srResult.trackingUrl;
+      } catch (srErr) {
+        console.warn('Shiprocket auto-creation notice:', srErr.message);
+      }
+    }
 
     // If delivered, credit the store wallet from pendingSettlement to balance
     if (status === 'delivered') {

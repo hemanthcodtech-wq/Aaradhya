@@ -85,10 +85,37 @@ const getStoreWallet = async (req, res, next) => {
       };
     }
 
-    const transactions = store
-      .find('walletTransactions', { storeCode: storeCodeUpper })
-      .slice(-30)
-      .reverse();
+    const existingTx = store.find('walletTransactions', { storeCode: storeCodeUpper }) || [];
+    const existingRefs = new Set(existingTx.map((t) => t.referenceId || t.reference));
+
+    const posBills = store.find('posBills', { storeCode: storeCodeUpper }) || [];
+    const synthesizedPosTx = posBills
+      .filter((b) => !existingRefs.has(b.billNumber))
+      .map((b) => ({
+        _id: b._id || `tx_pos_${b.billNumber}`,
+        storeCode: storeCodeUpper,
+        type: 'pos_sale',
+        referenceId: b.billNumber,
+        reference: b.billNumber,
+        channel: 'Counter POS',
+        method: b.paymentMode || 'Cash',
+        amount: b.totalPayable || b.subtotal || 0,
+        customer: b.customer?.name || 'Walk-in Customer',
+        phone: b.customer?.phone || '',
+        status: 'settled',
+        createdAt: b.createdAt || new Date().toISOString(),
+        date: new Date(b.createdAt || Date.now()).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      }));
+
+    const transactions = [...existingTx, ...synthesizedPosTx]
+      .sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date))
+      .slice(0, 50);
 
     return sendSuccess(res, { wallet, transactions });
   } catch (err) {
@@ -610,31 +637,45 @@ const getStoreCustomers = async (req, res, next) => {
 
     // Scan POS bills
     posBills.forEach((b) => {
-      if (b.customer && b.customer.phone) {
-        const key = b.customer.phone;
+      const custPhone = b.customer?.phone || (b.customer?.name ? `pos_${b.customer.name.replace(/\s+/g, '_').toLowerCase()}` : null);
+      if (custPhone) {
+        const key = custPhone;
         if (!customerMap.has(key)) {
           customerMap.set(key, {
             id: `pos_cust_${key}`,
-            name: b.customer.name || 'Walk-in Shopper',
+            name: b.customer.name || 'In-Store Shopper',
             email: b.customer.email || 'counter@aaradhya.com',
-            phone: b.customer.phone,
-            city: 'In-Store',
+            phone: b.customer.phone || 'In-Store',
+            city: 'KPHB Store Counter',
             totalOrders: 0,
             totalSpent: 0,
-            lastOrderDate: b.createdAt,
+            lastOrderDate: b.createdAt || new Date().toISOString(),
             channel: 'Counter POS',
           });
         }
         const record = customerMap.get(key);
         record.totalOrders += 1;
-        record.totalSpent += b.totalAmount || 0;
-        if (new Date(b.createdAt) > new Date(record.lastOrderDate)) {
-          record.lastOrderDate = b.createdAt;
+        record.totalSpent += (b.totalPayable || b.subtotal || b.totalAmount || 0);
+        if (new Date(b.createdAt || Date.now()) > new Date(record.lastOrderDate)) {
+          record.lastOrderDate = b.createdAt || new Date().toISOString();
         }
       }
     });
 
-    const customersList = Array.from(customerMap.values()).sort((a, b) => b.totalSpent - a.totalSpent);
+    const customersList = Array.from(customerMap.values())
+      .map((c) => ({
+        ...c,
+        _id: c.id,
+        ordersCount: c.totalOrders,
+        totalSpend: c.totalSpent,
+        lastOrderDate: new Date(c.lastOrderDate).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }),
+      }))
+      .sort((a, b) => b.totalSpent - a.totalSpent);
+
     return sendSuccess(res, customersList);
   } catch (err) {
     next(err);

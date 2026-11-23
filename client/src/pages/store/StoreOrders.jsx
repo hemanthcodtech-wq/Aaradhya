@@ -51,8 +51,10 @@ const StoreOrders = () => {
     setLoading(true);
     try {
       const res = await axiosClient.get(`/orders/store/${store.activeStore}`);
-      if (res.data?.success && res.data.data?.length > 0) {
-        setOrders(res.data.data);
+      const payload = res?.data || res;
+      const list = Array.isArray(payload) ? payload : (payload?.data || []);
+      if (list && list.length > 0) {
+        setOrders(list);
       } else {
         setOrders(getFallbackOrders());
       }
@@ -169,17 +171,25 @@ const StoreOrders = () => {
   const handleUpdateStatus = async (suborderNumber, nextStatus, courier = '', tracking = '') => {
     setUpdatingStatus(true);
     try {
-      await axiosClient.put(`/orders/suborders/${suborderNumber}/status`, {
+      const res = await axiosClient.put(`/orders/suborders/${suborderNumber}/status`, {
         status: nextStatus,
         courier,
         trackingNumber: tracking,
         storeCode: store.activeStore,
       });
+      const updatedSub = res?.data || res;
       // Local optimistic update
       setOrders((prev) =>
         prev.map((o) =>
           o.suborderNumber === suborderNumber
-            ? { ...o, status: nextStatus, courier: courier || o.courier, trackingNumber: tracking || o.trackingNumber }
+            ? {
+                ...o,
+                status: nextStatus,
+                courier: updatedSub.courier || courier || o.courier,
+                trackingNumber: updatedSub.trackingNumber || tracking || o.trackingNumber,
+                labelUrl: updatedSub.labelUrl || o.labelUrl,
+                trackingUrl: updatedSub.trackingUrl || o.trackingUrl,
+              }
             : o
         )
       );
@@ -187,8 +197,10 @@ const StoreOrders = () => {
         setSelectedSuborder((prev) => ({
           ...prev,
           status: nextStatus,
-          courier: courier || prev.courier,
-          trackingNumber: tracking || prev.trackingNumber,
+          courier: updatedSub.courier || courier || prev.courier,
+          trackingNumber: updatedSub.trackingNumber || tracking || prev.trackingNumber,
+          labelUrl: updatedSub.labelUrl || prev.labelUrl,
+          trackingUrl: updatedSub.trackingUrl || prev.trackingUrl,
         }));
       }
     } catch {
@@ -355,9 +367,31 @@ const StoreOrders = () => {
                             <span className="fw-semibold text-dark d-block" style={{ fontSize: '0.74rem' }}>
                               {o.courier}
                             </span>
-                            <span className="font-monospace text-muted" style={{ fontSize: '0.7rem' }}>
-                              {o.trackingNumber}
-                            </span>
+                            <div className="d-flex align-items-center gap-1.5">
+                              <span className="font-monospace text-muted" style={{ fontSize: '0.7rem' }}>
+                                {o.trackingNumber}
+                              </span>
+                              <a
+                                href={o.trackingUrl || `https://shiprocket.co/tracking/${o.trackingNumber}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary text-decoration-none"
+                                title="Live Shiprocket Tracking"
+                              >
+                                <ExternalLink size={11} />
+                              </a>
+                            </div>
+                            {o.labelUrl && (
+                              <a
+                                href={o.labelUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="badge bg-light text-primary border text-decoration-none mt-0.5 d-inline-block"
+                                style={{ fontSize: '0.64rem' }}
+                              >
+                                📄 Label PDF
+                              </a>
+                            )}
                           </div>
                         ) : (
                           <span className="text-muted small">Not Dispatched</span>
@@ -524,6 +558,36 @@ const StoreOrders = () => {
                 <button type="button" className="btn-close" onClick={() => setIsDispatchModalOpen(false)} />
               </div>
               <div className="modal-body px-4 py-3">
+                {/* 1-Click Shiprocket Automated Dispatch */}
+                <div className="p-3 rounded-3 border mb-3" style={{ backgroundColor: '#F0FDF4', borderColor: '#BBF7D0' }}>
+                  <div className="d-flex align-items-center justify-content-between mb-1.5">
+                    <span className="fw-bold small text-dark d-flex align-items-center gap-1.5">
+                      <Truck size={15} className="text-success" /> Shiprocket Auto-Logistics
+                    </span>
+                    <span className="badge bg-success text-white" style={{ fontSize: '0.66rem' }}>Production Ready</span>
+                  </div>
+                  <p className="text-muted small mb-2.5" style={{ fontSize: '0.74rem' }}>
+                    1-click automated API fulfillment: allocates best courier (BlueDart / Delhivery), generates real AWB tracking number, manifests parcel, and generates shipping label PDF.
+                  </p>
+                  <button
+                    type="button"
+                    disabled={updatingStatus}
+                    onClick={() => handleUpdateStatus(dispatchTarget.suborderNumber, 'shipped', '', '')}
+                    className="btn btn-sm btn-success w-100 fw-semibold d-flex align-items-center justify-content-center gap-1.5 shadow-sm"
+                    style={{ fontSize: '0.78rem' }}
+                  >
+                    <Truck size={14} />
+                    {updatingStatus ? 'Connecting Shiprocket...' : '🚀 1-Click Shiprocket Auto-AWB Dispatch'}
+                  </button>
+                </div>
+
+                <div className="position-relative text-center my-3">
+                  <hr className="my-0" />
+                  <span className="position-absolute top-50 start-50 translate-middle bg-white px-2 small text-muted" style={{ fontSize: '0.7rem' }}>
+                    OR MANUAL COURIER DISPATCH
+                  </span>
+                </div>
+
                 <div className="mb-3">
                   <label className="form-label small fw-semibold text-dark">Logistics Courier Partner *</label>
                   <select
@@ -531,9 +595,9 @@ const StoreOrders = () => {
                     value={courierName}
                     onChange={(e) => setCourierName(e.target.value)}
                   >
-                    <option value="Blue Dart Express">Blue Dart Express</option>
-                    <option value="Delhivery Logistics">Delhivery Logistics</option>
-                    <option value="DTDC Courier">DTDC Courier</option>
+                    <option value="Blue Dart Express via Shiprocket">Blue Dart Express via Shiprocket</option>
+                    <option value="Delhivery Surface via Shiprocket">Delhivery Surface via Shiprocket</option>
+                    <option value="DTDC Air Express">DTDC Air Express</option>
                     <option value="Professional Couriers">Professional Couriers</option>
                     <option value="Store Direct Express">Store Direct Express Runner</option>
                   </select>

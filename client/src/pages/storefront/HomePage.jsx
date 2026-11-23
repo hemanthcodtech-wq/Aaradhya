@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -101,15 +101,26 @@ const HomePage = () => {
   };
 
   const defaultCategoryShortcuts = [
-    { name: "Men's Fashion", link: '/products?category=mens-wear', img: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=300&auto=format&fit=crop&q=80' },
-    { name: "Women's Fashion", link: '/category/sarees', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=80' },
-    { name: "Kids Fashion", link: '/products?category=kids-wear', img: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=80' },
-    { name: "Accessories", link: '/products?category=accessories', img: 'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=300&auto=format&fit=crop&q=80' },
-    { name: "Pure Silk Sarees", link: '/category/sarees', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=80' },
-    { name: "Dress Materials", link: '/category/dress-materials', img: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&auto=format&fit=crop&q=80' },
-    { name: "Running Fabrics", link: '/category/fabrics', img: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=300&auto=format&fit=crop&q=80' },
-    { name: "Festive Offers", link: '/products?deal=flash', img: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=80' },
+    { title: "Most Wanted", link: '/products?sort=popular', image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=85' },
+    { title: "Kurtis", link: '/category/kurtis', image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop&q=85' },
+    { title: "Sets", link: '/products?search=Sets', image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=85' },
+    { title: "Bottoms", link: '/products?search=Bottoms', image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=85' },
+    { title: "Pure Silk Sarees", link: '/category/sarees', image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&auto=format&fit=crop&q=85' },
+    { title: "Running Fabrics", link: '/category/fabrics', image: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=85' },
+    { title: "Dress Materials", link: '/category/dress-materials', image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&auto=format&fit=crop&q=85' },
+    { title: "Men's Fashion", link: '/products?category=mens-wear', image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop&q=80' },
+    { title: "Accessories", link: '/products?category=accessories', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&auto=format&fit=crop&q=80' },
+    { title: "Festive Offers", link: '/products?sort=discount', image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&auto=format&fit=crop&q=80' },
   ];
+
+  const categoryScrollRef = useRef(null);
+
+  const scrollCategories = (direction) => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -240 : 240;
+      categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   const popularList = highlights?.popularCollections || highlights?.newArrivals || [];
   const bestSellersList = highlights?.bestSellers || [];
@@ -120,106 +131,83 @@ const HomePage = () => {
       <HeroBanner />
 
       <div className="container py-4">
-        {/* 2. Explore Categories: Single Horizontal Line, Sleek Circular Avatars (NO Square Cards) */}
-      <section className="mb-4 mb-md-5">
-        <div className="d-flex align-items-center justify-content-between mb-2 mb-md-3">
-          <motion.div
-            initial={{ opacity: 0, x: -15 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-          >
-            <h5
-              className="fw-bold mb-0 text-dark"
-              style={{
-                fontSize: 'clamp(1.2rem, 2.5vw, 1.55rem)',
-                letterSpacing: '-0.3px',
-                fontFamily: 'var(--font-heading-family)',
-                color: '#17233B',
-              }}
-            >
-              Explore Categories
-            </h5>
-          </motion.div>
-
-          <Link to="/categories" className="text-decoration-none fw-semibold small d-flex align-items-center gap-1" style={{ color: '#E90064' }}>
-            <span>View All</span>
-            <ChevronRight size={14} />
-          </Link>
-        </div>
-
-        {/* Center-Aligned Horizontal Scroller (No square cards, circular icons + full names) */}
-        <div
-          className="d-flex align-items-start justify-content-start justify-content-lg-center gap-3 gap-md-4 overflow-x-auto pb-2 scrollbar-hidden"
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch',
-            scrollSnapType: 'x mandatory',
-          }}
-        >
-          {defaultCategoryShortcuts.map((cat, idx) => (
+        {/* 2. Explore Categories: One Line Scrollable Compact Square Cards */}
+        <section className="mb-4 mb-md-5" id="explore-categories">
+          <div className="d-flex align-items-center justify-content-between mb-2.5 mb-md-3">
             <motion.div
-              key={idx}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="flex-shrink-0 text-center"
-              style={{
-                width: 'clamp(82px, 10.5vw, 102px)',
-                scrollSnapAlign: 'center',
-              }}
+              initial={{ opacity: 0, x: -15 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
             >
-              <Link
-                to={cat.link}
-                className="text-decoration-none d-flex flex-column align-items-center"
+              <h5
+                className="fw-bold mb-0 text-dark"
+                style={{
+                  fontSize: 'clamp(1.15rem, 2.2vw, 1.45rem)',
+                  letterSpacing: '-0.3px',
+                  fontFamily: 'var(--font-heading-family)',
+                  color: '#17233B',
+                }}
               >
-                <div
-                  className="rounded-circle overflow-hidden mb-2 d-flex align-items-center justify-content-center shadow-sm"
-                  style={{
-                    width: 'clamp(64px, 8.5vw, 80px)',
-                    height: 'clamp(64px, 8.5vw, 80px)',
-                    backgroundColor: '#FFF0F5',
-                    border: '2.5px solid #F0E7ED',
-                    padding: '2px',
-                    transition: 'all 0.25s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#E90064';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(233, 0, 100, 0.25)';
-                    e.currentTarget.style.transform = 'scale(1.06)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#F0E7ED';
-                    e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  <img
-                    src={cat.img}
-                    alt={cat.name}
-                    className="w-100 h-100 rounded-circle"
-                    style={{ objectFit: 'cover' }}
-                    loading="lazy"
-                  />
-                </div>
-                <span
-                  className="fw-semibold text-dark text-center d-block w-100"
-                  style={{
-                    fontSize: 'clamp(0.72rem, 1vw, 0.82rem)',
-                    letterSpacing: '-0.2px',
-                    lineHeight: 1.25,
-                    color: '#17233B',
-                    whiteSpace: 'normal',
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {cat.name}
-                </span>
-              </Link>
+                Explore Categories
+              </h5>
             </motion.div>
-          ))}
-        </div>
-      </section>
+
+            <div className="d-flex align-items-center gap-1.5">
+              {/* Desktop Scroll Arrow Controls */}
+              <button
+                type="button"
+                onClick={() => scrollCategories('left')}
+                className="btn btn-sm btn-light rounded-circle p-1 d-none d-md-flex align-items-center justify-content-center shadow-xs"
+                style={{ width: '28px', height: '28px', backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}
+                aria-label="Scroll left"
+              >
+                <ChevronLeft size={15} />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollCategories('right')}
+                className="btn btn-sm btn-light rounded-circle p-1 d-none d-md-flex align-items-center justify-content-center shadow-xs"
+                style={{ width: '28px', height: '28px', backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}
+                aria-label="Scroll right"
+              >
+                <ChevronRight size={15} />
+              </button>
+              <Link
+                to="/categories"
+                className="text-decoration-none fw-semibold small d-flex align-items-center gap-1 ms-2"
+                style={{ color: '#E90064', fontSize: '0.85rem' }}
+              >
+                <span>View All</span>
+                <ChevronRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Single Line Scrollable Track of Compact Square Cards */}
+          <div
+            ref={categoryScrollRef}
+            className="category-home-scroll-track"
+          >
+            {defaultCategoryShortcuts.map((cat, idx) => (
+              <motion.div
+                key={idx}
+                className="category-home-square-item flex-shrink-0"
+                whileHover={{ y: -3, scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link to={cat.link} className="category-home-square-card shadow-xs">
+                  <img src={cat.image} alt={cat.title} loading="lazy" />
+                  <div className="category-square-overlay">
+                    <span className="category-square-title">
+                      {cat.title}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
       {/* 3. Popular Collection Section */}
       <section className="mb-5" id="popular-collection">

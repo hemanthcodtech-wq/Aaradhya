@@ -65,9 +65,11 @@ const StoreBarcodes = () => {
     setLoading(true);
     try {
       const res = await axiosClient.get(`/stores/${store.activeStore}/products`);
-      if (res.data?.success && res.data.data?.length > 0) {
-        setProducts(res.data.data);
-        setSelectedItem(res.data.data[0]);
+      const payload = res?.data || res;
+      const list = Array.isArray(payload) ? payload : (payload?.data || []);
+      if (list && list.length > 0) {
+        setProducts(list);
+        setSelectedItem(list[0]);
       } else {
         const dummy = getFallbackProducts();
         setProducts(dummy);

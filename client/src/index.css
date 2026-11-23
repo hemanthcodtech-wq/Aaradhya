@@ -1788,6 +1788,112 @@ header.sticky-top {
 }
 
 /* =========================================================
+   COMPACT SQUARE CATEGORY SCROLLER (ONE LINE SCROLLABLE HOME BAR)
+   ========================================================= */
+.category-home-scroll-track {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+  padding-top: 4px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.category-home-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
+.category-home-square-item {
+  flex: 0 0 clamp(98px, 11vw, 122px);
+  max-width: 125px;
+  scroll-snap-align: start;
+}
+
+.category-home-square-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1; /* Strict 1:1 square ratio */
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #F8F6F8;
+  border: 1px solid #ECE6EB;
+  box-shadow: 0 2px 8px rgba(23, 35, 59, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.category-home-square-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(23, 35, 59, 0.14);
+}
+
+.category-home-square-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.category-home-square-card:hover img {
+  transform: scale(1.08);
+}
+
+.category-home-square-card .category-square-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 6px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.44) 55%, rgba(0, 0, 0, 0.74) 100%);
+  transition: background 0.25s ease;
+}
+
+.category-home-square-card:hover .category-square-overlay {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.54) 55%, rgba(0, 0, 0, 0.84) 100%);
+}
+
+.category-home-square-card .category-square-title {
+  color: #FFFFFF;
+  font-family: var(--font-heading-family);
+  font-size: clamp(0.76rem, 1.05vw, 0.88rem);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.22;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+@media (max-width: 576px) {
+  .category-home-scroll-track {
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .category-home-square-item {
+    flex: 0 0 96px;
+    max-width: 96px;
+  }
+  .category-home-square-card {
+    border-radius: 12px;
+  }
+  .category-home-square-card .category-square-title {
+    font-size: 0.74rem;
+  }
+}
+
+/* =========================================================
    CURATED FITS: 5-PER-ROW ON DESKTOP, SINGLE CARD SLIDER ON MOBILE
    ========================================================= */
 

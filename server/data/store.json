@@ -576,11 +576,11 @@
       ],
       "sku": "AS-000001-RED-FS",
       "slug": "pure-kanjeevaram-bridal-silk-saree",
-      "stock": 10,
+      "stock": 9,
       "storeCode": "AS",
       "storeId": "store_silks_001",
       "storeName": "Aaradhya Silks",
-      "updatedAt": "2026-11-13T16:10:14.750Z"
+      "updatedAt": "2026-11-23T15:58:23.155Z"
     },
     {
       "_id": "prod_as_002",
@@ -1562,6 +1562,51 @@
       "subtotal": 1047,
       "taxAmount": 52,
       "totalPayable": 1099
+    },
+    {
+      "_id": "pos_1795449503171_93780",
+      "billNumber": "AS-POS-20261123-4237",
+      "cashier": {
+        "id": "6af80c2ee8d43783fadfc0c8",
+        "name": "Aaradhya Silks Admin"
+      },
+      "createdAt": "2026-11-23T15:58:23.171Z",
+      "customer": {
+        "name": "Ramesh Sharma",
+        "phone": "9848099887",
+        "email": ""
+      },
+      "discountAmount": 0,
+      "items": [
+        {
+          "product": "prod_as_001",
+          "name": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+          "sku": "AS-000001-RED-FS",
+          "barcode": "AS-000001-RED-FS",
+          "variantName": "",
+          "price": 19999,
+          "mrp": 19999,
+          "quantity": 1,
+          "gstRate": 18,
+          "taxAmount": 3599.82,
+          "total": 23598.82
+        }
+      ],
+      "paymentDetails": {
+        "cashTendered": 23598.82,
+        "changeReturned": 0,
+        "upiRef": "UPI-RAZOR-991244",
+        "cardLast4": ""
+      },
+      "paymentMode": "UPI",
+      "status": "Completed",
+      "storeCode": "AS",
+      "storeId": "store_silks_001",
+      "storeName": "Aaradhya Silks",
+      "subtotal": 19999,
+      "taxAmount": 3599.82,
+      "totalPayable": 23598.82,
+      "updatedAt": "2026-11-23T15:58:23.171Z"
     }
   ],
   "stockMovements": [
@@ -1689,6 +1734,22 @@
       "referenceId": "PO-2026-8891",
       "referenceType": "Purchase",
       "sku": "IPHONE-15-BLU"
+    },
+    {
+      "_id": "sto_1795449503159_kmjm9",
+      "createdAt": "2026-11-23T15:58:23.159Z",
+      "movementType": "pos_sale",
+      "newStock": 9,
+      "notes": "Offline counter checkout AS-POS-20261123-4237",
+      "performedBy": "Aaradhya Silks Admin",
+      "previousStock": 10,
+      "product": "prod_as_001",
+      "productName": "Pure Kanjeevaram Bridal Silk Saree (Crimson Gold)",
+      "quantity": -1,
+      "referenceId": "AS-POS-20261123-4237",
+      "referenceType": "POSBill",
+      "sku": "AS-000001-RED-FS",
+      "updatedAt": "2026-11-23T15:58:23.159Z"
     }
   ],
   "vendorPayouts": [
@@ -1723,7 +1784,7 @@
       "banner": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1200&auto=format&fit=crop&q=80",
       "code": "AS",
       "createdAt": "2026-01-01T00:00:00.000Z",
-      "currentCounter": 10,
+      "currentCounter": 12,
       "description": "Exclusive Kanjeevaram pure silk sarees, Banarasi brocades, bridal ensembles and heirloom handwoven silks.",
       "email": "silks@aaradhya.com",
       "gstin": "29AAAAA0000A1Z5",
@@ -1735,7 +1796,7 @@
       "phone": "+91 98765 11001",
       "prefix": "AS",
       "totalRevenue": 1246320,
-      "updatedAt": "2026-11-19T09:59:48.636Z",
+      "updatedAt": "2026-11-20T14:27:46.440Z",
       "walletBalance": 328450
     },
     {
@@ -1750,7 +1811,7 @@
       "banner": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&auto=format&fit=crop&q=80",
       "code": "AF",
       "createdAt": "2026-01-01T00:00:00.000Z",
-      "currentCounter": 7,
+      "currentCounter": 8,
       "description": "Artisan block-print cottons, unstitched dress materials, pure linen meterage, brocades & chanderi fabrics.",
       "email": "fabrics@aaradhya.com",
       "gstin": "29BBBBB1111B2Z6",
@@ -1762,22 +1823,22 @@
       "phone": "+91 98765 22002",
       "prefix": "AF",
       "totalRevenue": 982740,
-      "updatedAt": "2026-11-13T16:09:58.610Z",
+      "updatedAt": "2026-11-20T14:32:14.097Z",
       "walletBalance": 264820
     }
   ],
   "wallets": [
     {
       "_id": "wal_silks_001",
-      "balance": 343698.95,
+      "balance": 367297.77,
       "isActive": true,
       "pendingSettlement": 60948.95,
       "storeCode": "AS",
       "storeId": "store_silks_001",
       "storeName": "Aaradhya Silks",
-      "totalEarned": 1277317.9,
+      "totalEarned": 1300916.72,
       "totalWithdrawn": 872670,
-      "updatedAt": "2026-11-13T16:10:14.754Z"
+      "updatedAt": "2026-11-23T15:58:23.162Z"
     },
     {
       "_id": "wal_fabrics_002",
@@ -1886,6 +1947,21 @@
       "storeCode": "AF",
       "storeId": "store_fabrics_002",
       "type": "pos_sale"
+    },
+    {
+      "_id": "wal_1795449503165_i6es2",
+      "amount": 23598.82,
+      "createdAt": "2026-11-23T15:58:23.165Z",
+      "description": "Counter POS Sale AS-POS-20261123-4237 (UPI)",
+      "newBalance": 367297.77,
+      "previousBalance": 343698.95,
+      "reference": "AS-POS-20261123-4237",
+      "referenceId": "AS-POS-20261123-4237",
+      "status": "settled",
+      "storeCode": "AS",
+      "storeId": "store_silks_001",
+      "type": "pos_sale",
+      "updatedAt": "2026-11-23T15:58:23.165Z"
     }
   ],
   "storePayouts": [
@@ -2018,6 +2094,47 @@
       "status": "rejected_restock",
       "restocked": false,
       "createdAt": "2026-11-11T10:56:35.533Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "_id": "aud_seed_01",
+      "action": "SUPER_ADMIN_LOGIN",
+      "category": "auth",
+      "details": "Super Admin signed in to Central Platform Portal",
+      "user": {
+        "name": "Aaradhya Super Admin",
+        "email": "admin@aaradhya.com",
+        "role": "super_admin"
+      },
+      "ipAddress": "127.0.0.1",
+      "timestamp": "2026-11-23T15:00:24.325Z"
+    },
+    {
+      "_id": "aud_seed_02",
+      "action": "PAYOUT_APPROVED",
+      "category": "payout",
+      "details": "Approved bi-weekly payout PO-AS-2026-001 for Aaradhya Silks (₹1,50,000)",
+      "user": {
+        "name": "Aaradhya Super Admin",
+        "email": "admin@aaradhya.com",
+        "role": "super_admin"
+      },
+      "ipAddress": "127.0.0.1",
+      "timestamp": "2026-11-20T15:00:24.325Z"
+    },
+    {
+      "_id": "aud_seed_03",
+      "action": "PROMOTION_CREATED",
+      "category": "promotion",
+      "details": "Created coupon SILK10 (10% off pure silks)",
+      "user": {
+        "name": "Aaradhya Super Admin",
+        "email": "admin@aaradhya.com",
+        "role": "super_admin"
+      },
+      "ipAddress": "127.0.0.1",
+      "timestamp": "2026-11-18T15:00:24.325Z"
     }
   ]
 }
